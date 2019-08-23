@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+
+    <!-- DEBUG -->
+    <string name="realty_fragment_name">Realty</string>
+
+    <!-- Toolbar and Navigation drawer Menu -->
+    <string name="menu_item_add_name">Add</string>
+    <string name="menu_item_edit_name">Edit</string>
+    <string name="menu_item_search_name">Search</string>
 </resources>

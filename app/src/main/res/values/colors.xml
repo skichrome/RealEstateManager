@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#0288d1</color>
+    <color name="colorPrimaryLight">#5eb8ff</color>
+    <color name="colorPrimaryDark">#005b9f</color>
+
+    <color name="colorSecondary">#d32f2f</color>
+    <color name="colorSecondaryLight">#ff6659</color>
+    <color name="colorSecondaryDark">#9a0007</color>
+
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorPrimaryLight">#000000</color>
+    <color name="textColorPrimaryDark">#ffffff</color>
+    <color name="textColorSecondary">#ffffff</color>
+    <color name="textColorSecondaryLight">#000000</color>
+    <color name="textColorSecondaryDark">#ffffff</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="toolbarColor">#B1B1B1</color>
+    <color name="toolbarColorDark">#818080</color>
 </resources>
