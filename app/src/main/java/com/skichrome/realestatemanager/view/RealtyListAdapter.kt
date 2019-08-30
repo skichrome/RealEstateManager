@@ -38,8 +38,10 @@ class RealtyListAdapter(private var list: List<Realty> = listOf()) :
     {
         fun bind(item: Realty)
         {
-            // Todo update all fields here
-            binding.realtyListItemName.text = item.city
+            val price = "\$ ${item.price}"
+            binding.realtyListItemPrice.text = price
+            binding.realtyListItemName.text = item.agent
+            binding.realtyListItemLocation.text = item.city
             binding.executePendingBindings()
         }
     }

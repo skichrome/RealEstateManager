@@ -1,6 +1,7 @@
 package com.skichrome.realestatemanager.view
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,9 +41,15 @@ class RealtyListFragment : Fragment()
         viewModel = ViewModelProviders.of(this, vmFactory).get(RealtyViewModel::class.java)
         binding.realtyViewModel = viewModel
 
+        val displayMetrics = DisplayMetrics()
+        activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val density = displayMetrics.density
+        val width = displayMetrics.widthPixels
+        val spanCount = if (width / density <= 600) 2 else 4
+
+        val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
         binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
-        binding.realtyListFragmentRecyclerView.layoutManager =
-            GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+        binding.realtyListFragmentRecyclerView.layoutManager = layoutManager
         binding.realtyListFragmentRecyclerView.adapter = adapter
 
         val largePadding = resources.getDimension(R.dimen.preview_card_spacing).toInt()

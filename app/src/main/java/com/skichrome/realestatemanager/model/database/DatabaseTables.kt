@@ -16,9 +16,9 @@ data class Realty(
     val address: String,
     val postCode: Int,
     val city: String,
-    val status: Boolean,
+    var status: Boolean = false,
     val dateAdded: Date,
-    val dateSell: Date? = null,
+    var dateSell: Date? = null,
     val agent: String
 )
 
@@ -32,8 +32,8 @@ data class Realty(
     ]
 )
 data class Poi(
-    @PrimaryKey(autoGenerate = true) val poiId: Long,
-    val type: String,
+    @PrimaryKey(autoGenerate = true) val poiId: Long = 0L,
+    var type: String,
     @ColumnInfo(name = "realtyId", index = true)
     val realtyId: Long
 )
@@ -48,8 +48,8 @@ data class Poi(
     ]
 )
 data class RealtyType(
-    @PrimaryKey(autoGenerate = true) val realtyTypeId: Long,
-    val name: String,
+    @PrimaryKey(autoGenerate = true) val realtyTypeId: Long = 0L,
+    var name: String,
     @ColumnInfo(name = "realtyId", index = true)
     val realtyId: Long
 )
@@ -64,9 +64,9 @@ data class RealtyType(
     ]
 )
 data class MediaReference(
-    @PrimaryKey(autoGenerate = true) val mediaReferenceId: Long,
-    val reference: String,
-    val shortDesc: String,
+    @PrimaryKey(autoGenerate = true) val mediaReferenceId: Long = 0L,
+    var reference: String,
+    var shortDesc: String,
     @ColumnInfo(name = "realtyId", index = true)
     val realtyId: Long
 )

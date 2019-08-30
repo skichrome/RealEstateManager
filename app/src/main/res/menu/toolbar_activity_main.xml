@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addMenuItem"
+        android:id="@+id/addRealtyFragment"
         android:icon="@drawable/ic_add_24dp"
         android:title="@string/menu_item_add_name"
         app:showAsAction="ifRoom" />

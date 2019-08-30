@@ -30,6 +30,12 @@ interface RealtyDao
 @Dao
 interface PoiDao
 {
+    @Insert
+    fun insertPoi(poi: Poi): Completable
+
+    @Query("SELECT * FROM Poi")
+    fun getAllPoi(): Flowable<List<Poi>>
+
     @Query("SELECT * FROM Poi WHERE poiId = :realtyId")
     fun getPoiOfRealtyById(realtyId: Long): Observable<Poi>
 
@@ -43,6 +49,12 @@ interface PoiDao
 @Dao
 interface RealtyTypeDao
 {
+    @Insert
+    fun insertRealtyType(realtyType: RealtyType): Completable
+
+    @Query("SELECT * FROM RealtyType")
+    fun getAllRealtyType(): Flowable<List<RealtyType>>
+
     @Query("SELECT * FROM RealtyType WHERE realtyTypeId = :realtyId")
     fun getTypeOfRealtyById(realtyId: Long): Observable<RealtyType>
 
@@ -56,6 +68,9 @@ interface RealtyTypeDao
 @Dao
 interface MediaReferenceDao
 {
+    @Insert
+    fun insertMediaReference(mediaRef: MediaReference): Completable
+
     @Query("SELECT * FROM MediaReference WHERE mediaReferenceId = :realtyId")
     fun getMediaOfRealtyById(realtyId: Long): Observable<MediaReference>
 

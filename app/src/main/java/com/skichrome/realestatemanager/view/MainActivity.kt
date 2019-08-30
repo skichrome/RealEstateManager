@@ -1,6 +1,7 @@
 package com.skichrome.realestatemanager.view
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -29,10 +30,17 @@ class MainActivity : AppCompatActivity()
         appBarConfiguration =
             AppBarConfiguration(setOf(R.id.realtyListFragment), activity_main_menu_drawer_layout)
 
-        toolbar?.inflateMenu(R.menu.toolbar_activity_main)
+        setSupportActionBar(toolbar)
         toolbar?.setupWithNavController(navController, appBarConfiguration)
 
         activity_main_navigation_view?.setupWithNavController(navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean
+    {
+        val result = super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.toolbar_activity_main, menu)
+        return result
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean
