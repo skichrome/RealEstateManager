@@ -13,20 +13,30 @@
     <string name="realty_preview_picture_content_desc">This is a preview picture of a realty</string>
     <string name="rv_add_photo_content_desc">Picture added by user, and tooltips picture clicked when user want to upload a new picture</string>
 
-
     <!-- Add Realty Fragment -->
     <string name="add_realty_frag_hint_desc">Description</string>
     <string name="add_realty_frag_hint_address">Address</string>
     <string name="add_realty_frag_hint_city">City</string>
-    <string name="add_realty_frag_hint_postcode">postcode</string>
-    <string name="add_realty_frag_hint_price">price</string>
-    <string name="add_realty_frag_hint_surface">surface</string>
-    <string name="add_realty_frag_hint_type">type</string>
-    <string name="add_realty_frag_hint_rooms">rooms</string>
-    <string name="add_realty_frag_hint_creation_date">creation date</string>
-    <string name="add_realty_frag_hint_selling_date">selling date</string>
-    <string name="add_realty_frag_hint_status">status</string>
+    <string name="add_realty_frag_hint_postcode">Postcode</string>
+    <string name="add_realty_frag_hint_price">Price</string>
+    <string name="add_realty_frag_hint_surface">Surface</string>
+    <string name="add_realty_frag_hint_type">Type</string>
+    <string name="add_realty_frag_hint_rooms">Rooms</string>
+    <string name="add_realty_frag_hint_creation_date">Creation date</string>
+    <string name="add_realty_frag_hint_sold_date">Sold date</string>
+    <string name="add_realty_frag_hint_status">Status</string>
     <string name="add_realty_frag_hint_agent">Agent</string>
     <string name="add_realty_frag_btn_submit">Submit</string>
+
+    <string-array name="add_realty_frag_hint_status_spinner">
+        <item name="add_realty_frag_hint_status_false">Available</item>
+        <item name="add_realty_frag_hint_status_true">Sold</item>
+    </string-array>
+
+    <string name="add_realty_fragment_edit_text_input_tag">required_input</string>
+    <string name="add_realty_fragment_edit_text_created_date_input_tag">created_date_input</string>
+    <string name="add_realty_fragment_edit_text_sold_date_input_tag">sold_date_input</string>
+    <string name="add_realty_frag_error_input_field">Required field</string>
+    <string name="addRealtyFragmentBtnSetDate">set</string>
 
 </resources>
