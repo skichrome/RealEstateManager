@@ -11,13 +11,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RealtyViewModel(private val realtyDataSource: RealEstateDataRepository) : ViewModel()
 {
     val realEstates = MutableLiveData<List<Realty>>() // can be observed from fragment
     val isLoading = ObservableField<Boolean>(false) // can be observed from data binding
+    val insertLoading = MutableLiveData<Boolean>()
 
     private val disposable = CompositeDisposable()
 
@@ -39,22 +39,9 @@ class RealtyViewModel(private val realtyDataSource: RealEstateDataRepository) : 
             )
     }
 
-    fun insertRealty()
+    fun insertRealty(realty: Realty)
     {
-        val realty = Realty(
-            price = 120_000f,
-            address = "12 avenue du pont",
-            postCode = 95000,
-            city = "Brooklyn",
-            agent = "Penthouse",
-            dateAdded = Date(System.currentTimeMillis()),
-            fullDescription = "A big description",
-            roomNumber = 4,
-            status = false,
-            surface = 45.57f
-        )
-
-        isLoading.set(true)
+        insertLoading.value = true
 
         disposable += realtyDataSource.insertRealty(realty)
             .subscribeOn(Schedulers.newThread())
@@ -64,7 +51,7 @@ class RealtyViewModel(private val realtyDataSource: RealEstateDataRepository) : 
             {
                 override fun onComplete()
                 {
-                    isLoading.set(false)
+                    insertLoading.value = false
                     Log.e("INSERT", "Successfully inserted realty into database !")
                 }
 

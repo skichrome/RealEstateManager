@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addRealtyFragNameInput"
+                android:id="@+id/addRealtyFragDescriptionInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
@@ -228,8 +228,6 @@
                 android:id="@+id/addRealtyFragAgentInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
                 android:inputType="text"
                 android:singleLine="true"
                 android:tag="@string/add_realty_fragment_edit_text_input_tag" />
@@ -267,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:cursorVisible="false"
-                android:focusable="false"
+                android:focusable="true"
                 android:focusableInTouchMode="false"
                 android:inputType="date"
                 android:singleLine="true"
@@ -278,12 +276,13 @@
             android:id="@+id/addRealtyFragDateAddedBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
             android:layout_marginEnd="16dp"
             android:tag="@string/add_realty_fragment_edit_text_input_tag"
             android:text="@string/addRealtyFragmentBtnSetDate"
             app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragRecyclerViewAddPhoto" />
+            app:layout_constraintTop_toTopOf="@+id/addRealtyFragInputDateCreatedTextLayout" />
 
         <!-- selling date and status -->
         <LinearLayout
@@ -329,7 +328,8 @@
                     android:focusableInTouchMode="false"
                     android:inputType="date"
                     android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                    android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                    tools:ignore="KeyboardInaccessibleWidget" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
