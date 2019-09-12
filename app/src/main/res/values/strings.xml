@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+    <string name="content_provider_authority">com.skichrome.realestatemanager.fileprovider</string>
 
     <!-- DEBUG -->
     <string name="realty_fragment_name">Realty</string>
@@ -11,7 +12,8 @@
 
     <!-- images contentDescriptions -->
     <string name="realty_preview_picture_content_desc">This is a preview picture of a realty</string>
-    <string name="rv_add_photo_content_desc">Picture added by user, and tooltips picture clicked when user want to upload a new picture</string>
+    <string name="rv_realty_picture_content_desc">Picture of a realty added by the user</string>
+    <string name="rv_add_picture_content_desc">Click here to add new picture into picture list</string>
 
     <!-- Add Realty Fragment -->
     <string name="add_realty_frag_hint_desc">Description</string>
@@ -26,11 +28,34 @@
     <string name="add_realty_frag_hint_sold_date">Sold date</string>
     <string name="add_realty_frag_hint_status">Status</string>
     <string name="add_realty_frag_hint_agent">Agent</string>
+    <string name="add_realty_frag_recycler_view_title">Realty pictures</string>
     <string name="add_realty_frag_btn_submit">Submit</string>
 
     <string-array name="add_realty_frag_hint_status_spinner">
         <item name="add_realty_frag_hint_status_false">Available</item>
         <item name="add_realty_frag_hint_status_true">Sold</item>
+    </string-array>
+
+    <string-array name="realty_categories">
+        <item name="type_flat">Flat</item>
+        <item name="type_penthouse">Penthouse</item>
+        <item name="type_mansion">Mansion</item>
+        <item name="type_house">House</item>
+        <item name="type_duplex">Duplex</item>
+    </string-array>
+
+    <string-array name="realty_picture_type">
+        <item name="type_facade">Facade</item>
+        <item name="type_lounge">Lounge</item>
+        <item name="type_bathroom">Bathroom</item>
+        <item name="type_kitchen">Kitchen</item>
+        <item name="type_bedroom">Bedroom</item>
+        <item name="type_living">Living room</item>
+        <item name="type_library">Library</item>
+        <item name="type_garden">Garden</item>
+        <item name="type_desktop">Desktop</item>
+        <item name="type_Hall">Hall</item>
+        <item name="type_cellar">Cellar</item>
     </string-array>
 
     <string name="add_realty_fragment_edit_text_input_tag">required_input</string>
@@ -39,4 +64,15 @@
     <string name="add_realty_frag_error_input_field">Required field</string>
     <string name="addRealtyFragmentBtnSetDate">set</string>
 
+    <!-- Delete Picture Alert Dialog -->
+    <string name="delete_picture_alert_title">Warning</string>
+    <string name="delete_picture_alert_message">Do you really want to delete this picture ?</string>
+    <string name="delete_picture_alert_confirm">Yes</string>
+    <string name="delete_picture_alert_cancel">No</string>
+
+    <!-- Picture type selection Alert Dialog -->
+    <string name="select_picture_type_alert_title">Picture type</string>
+    <string name="select_picture_type_alert_message">Witch type of picture are you taking ?</string>
+    <string name="select_picture_type_alert_confirm">OK</string>
+    <string name="select_picture_type_alert_cancel">Cancel</string>
 </resources>

@@ -1,360 +1,374 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/addRealtyFragScrollView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/addRealtyFragScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Description of Realty -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addRealtyFragInputNameTextLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/add_realty_frag_hint_desc"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addRealtyFragDescriptionInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Address of Realty -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addRealtyFragInputAddressTextLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/add_realty_frag_hint_address"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputNameTextLayout"
-            app:startIconDrawable="@drawable/ic_location_24dp">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addRealtyFragAddressInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"
-                android:singleLine="true"
-                android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- City and PostCode of Realty -->
-        <LinearLayout
-            android:id="@+id/addRealtyFragLinearLayoutPostCodeCity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputAddressTextLayout">
-
+            <!-- Description of Realty -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragCityInputLayout"
+                android:id="@+id/addRealtyFragInputNameTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="3"
-                android:hint="@string/add_realty_frag_hint_city"
+                android:hint="@string/add_realty_frag_hint_desc"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:startIconDrawable="@drawable/ic_location_city_24dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragCityInput"
+                    android:id="@+id/addRealtyFragDescriptionInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:inputType="textMultiLine"
                     android:tag="@string/add_realty_fragment_edit_text_input_tag" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Address of Realty -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragPostCodeLayout"
+                android:id="@+id/addRealtyFragInputAddressTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="2"
-                android:hint="@string/add_realty_frag_hint_postcode"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragPostCodeInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Realty price and surface -->
-        <LinearLayout
-            android:id="@+id/addRealtyFragLinearLayoutPriceSurface"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutPostCodeCity">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragInputPriceTextLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="3"
-                android:hint="@string/add_realty_frag_hint_price"
+                android:hint="@string/add_realty_frag_hint_address"
                 app:endIconMode="clear_text"
-                app:startIconDrawable="@drawable/ic_attach_money_24dp">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputNameTextLayout"
+                app:startIconDrawable="@drawable/ic_location_24dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragPriceInput"
+                    android:id="@+id/addRealtyFragAddressInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
+                    android:inputType="textPostalAddress"
                     android:singleLine="true"
                     android:tag="@string/add_realty_fragment_edit_text_input_tag" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- City and PostCode of Realty -->
+            <LinearLayout
+                android:id="@+id/addRealtyFragLinearLayoutPostCodeCity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputAddressTextLayout">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragCityInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="3"
+                    android:hint="@string/add_realty_frag_hint_city"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/ic_location_city_24dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragCityInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragPostCodeLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:hint="@string/add_realty_frag_hint_postcode"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragPostCodeInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Realty price and surface -->
+            <LinearLayout
+                android:id="@+id/addRealtyFragLinearLayoutPriceSurface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutPostCodeCity">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragInputPriceTextLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="3"
+                    android:hint="@string/add_realty_frag_hint_price"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_attach_money_24dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragPriceInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragInputSurfaceTextLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:hint="@string/add_realty_frag_hint_surface"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragSurfaceInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Realty type and room number -->
+            <LinearLayout
+                android:id="@+id/addRealtyFragLinearLayoutTypeAndRoomNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutPriceSurface">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragInputTypeTextLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="3"
+                    android:hint="@string/add_realty_frag_hint_type"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragTypeInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragInputRoomNumberTextLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:hint="@string/add_realty_frag_hint_rooms"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragRoomNumberInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Agent -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragInputSurfaceTextLayout"
+                android:id="@+id/addRealtyFragInputAgentTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="2"
-                android:hint="@string/add_realty_frag_hint_surface"
-                app:endIconMode="clear_text">
+                android:layout_weight="1"
+                android:hint="@string/add_realty_frag_hint_agent"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutTypeAndRoomNumber">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragSurfaceInput"
+                    android:id="@+id/addRealtyFragAgentInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:tag="@string/add_realty_fragment_edit_text_input_tag" />
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
-        <!-- Realty type and room number -->
-        <LinearLayout
-            android:id="@+id/addRealtyFragLinearLayoutTypeAndRoomNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutPriceSurface">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragInputTypeTextLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+            <!-- Picture -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/addRealtyFragRecyclerViewAddPhotoTitle"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="3"
-                android:hint="@string/add_realty_frag_hint_type"
-                app:endIconMode="clear_text">
+                android:text="@string/add_realty_frag_recycler_view_title"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputAgentTextLayout" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragTypeInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragInputRoomNumberTextLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="2"
-                android:hint="@string/add_realty_frag_hint_rooms"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragRoomNumberInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Agent -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addRealtyFragInputAgentTextLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:hint="@string/add_realty_frag_hint_agent"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutTypeAndRoomNumber">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addRealtyFragAgentInput"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addRealtyFragRecyclerViewAddPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:singleLine="true"
-                android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Picture -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/addRealtyFragRecyclerViewAddPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputAgentTextLayout"
-            tools:itemCount="2"
-            tools:listitem="@layout/photo_rv_item" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addRealtyFragInputDateCreatedTextLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:hint="@string/add_realty_frag_hint_creation_date"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateAddedBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragRecyclerViewAddPhoto">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addRealtyFragDateCreatedEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:cursorVisible="false"
-                android:focusable="true"
-                android:focusableInTouchMode="false"
-                android:inputType="date"
-                android:singleLine="true"
-                android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addRealtyFragDateAddedBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="16dp"
-            android:tag="@string/add_realty_fragment_edit_text_input_tag"
-            android:text="@string/addRealtyFragmentBtnSetDate"
-            app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/addRealtyFragInputDateCreatedTextLayout" />
-
-        <!-- selling date and status -->
-        <LinearLayout
-            android:id="@+id/addRealtyFragLinearLayoutStatusSellingDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/addRealtyFragSubmitBtn"
-            app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateSoldBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputDateCreatedTextLayout">
-
-            <Spinner
-                android:id="@+id/addRealtyFragStatusSpinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_margin="8dp"
-                android:layout_weight="2"
-                android:entries="@array/add_realty_frag_hint_status_spinner" />
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragRecyclerViewAddPhotoTitle"
+                tools:itemCount="2"
+                tools:listitem="@layout/photo_rv_item" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addRealtyFragSoldDateTextViewLayout"
+                android:id="@+id/addRealtyFragInputDateCreatedTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="3"
-                android:hint="@string/add_realty_frag_hint_sold_date"
+                android:layout_weight="1"
+                android:hint="@string/add_realty_frag_hint_creation_date"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateAddedBtn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addRealtyFragRecyclerViewAddPhoto">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addRealtyFragSoldDateEditText"
+                    android:id="@+id/addRealtyFragDateCreatedEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:cursorVisible="false"
-                    android:focusable="false"
+                    android:focusable="true"
                     android:focusableInTouchMode="false"
                     android:inputType="date"
                     android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addRealtyFragDateSoldBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:tag="@string/add_realty_fragment_edit_text_input_tag"
-            android:text="@string/addRealtyFragmentBtnSetDate"
-            app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutStatusSellingDate" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addRealtyFragDateAddedBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="16dp"
+                android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                android:text="@string/addRealtyFragmentBtnSetDate"
+                app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/addRealtyFragInputDateCreatedTextLayout" />
 
-        <!-- Submit button -->
-        <Button
-            android:id="@+id/addRealtyFragSubmitBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/add_realty_frag_btn_submit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <!-- selling date and status -->
+            <LinearLayout
+                android:id="@+id/addRealtyFragLinearLayoutStatusSellingDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/addRealtyFragSubmitBtn"
+                app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateSoldBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputDateCreatedTextLayout">
+
+                <Spinner
+                    android:id="@+id/addRealtyFragStatusSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:layout_weight="2"
+                    android:entries="@array/add_realty_frag_hint_status_spinner" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addRealtyFragSoldDateTextViewLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="3"
+                    android:hint="@string/add_realty_frag_hint_sold_date"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateAddedBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/addRealtyFragRecyclerViewAddPhoto">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addRealtyFragSoldDateEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="date"
+                        android:singleLine="true"
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addRealtyFragDateSoldBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                android:text="@string/addRealtyFragmentBtnSetDate"
+                app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutStatusSellingDate" />
+
+            <!-- Submit button -->
+            <Button
+                android:id="@+id/addRealtyFragSubmitBtn"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/add_realty_frag_btn_submit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

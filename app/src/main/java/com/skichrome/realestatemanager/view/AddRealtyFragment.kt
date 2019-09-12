@@ -1,11 +1,19 @@
 package com.skichrome.realestatemanager.view
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,40 +21,55 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.skichrome.realestatemanager.R
+import com.skichrome.realestatemanager.databinding.FragmentAddRealtyBinding
 import com.skichrome.realestatemanager.model.database.Realty
+import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
+import com.skichrome.realestatemanager.utils.StorageUtils
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import kotlinx.android.synthetic.main.fragment_add_realty.*
+import java.io.IOException
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListener
+class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListener, RealtyPhotoAdapter.OnClickPictureListener
 {
+    // =================================
+    //              Fields
+    // =================================
+
+    private val addPhotoAdapter = RealtyPhotoAdapter(callback = WeakReference(this))
     private val materialEditTextViewList = arrayListOf<TextInputLayout>()
-    private lateinit var spinnerArray: Array<String>
     private val date = SimpleDateFormat.getDateInstance()
-    private var realtyStatus: Boolean = false
+    private lateinit var spinnerArray: Array<String>
     private lateinit var realtyCreationDate: Calendar
+    private lateinit var imageAddedSrc: String
+    private lateinit var imageAddedTypeFromSpinner: String
+    private lateinit var binding: FragmentAddRealtyBinding
+    private var realtyStatus: Boolean = false
     private var realtySoldDate: Calendar? = null
     private var canRegisterARealty = false
 
     private lateinit var viewModel: RealtyViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View?
+    // =================================
+    //        Superclass Methods
+    // =================================
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        return inflater.inflate(R.layout.fragment_add_realty, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_add_realty, container, false)
+        binding.executePendingBindings()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
-        spinnerArray = resources.getStringArray(R.array.add_realty_frag_hint_status_spinner)
+
         populateViewList()
+        configureRecyclerView()
         configureViewModel()
         configureDateInput()
         addRealtyFragSubmitBtn.setOnClickListener {
@@ -55,6 +78,19 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
             getMaterialInputTextData()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+            addPhotoAdapter.addPictureToAdapter(imageAddedSrc)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    // =================================
+    //              Methods
+    // =================================
+
+    // --------  Configuration  ---------
 
     private fun populateViewList()
     {
@@ -69,6 +105,11 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
         materialEditTextViewList.add(addRealtyFragInputTypeTextLayout)
     }
 
+    private fun configureRecyclerView()
+    {
+        binding.addRealtyFragRecyclerViewAddPhoto.adapter = addPhotoAdapter
+    }
+
     private fun configureViewModel()
     {
         val vmFactory = Injection.provideViewModelFactory(context!!)
@@ -76,40 +117,36 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
 
         viewModel.insertLoading.observe(this, Observer {
             if (!it)
-            {
                 findNavController().navigateUp()
-            }
         })
     }
 
     private fun configureDateInput()
     {
+        spinnerArray = resources.getStringArray(R.array.add_realty_frag_hint_status_spinner)
+
         realtyCreationDate = Calendar.getInstance()
         val displayDate = date.format(realtyCreationDate.time)
 
         addRealtyFragDateCreatedEditText.setText(displayDate)
         addRealtyFragDateAddedBtn.setOnClickListener { showDatePicker(0) }
         addRealtyFragDateSoldBtn.setOnClickListener { showDatePicker(1) }
-        addRealtyFragStatusSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener
+        addRealtyFragStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, p3: Long)
             {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    p3: Long
-                )
-                {
-                    realtyStatus = parent?.getItemAtPosition(position) == spinnerArray[1]
-                    addRealtyFragDateSoldBtn.isEnabled = realtyStatus
-                    addRealtyFragSoldDateEditText.isEnabled = realtyStatus
-                    addRealtyFragSoldDateEditText.text = null
-                    addRealtyFragSoldDateTextViewLayout.error = null
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+                realtyStatus = parent?.getItemAtPosition(position) == spinnerArray[1]
+                addRealtyFragDateSoldBtn.isEnabled = realtyStatus
+                addRealtyFragSoldDateEditText.isEnabled = realtyStatus
+                addRealtyFragSoldDateEditText.text = null
+                addRealtyFragSoldDateTextViewLayout.error = null
             }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+        }
     }
+
+    // --------  UI  ---------
 
     private fun showDatePicker(tag: Int)
     {
@@ -117,12 +154,43 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
         dialogFragment.show(fragmentManager!!, "DateDialog")
     }
 
+    private fun launchCamera()
+    {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(activity!!.packageManager)?.also {
+                val photoFile = try
+                {
+                    if (StorageUtils.isExternalStorageWritable())
+                    {
+                        context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                            ?.let { StorageUtils.createOrGetImageFile(it, "test") }
+                    } else null
+
+                } catch (e: IOException)
+                {
+                    null
+                }
+
+                photoFile?.also {
+                    imageAddedSrc = it.absolutePath
+
+                    val uri = FileProvider.getUriForFile(
+                        context!!.applicationContext,
+                        getString(R.string.content_provider_authority),
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }
+    }
+
     private fun getMaterialInputTextData()
     {
         for (layout in materialEditTextViewList)
         {
-            val textInput =
-                layout.findViewWithTag<TextInputEditText>(getString(R.string.add_realty_fragment_edit_text_input_tag))
+            val textInput = layout.findViewWithTag<TextInputEditText>(getString(R.string.add_realty_fragment_edit_text_input_tag))
             val str: String? = textInput?.text?.toString()
 
             if (textInput != null && str == null || str == "")
@@ -147,7 +215,6 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
                 address = addRealtyFragAddressInput.text.toString(),
                 price = addRealtyFragPriceInput.text.toString().toFloat()
             )
-            Log.e("getInput", realtyToBeAdded.toString())
             viewModel.insertRealty(realtyToBeAdded)
         }
     }
@@ -177,6 +244,10 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
         }
     }
 
+    // =================================
+    //            Callbacks
+    // =================================
+
     override fun onDateSet(calendar: Calendar, tag: Int)
     {
         val time = date.format(calendar.time)
@@ -193,6 +264,47 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
                 addRealtyFragSoldDateTextViewLayout.error = null
                 realtySoldDate = calendar
             }
+        }
+    }
+
+    override fun onClickAddPicture()
+    {
+        val alertDialog = AlertDialog.Builder(context!!).apply {
+
+            val alertInflater = layoutInflater.inflate(R.layout.alert_dialog_spinner, null)
+
+            setView(alertInflater)
+
+            setTitle(getString(R.string.select_picture_type_alert_title))
+                .setMessage(getString(R.string.select_picture_type_alert_message))
+                .setPositiveButton(getString(R.string.select_picture_type_alert_confirm)) { _, _ -> launchCamera() }
+                .setNegativeButton(getString(R.string.select_picture_type_alert_cancel)) { dialog, _ -> dialog.dismiss() }
+                .create()
+
+            alertInflater.findViewById<Spinner>(R.id.alertDialogSpinner).onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener
+                {
+                    override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+                    override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, p3: Long)
+                    {
+                        imageAddedTypeFromSpinner = parent?.getItemAtPosition(position).toString()
+                        Log.e("DEBUG", imageAddedTypeFromSpinner)
+                    }
+                }
+        }
+        alertDialog.show()
+    }
+
+    override fun onLongClickPicture(position: Int)
+    {
+        AlertDialog.Builder(context!!).apply {
+            setTitle(getString(R.string.delete_picture_alert_title))
+                .setMessage(getString(R.string.delete_picture_alert_message))
+                .setPositiveButton(getString(R.string.delete_picture_alert_confirm)) { _, _ -> addPhotoAdapter.removePictureFromAdapter(position) }
+                .setNegativeButton(getString(R.string.delete_picture_alert_cancel)) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
         }
     }
 }

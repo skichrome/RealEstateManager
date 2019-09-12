@@ -18,6 +18,7 @@
 
     <color name="white">#FFFFFF</color>
 
-    <color name="toolbarColor">#B1B1B1</color>
-    <color name="toolbarColorDark">#818080</color>
+    <color name="grayColorLight">#EEEEEE</color>
+    <color name="grayColor">#B1B1B1</color>
+    <color name="grayColorDark">#818080</color>
 </resources>
