@@ -64,6 +64,11 @@ class RealtyListFragment : Fragment()
         viewModel.realEstates.observe(
             this,
             Observer { it?.let { list -> adapter.replaceData(list) } })
-        viewModel.observeDatabaseChanges()
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+        viewModel.getAllRealty()
     }
 }

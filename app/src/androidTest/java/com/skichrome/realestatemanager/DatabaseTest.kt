@@ -1,13 +1,17 @@
 package com.skichrome.realestatemanager
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.skichrome.realestatemanager.model.database.*
+import com.skichrome.realestatemanager.utils.AppCoroutinesConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
+import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -17,9 +21,6 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest
 {
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
-
     companion object
     {
         private lateinit var database: RealEstateDatabase
@@ -43,38 +44,59 @@ class DatabaseTest
             status = false,
             surface = 45.57f
         )
+        private val REALTY2 = Realty(
+            id = AUTO_GENERATED_ID + 1,
+            price = 120_000f,
+            address = "12 avenue du pont",
+            postCode = 95000,
+            city = "J'ai pas d'inspiration",
+            agent = "Bob",
+            dateAdded = Date.from(Instant.now()),
+            fullDescription = "A big description",
+            roomNumber = 4,
+            status = false,
+            surface = 45.57f
+        )
         private val POI = Poi(
             poiId = AUTO_GENERATED_ID,
             type = "School",
             realtyId = AUTO_GENERATED_ID
         )
         private val REALTY_TYPE = RealtyType(
-            realtyId = AUTO_GENERATED_ID,
             realtyTypeId = AUTO_GENERATED_ID,
+            realtyId = AUTO_GENERATED_ID,
             name = "Penthouse"
         )
         private val MEDIA_REF = MediaReference(
             mediaReferenceId = AUTO_GENERATED_ID,
-            reference = "https://amazing-pict.com/amazing",
             realtyId = AUTO_GENERATED_ID,
+            reference = "https://amazing-pict.com/amazing",
             shortDesc = "RxJava tests crashes was very difficult to fix but now it's OK"
         )
+
+        @ExperimentalCoroutinesApi
+        @BeforeClass
+        @JvmStatic
+        fun initCoroutines()
+        {
+            with(AppCoroutinesConfiguration) {
+                uiDispatchers = Dispatchers.Unconfined
+                backgroundDispatchers = Dispatchers.Unconfined
+                ioDispatchers = Dispatchers.Unconfined
+            }
+        }
     }
 
     @Before
     fun initDb()
     {
-        database = Room.inMemoryDatabaseBuilder(
-            InstrumentationRegistry.getInstrumentation().context,
-            RealEstateDatabase::class.java
-        )
+        database = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().context, RealEstateDatabase::class.java)
             .allowMainThreadQueries()
             .build()
         realtyDao = database.realtyDao()
         poiDao = database.poiDao()
         realtyTypeDao = database.realtyTypeDao()
         mediaReferenceDao = database.mediaReferenceDao()
-
     }
 
     @After
@@ -90,109 +112,78 @@ class DatabaseTest
 
     @Test
     @Throws(Exception::class)
-    fun insertAndGetRealtyAndTestReturnedID()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        val storedRealty = realtyDao.getAllRealty().blockingFirst()[0]
+    fun insertAndGetRealty() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        realtyDao.insertRealty(REALTY2)
+        val storedRealty = realtyDao.getAllRealty()
 
-        database.realtyDao()
-            .getRealtyById(storedRealty.id)
-            .test()
-            .assertNoErrors()
-            .assertValue {
-                it.status == REALTY.status
-                        && it.address == REALTY.address
-                        && it.agent == REALTY.agent
-                        && it.city == REALTY.city
-                        && it.dateAdded == REALTY.dateAdded
-                        && it.dateSell == REALTY.dateSell
-                        && it.fullDescription == REALTY.fullDescription
-                        && it.postCode == REALTY.postCode
-                        && it.price == REALTY.price
-                        && it.roomNumber == REALTY.roomNumber
-                        && it.surface == REALTY.surface
-
-                        && it.id == AUTO_GENERATED_ID
-            }
+        assertEquals(listOf(REALTY, REALTY2), storedRealty)
     }
 
     @Test
-    fun updateAndGetRealty()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        val storedRealty = realtyDao.getAllRealty().blockingFirst()[0]
+    @Throws(Exception::class)
+    fun updateAndGetRealty() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val storedRealty = realtyDao.getAllRealty().first()
         storedRealty.status = true
+        realtyDao.updateRealty(storedRealty)
 
-        realtyDao.updateRealty(storedRealty).blockingAwait()
-
-        realtyDao.getAllRealty()
-            .test()
-            .assertValue { it.last().status }
+        val updatedRealtyList = realtyDao.getAllRealty()
+        assertEquals(listOf(storedRealty), updatedRealtyList)
     }
 
     @Test
-    fun insertAndDeleteRealty()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-
-        val storedRealty = realtyDao.getAllRealty().blockingFirst()[0]
-
+    @Throws(Exception::class)
+    fun insertAndDeleteRealty() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val storedRealty = realtyDao.getAllRealty().first()
         realtyDao.deleteRealtyById(storedRealty.id)
-            .test()
-            .assertComplete()
 
-        realtyDao.getAllRealty()
-            .test()
-            .assertValue { it.isEmpty() }
+        val expectedEmptyList = realtyDao.getAllRealty()
+        assert(expectedEmptyList.isEmpty())
     }
-
 
     // =================================
     // Poi DAO Test
     // =================================
 
     @Test
-    fun insertAndGetPoi()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        poiDao.insertPoi(POI).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndGetPoi() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        poiDao.insertPoi(POI)
 
-        poiDao.getPoiOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue {
-                it.poiId == POI.poiId
-                        && it.realtyId == AUTO_GENERATED_ID
-                        && it.type == POI.type
-            }
+        val storedPoi = poiDao.getAllPoi()
+        assertEquals(listOf(POI), storedPoi)
+
     }
 
     @Test
-    fun updateAndGetPoi()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        poiDao.insertPoi(POI).blockingAwait()
-        val storedPoi = poiDao.getPoiOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
+    @Throws(Exception::class)
+    fun updateAndGetPoi() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedPoiId = poiDao.insertPoi(POI)
+
+        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId)
         storedPoi.type = "restaurant"
+        poiDao.updatePoiOfRealty(storedPoi)
 
-        poiDao.updatePoiOfRealty(storedPoi).blockingAwait()
-
-        poiDao.getPoiOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue { it.type == "restaurant" }
+        val updatedPoi = poiDao.getAllPoi()
+        assertEquals(listOf(storedPoi), updatedPoi)
     }
 
     @Test
-    fun insertAndDeletePoi()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        poiDao.insertPoi(POI).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndDeletePoi() = runBlocking {
 
-        val storedPoi = poiDao.getPoiOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
-        poiDao.deletePoiOfRealtyById(storedPoi.poiId).blockingAwait()
+        realtyDao.insertRealty(REALTY)
+        val insertedPoiId = poiDao.insertPoi(POI)
 
-        poiDao.getAllPoi()
-            .test()
-            .assertValue { it.isEmpty() }
+        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId)
+        poiDao.deletePoiOfRealtyById(storedPoi.poiId)
+
+        val expectedEmptyList = poiDao.getAllPoi()
+        assert(expectedEmptyList.isEmpty())
     }
 
     // =================================
@@ -200,47 +191,40 @@ class DatabaseTest
     // =================================
 
     @Test
-    fun insertAndGetRealtyType()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        realtyTypeDao.insertRealtyType(REALTY_TYPE).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndGetRealtyType() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
 
-        realtyTypeDao.getTypeOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue {
-                it.realtyId == REALTY_TYPE.realtyId
-                        && it.realtyTypeId == AUTO_GENERATED_ID
-                        && it.name == REALTY_TYPE.name
-            }
+        val storedType = realtyTypeDao.getAllRealtyType()
+        assertEquals(listOf(REALTY_TYPE), storedType)
     }
 
     @Test
-    fun updateAndGetRealtyType()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        realtyTypeDao.insertRealtyType(REALTY_TYPE).blockingAwait()
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
+    @Throws(Exception::class)
+    fun updateAndGetRealtyType() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
+
+        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId)
         storedRealtyType.name = "House"
+        realtyTypeDao.updateTypeOfRealty(storedRealtyType)
 
-        realtyTypeDao.updateTypeOfRealty(storedRealtyType).blockingAwait()
-
-        realtyTypeDao.getTypeOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue { it.name == "House" }
+        val updatedType = realtyTypeDao.getAllRealtyType()
+        assertEquals(listOf(storedRealtyType), updatedType)
     }
 
     @Test
-    fun insertAndDeleteRealtyType()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        realtyTypeDao.insertRealtyType(REALTY_TYPE).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndDeleteRealtyType() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
 
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
-        realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyId).blockingAwait()
+        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId)
+        realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyId)
 
-        realtyTypeDao.getAllRealtyType()
-            .test()
-            .assertValue { it.isEmpty() }
+        val expectedEmptyList = realtyTypeDao.getAllRealtyType()
+        assert(expectedEmptyList.isEmpty())
     }
 
     // =================================
@@ -248,50 +232,39 @@ class DatabaseTest
     // =================================
 
     @Test
-    fun insertAndGetMediaReference()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        mediaReferenceDao.insertMediaReference(MEDIA_REF).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndGetMediaReference() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
-        mediaReferenceDao.getMediaOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue {
-                it.realtyId == REALTY_TYPE.realtyId
-                        && it.mediaReferenceId == AUTO_GENERATED_ID
-                        && it.reference == MEDIA_REF.reference
-                        && it.realtyId == MEDIA_REF.realtyId
-                        && it.shortDesc == MEDIA_REF.shortDesc
-            }
+        val storedMediaRef = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
+        assertEquals(MEDIA_REF, storedMediaRef)
     }
 
     @Test
-    fun updateAndGetMediaReference()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        mediaReferenceDao.insertMediaReference(MEDIA_REF).blockingAwait()
-        val storedMediaReference =
-            mediaReferenceDao.getMediaOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
+    @Throws(Exception::class)
+    fun updateAndGetMediaReference() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
+
+        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
         storedMediaReference.reference = "https://new-reference.fr/"
+        mediaReferenceDao.updateMediaOfRealty(storedMediaReference)
 
-        mediaReferenceDao.updateMediaOfRealty(storedMediaReference).blockingAwait()
-
-        mediaReferenceDao.getMediaOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertValue { it.reference == "https://new-reference.fr/" }
+        val updatedMediaRef = mediaReferenceDao.getAllMedias()
+        assertEquals(listOf(storedMediaReference), updatedMediaRef)
     }
 
     @Test
-    fun insertAndDeleteMediaReference()
-    {
-        realtyDao.insertRealty(REALTY).blockingAwait()
-        mediaReferenceDao.insertMediaReference(MEDIA_REF).blockingAwait()
+    @Throws(Exception::class)
+    fun insertAndDeleteMediaReference() = runBlocking {
+        realtyDao.insertRealty(REALTY)
+        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
-        val storedMediaReference =
-            mediaReferenceDao.getMediaOfRealtyById(AUTO_GENERATED_ID).blockingFirst()
-        mediaReferenceDao.deleteMediaOfRealtyById(storedMediaReference.realtyId).blockingAwait()
+        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
+        mediaReferenceDao.deleteMediaOfRealtyById(storedMediaReference.realtyId)
 
-        mediaReferenceDao.getMediaOfRealtyById(AUTO_GENERATED_ID)
-            .test()
-            .assertEmpty()
+        val expectedEmptyList = mediaReferenceDao.getAllMedias()
+        assert(expectedEmptyList.isEmpty())
     }
 }

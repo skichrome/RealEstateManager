@@ -8,7 +8,7 @@ import java.util.*
 
 @Entity
 data class Realty(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0L,
     val price: Float,
     val surface: Float,
     val roomNumber: Int,

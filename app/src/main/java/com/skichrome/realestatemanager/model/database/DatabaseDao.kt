@@ -4,79 +4,79 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Observable
 
 @Dao
 interface RealtyDao
 {
     @Query("SELECT * FROM Realty")
-    fun getAllRealty(): Flowable<List<Realty>>
+    suspend fun getAllRealty(): List<Realty>
 
     @Query("SELECT * FROM Realty WHERE id = :realtyId")
-    fun getRealtyById(realtyId: Long): Flowable<Realty>
+    suspend fun getRealtyById(realtyId: Long): Realty
 
     @Insert
-    fun insertRealty(vararg realty: Realty): Completable
+    suspend fun insertRealty(vararg realty: Realty): List<Long>
 
     @Update
-    fun updateRealty(realty: Realty): Completable
+    suspend fun updateRealty(realty: Realty): Int
 
     @Query("DELETE FROM Realty WHERE id = :realtyId")
-    fun deleteRealtyById(realtyId: Long): Completable
+    suspend fun deleteRealtyById(realtyId: Long)
 }
 
 @Dao
 interface PoiDao
 {
     @Insert
-    fun insertPoi(poi: Poi): Completable
+    suspend fun insertPoi(poi: Poi): Long
 
     @Query("SELECT * FROM Poi")
-    fun getAllPoi(): Flowable<List<Poi>>
+    suspend fun getAllPoi(): List<Poi>
 
     @Query("SELECT * FROM Poi WHERE poiId = :realtyId")
-    fun getPoiOfRealtyById(realtyId: Long): Observable<Poi>
+    suspend fun getPoiOfRealtyById(realtyId: Long): Poi
 
     @Update
-    fun updatePoiOfRealty(poi: Poi): Completable
+    suspend fun updatePoiOfRealty(poi: Poi): Int
 
     @Query("DELETE FROM Poi WHERE poiId = :poiId")
-    fun deletePoiOfRealtyById(poiId: Long): Completable
+    suspend fun deletePoiOfRealtyById(poiId: Long)
 }
 
 @Dao
 interface RealtyTypeDao
 {
     @Insert
-    fun insertRealtyType(realtyType: RealtyType): Completable
+    suspend fun insertRealtyType(realtyType: RealtyType): Long
 
     @Query("SELECT * FROM RealtyType")
-    fun getAllRealtyType(): Flowable<List<RealtyType>>
+    suspend fun getAllRealtyType(): List<RealtyType>
 
     @Query("SELECT * FROM RealtyType WHERE realtyTypeId = :realtyId")
-    fun getTypeOfRealtyById(realtyId: Long): Observable<RealtyType>
+    suspend fun getTypeOfRealtyById(realtyId: Long): RealtyType
 
     @Update
-    fun updateTypeOfRealty(realtyType: RealtyType): Completable
+    suspend fun updateTypeOfRealty(realtyType: RealtyType): Int
 
     @Query("DELETE FROM RealtyType WHERE realtyTypeId = :realtyId")
-    fun deleteTypeOfRealtyById(realtyId: Long): Completable
+    suspend fun deleteTypeOfRealtyById(realtyId: Long)
 }
 
 @Dao
 interface MediaReferenceDao
 {
     @Insert
-    fun insertMediaReference(mediaRef: MediaReference): Completable
+    suspend fun insertMediaReference(mediaRef: MediaReference): Long
+
+    @Query("SELECT * FROM MediaReference")
+    suspend fun getAllMedias(): List<MediaReference>
 
     @Query("SELECT * FROM MediaReference WHERE mediaReferenceId = :realtyId")
-    fun getMediaOfRealtyById(realtyId: Long): Observable<MediaReference>
+    suspend fun getMediaOfRealtyById(realtyId: Long): MediaReference
 
     @Update
-    fun updateMediaOfRealty(mediaReference: MediaReference): Completable
+    suspend fun updateMediaOfRealty(mediaReference: MediaReference): Int
 
     @Query("DELETE FROM MediaReference WHERE mediaReferenceId = :mediaRefId")
-    fun deleteMediaOfRealtyById(mediaRefId: Long): Completable
+    suspend fun deleteMediaOfRealtyById(mediaRefId: Long)
 }
