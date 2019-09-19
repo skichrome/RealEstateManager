@@ -71,8 +71,8 @@ interface MediaReferenceDao
     @Query("SELECT * FROM MediaReference")
     suspend fun getAllMedias(): List<MediaReference>
 
-    @Query("SELECT * FROM MediaReference WHERE mediaReferenceId = :realtyId")
-    suspend fun getMediaOfRealtyById(realtyId: Long): MediaReference
+    @Query("SELECT * FROM MediaReference WHERE realtyId = :realtyId")
+    suspend fun getMediaOfRealtyById(realtyId: Long): List<MediaReference>
 
     @Update
     suspend fun updateMediaOfRealty(mediaReference: MediaReference): Int

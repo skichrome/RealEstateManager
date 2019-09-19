@@ -30,6 +30,8 @@ class RealEstateDataRepository(private val netManager: NetManager, private val l
         return localDataSource.getAllRealty()
     }
 
+    suspend fun getRealty(id: Long): Realty = localDataSource.getRealtyById(id)
+
     suspend fun insertRealty(realty: Realty): Long = localDataSource.createRealty(realty)
 
     suspend fun insertMediaReferences(medias: List<MediaReference?>, realtyId: Long) = medias.forEach {
@@ -39,4 +41,6 @@ class RealEstateDataRepository(private val netManager: NetManager, private val l
             localDataSource.insertMediaReferences(it)
         }
     }
+
+    suspend fun getMediaReferencesFromRealty(id: Long): List<MediaReference> = localDataSource.getMediaReferencesFromRealtyId(id)
 }

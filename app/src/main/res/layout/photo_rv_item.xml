@@ -40,7 +40,6 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/rv_realty_picture_content_desc"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_add_circle_24dp"
                 android:visibility="@{isImgLocationNull ? View.INVISIBLE : View.VISIBLE}" />
 
             <ImageView

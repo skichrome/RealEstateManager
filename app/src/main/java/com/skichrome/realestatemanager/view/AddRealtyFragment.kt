@@ -36,7 +36,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     //              Fields
     // =================================
 
-    private val addPhotoAdapter = RealtyPhotoAdapter(callback = WeakReference(this))
+    private val photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
     private val materialEditTextViewList = arrayListOf<TextInputLayout>()
     private val date = SimpleDateFormat.getDateInstance()
     private lateinit var spinnerArray: Array<String>
@@ -74,7 +74,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-            addPhotoAdapter.addPictureToAdapter(MediaReference(reference = imageAddedSrc, shortDesc = imageAddedTypeFromSpinner))
+            photoAdapter.addPictureToAdapter(MediaReference(reference = imageAddedSrc, shortDesc = imageAddedTypeFromSpinner))
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -98,7 +98,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun configureRecyclerView()
     {
-        binding.addRealtyFragRecyclerViewAddPhoto.adapter = addPhotoAdapter
+        binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
     }
 
     private fun configureViewModel()
@@ -213,7 +213,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 price = addRealtyFragPriceInput.text.toString().toFloat(),
                 realtyTypeId = realtyType
             )
-            viewModel.insertRealty(realtyToBeAdded, addPhotoAdapter.getAllPicturesReferences())
+            viewModel.insertRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
         }
     }
 
@@ -297,7 +297,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         AlertDialog.Builder(context!!).apply {
             setTitle(getString(R.string.delete_picture_alert_title))
                 .setMessage(getString(R.string.delete_picture_alert_message))
-                .setPositiveButton(getString(R.string.delete_picture_alert_confirm)) { _, _ -> addPhotoAdapter.removePictureFromAdapter(position) }
+                .setPositiveButton(getString(R.string.delete_picture_alert_confirm)) { _, _ -> photoAdapter.removePictureFromAdapter(position) }
                 .setNegativeButton(getString(R.string.delete_picture_alert_cancel)) { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()

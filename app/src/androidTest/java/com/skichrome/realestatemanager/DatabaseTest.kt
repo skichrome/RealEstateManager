@@ -241,7 +241,7 @@ class DatabaseTest
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
         val storedMediaRef = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
-        assertEquals(MEDIA_REF, storedMediaRef)
+        assertEquals(listOf(MEDIA_REF), storedMediaRef)
     }
 
     @Test
@@ -251,7 +251,7 @@ class DatabaseTest
         realtyDao.insertRealty(REALTY)
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
-        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
+        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId).first()
         storedMediaReference.reference = "https://new-reference.fr/"
         mediaReferenceDao.updateMediaOfRealty(storedMediaReference)
 
@@ -266,7 +266,7 @@ class DatabaseTest
         realtyDao.insertRealty(REALTY)
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
-        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
+        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId).first()
         mediaReferenceDao.deleteMediaOfRealtyById(storedMediaReference.realtyId)
 
         val expectedEmptyList = mediaReferenceDao.getAllMedias()

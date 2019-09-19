@@ -27,8 +27,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel, F : ViewModelPro
 
     abstract fun getFragmentLayout(): Int
     abstract fun getViewModelClass(): Class<V>
-    abstract fun configureFragment()
     abstract fun getInjection(): F
+    abstract fun configureFragment()
 
     // =================================
     //        Superclass Methods

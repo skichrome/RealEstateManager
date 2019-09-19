@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.RealtyListRvItemBinding
 import com.skichrome.realestatemanager.model.database.Realty
+import java.lang.ref.WeakReference
 
-class RealtyListAdapter(private var realtyList: List<Realty> = listOf()) :
+class RealtyListAdapter(private var realtyList: List<Realty> = listOf(), private val callback: WeakReference<RealtyItemListener>) :
     RecyclerView.Adapter<RealtyListAdapter.RealtyListViewHolder>()
 {
     private lateinit var binding: RealtyListRvItemBinding
@@ -20,7 +21,7 @@ class RealtyListAdapter(private var realtyList: List<Realty> = listOf()) :
         return RealtyListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) = holder.bind(realtyList[position])
+    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) = holder.bind(realtyList[position], callback)
 
     override fun getItemCount(): Int = realtyList.size
 
@@ -32,10 +33,16 @@ class RealtyListAdapter(private var realtyList: List<Realty> = listOf()) :
     class RealtyListViewHolder(private val binding: RealtyListRvItemBinding) :
         RecyclerView.ViewHolder(binding.root)
     {
-        fun bind(item: Realty)
+        fun bind(item: Realty, callback: WeakReference<RealtyItemListener>)
         {
             binding.realty = item
+            binding.root.setOnClickListener { callback.get()?.onClickRealty(item.id) }
             binding.executePendingBindings()
         }
+    }
+
+    interface RealtyItemListener
+    {
+        fun onClickRealty(id: Long)
     }
 }

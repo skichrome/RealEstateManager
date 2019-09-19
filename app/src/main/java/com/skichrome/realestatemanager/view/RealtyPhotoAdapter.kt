@@ -10,7 +10,7 @@ import com.skichrome.realestatemanager.databinding.PhotoRvItemBinding
 import com.skichrome.realestatemanager.model.database.MediaReference
 import java.lang.ref.WeakReference
 
-class RealtyPhotoAdapter(var list: MutableList<MediaReference?> = mutableListOf(null), private val callback: WeakReference<OnClickPictureListener>) :
+class RealtyPhotoAdapter(var list: MutableList<MediaReference?>, private val callback: WeakReference<OnClickPictureListener>) :
     RecyclerView.Adapter<RealtyPhotoAdapter.RealtyPhotoViewHolder>()
 {
     private lateinit var binding: PhotoRvItemBinding
@@ -26,6 +26,12 @@ class RealtyPhotoAdapter(var list: MutableList<MediaReference?> = mutableListOf(
         holder.bind(list[position], callback)
 
     override fun getItemCount(): Int = list.size
+
+    fun replacePhotoList(newImages: List<MediaReference?>)
+    {
+        list = newImages.toMutableList()
+        notifyDataSetChanged()
+    }
 
     fun addPictureToAdapter(image: MediaReference)
     {

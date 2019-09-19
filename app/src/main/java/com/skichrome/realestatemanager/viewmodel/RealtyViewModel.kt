@@ -41,6 +41,14 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
     val realtyTypes: LiveData<List<RealtyType>>
         get() = _realtyTypes
 
+    private val _realtyDetailed = ObservableField<Realty>()
+    val realtyDetailed: ObservableField<Realty>
+        get() = _realtyDetailed
+
+    private val _realtyDetailedPhotos = MutableLiveData<List<MediaReference>>()
+    val realtyDetailedPhotos: MutableLiveData<List<MediaReference>>
+        get() = _realtyDetailedPhotos
+
     init
     {
         getRealtyTypes()
@@ -64,6 +72,19 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
         uiScope.uiJob {
             _realEstates.value = ioTask {
                 repository.getAllRealty()
+            }
+        }
+    }
+
+    fun getRealty(id: Long)
+    {
+        uiScope.uiJob {
+            _realtyDetailed.set(
+                ioTask {
+                    repository.getRealty(id)
+                })
+            _realtyDetailedPhotos.value = ioTask {
+                repository.getMediaReferencesFromRealty(id)
             }
         }
     }

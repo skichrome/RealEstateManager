@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="realtyViewModel"
+            type="com.skichrome.realestatemanager.viewmodel.RealtyViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentTitleMedia"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/realty_details_fragment_medias_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/realtyDetailsFragmentRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:minHeight="@dimen/material_card_height"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentTitleMedia"
+                tools:itemCount="3"
+                tools:listitem="@layout/photo_rv_item" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentTitleDesc"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/realty_details_fragment_description_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRecyclerView" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{realtyViewModel.realtyDetailed.fullDescription}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentTitleDesc"
+                tools:text="@string/lorem_ipsum" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentSurfaceTitle"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_size_24dp"
+                android:gravity="center"
+                android:text="@string/realty_details_fragment_surface_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDescription" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentSurface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text='@{realtyViewModel.realtyDetailed.surface + " m2"}'
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentSurfaceTitle"
+                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentSurfaceTitle"
+                tools:text="@string/realty_details_fragment_surface_title" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentRoomNumberTitle"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_home_24dp"
+                android:gravity="center"
+                android:text="@string/realty_details_fragment_rooms_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurfaceTitle" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentRoomNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{String.valueOf(realtyViewModel.realtyDetailed.roomNumber)}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentRoomNumberTitle"
+                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentRoomNumberTitle"
+                tools:text="@string/realty_details_fragment_rooms_title" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentLocationTitle"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_location_24dp"
+                android:gravity="center"
+                android:text="@string/realty_details_fragment_location_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumberTitle" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentLocationAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{realtyViewModel.realtyDetailed.address}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationTitle"
+                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentLocationTitle"
+                tools:text="@string/realty_details_fragment_location_title" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentLocationPostCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{String.valueOf(realtyViewModel.realtyDetailed.postCode)}"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentLocationAddress"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationAddress"
+                tools:text="postcode" />
+
+            <TextView
+                android:id="@+id/realtyDetailsFragmentLocationCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{realtyViewModel.realtyDetailed.city}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationPostCode"
+                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentLocationPostCode"
+                tools:text="city" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

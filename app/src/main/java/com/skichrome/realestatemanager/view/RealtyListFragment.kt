@@ -2,6 +2,7 @@ package com.skichrome.realestatemanager.view
 
 import android.util.DisplayMetrics
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.R
@@ -9,10 +10,11 @@ import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
+import java.lang.ref.WeakReference
 
-class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewModel, ViewModelFactory>()
+class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewModel, ViewModelFactory>(), RealtyListAdapter.RealtyItemListener
 {
-    private val adapter = RealtyListAdapter()
+    private val adapter = RealtyListAdapter(callback = WeakReference(this))
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_list
 
@@ -46,5 +48,15 @@ class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewMod
     {
         super.onResume()
         viewModel.getAllRealty()
+    }
+
+    // =================================
+    //            Callbacks
+    // =================================
+
+    override fun onClickRealty(id: Long)
+    {
+        val navOptions = RealtyListFragmentDirections.actionRealtyListFragmentToDetailsRealtyFragment(id)
+        findNavController().navigate(navOptions)
     }
 }
