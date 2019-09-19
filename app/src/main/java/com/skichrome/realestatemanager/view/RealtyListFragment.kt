@@ -22,11 +22,7 @@ class RealtyListFragment : Fragment()
     private lateinit var viewModel: RealtyViewModel
     private val adapter = RealtyListAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_realty_list, container, false)
@@ -37,6 +33,7 @@ class RealtyListFragment : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+
         val vmFactory = Injection.provideViewModelFactory(context!!)
         viewModel = ViewModelProviders.of(this, vmFactory).get(RealtyViewModel::class.java)
         binding.realtyViewModel = viewModel
@@ -54,16 +51,9 @@ class RealtyListFragment : Fragment()
 
         val largePadding = resources.getDimension(R.dimen.preview_card_spacing).toInt()
         val smallPadding = resources.getDimension(R.dimen.preview_card_spacing_small).toInt()
-        binding.realtyListFragmentRecyclerView.addItemDecoration(
-            RvItemDecoration(
-                largePadding,
-                smallPadding
-            )
-        )
+        binding.realtyListFragmentRecyclerView.addItemDecoration(RvItemDecoration(largePadding, smallPadding))
 
-        viewModel.realEstates.observe(
-            this,
-            Observer { it?.let { list -> adapter.replaceData(list) } })
+        viewModel.realEstates.observe(this, Observer { it?.let { list -> adapter.replaceRealtyList(list) } })
     }
 
     override fun onResume()

@@ -173,24 +173,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutPriceSurface">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/addRealtyFragInputTypeTextLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <Spinner
+                    android:id="@+id/addRealtyFragTypeInputSpinner"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="8dp"
                     android:layout_weight="3"
-                    android:hint="@string/add_realty_frag_hint_type"
-                    app:endIconMode="clear_text">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/addRealtyFragTypeInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:entries="@array/realty_categories" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/addRealtyFragInputRoomNumberTextLayout"

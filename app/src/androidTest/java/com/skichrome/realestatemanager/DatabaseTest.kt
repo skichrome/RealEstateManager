@@ -42,7 +42,8 @@ class DatabaseTest
             fullDescription = "A big description",
             roomNumber = 4,
             status = false,
-            surface = 45.57f
+            surface = 45.57f,
+            realtyTypeId = AUTO_GENERATED_ID.toInt()
         )
         private val REALTY2 = Realty(
             id = AUTO_GENERATED_ID + 1,
@@ -55,16 +56,15 @@ class DatabaseTest
             fullDescription = "A big description",
             roomNumber = 4,
             status = false,
-            surface = 45.57f
+            surface = 45.57f,
+            realtyTypeId = AUTO_GENERATED_ID.toInt()
         )
         private val POI = Poi(
-            poiId = AUTO_GENERATED_ID,
-            type = "School",
-            realtyId = AUTO_GENERATED_ID
+            poiId = AUTO_GENERATED_ID.toInt(),
+            name = "School"
         )
         private val REALTY_TYPE = RealtyType(
-            realtyTypeId = AUTO_GENERATED_ID,
-            realtyId = AUTO_GENERATED_ID,
+            realtyTypeId = AUTO_GENERATED_ID.toInt(),
             name = "Penthouse"
         )
         private val MEDIA_REF = MediaReference(
@@ -113,6 +113,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealty() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         realtyDao.insertRealty(REALTY2)
         val storedRealty = realtyDao.getAllRealty()
@@ -123,6 +124,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealty() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val storedRealty = realtyDao.getAllRealty().first()
         storedRealty.status = true
@@ -135,6 +137,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealty() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val storedRealty = realtyDao.getAllRealty().first()
         realtyDao.deleteRealtyById(storedRealty.id)
@@ -150,6 +153,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetPoi() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         poiDao.insertPoi(POI)
 
@@ -161,11 +165,12 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetPoi() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val insertedPoiId = poiDao.insertPoi(POI)
 
-        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId)
-        storedPoi.type = "restaurant"
+        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId.toInt())
+        storedPoi.name = "restaurant"
         poiDao.updatePoiOfRealty(storedPoi)
 
         val updatedPoi = poiDao.getAllPoi()
@@ -175,11 +180,11 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeletePoi() = runBlocking {
-
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val insertedPoiId = poiDao.insertPoi(POI)
 
-        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId)
+        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId.toInt())
         poiDao.deletePoiOfRealtyById(storedPoi.poiId)
 
         val expectedEmptyList = poiDao.getAllPoi()
@@ -193,7 +198,6 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealtyType() = runBlocking {
-        realtyDao.insertRealty(REALTY)
         realtyTypeDao.insertRealtyType(REALTY_TYPE)
 
         val storedType = realtyTypeDao.getAllRealtyType()
@@ -203,10 +207,9 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealtyType() = runBlocking {
-        realtyDao.insertRealty(REALTY)
         val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
 
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId)
+        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId.toInt())
         storedRealtyType.name = "House"
         realtyTypeDao.updateTypeOfRealty(storedRealtyType)
 
@@ -217,11 +220,10 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealtyType() = runBlocking {
-        realtyDao.insertRealty(REALTY)
         val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
 
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId)
-        realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyId)
+        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId.toInt())
+        realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyTypeId)
 
         val expectedEmptyList = realtyTypeDao.getAllRealtyType()
         assert(expectedEmptyList.isEmpty())
@@ -234,6 +236,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetMediaReference() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
@@ -244,6 +247,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetMediaReference() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 
@@ -258,6 +262,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteMediaReference() = runBlocking {
+        realtyTypeDao.insertRealtyType(REALTY_TYPE)
         realtyDao.insertRealty(REALTY)
         val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
 

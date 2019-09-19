@@ -8,7 +8,7 @@ import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.RealtyListRvItemBinding
 import com.skichrome.realestatemanager.model.database.Realty
 
-class RealtyListAdapter(private var list: List<Realty> = listOf()) :
+class RealtyListAdapter(private var realtyList: List<Realty> = listOf()) :
     RecyclerView.Adapter<RealtyListAdapter.RealtyListViewHolder>()
 {
     private lateinit var binding: RealtyListRvItemBinding
@@ -20,16 +20,12 @@ class RealtyListAdapter(private var list: List<Realty> = listOf()) :
         return RealtyListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int)
-    {
-        holder.bind(list[position])
-    }
+    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) = holder.bind(realtyList[position])
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = realtyList.size
 
-    fun replaceData(newList: List<Realty>)
-    {
-        list = newList
+    fun replaceRealtyList(list: List<Realty>) = list.let {
+        realtyList = list
         notifyDataSetChanged()
     }
 
@@ -38,10 +34,7 @@ class RealtyListAdapter(private var list: List<Realty> = listOf()) :
     {
         fun bind(item: Realty)
         {
-            val price = "\$ ${item.price}"
-            binding.realtyListItemPrice.text = price
-            binding.realtyListItemName.text = item.agent
-            binding.realtyListItemLocation.text = item.city
+            binding.realty = item
             binding.executePendingBindings()
         }
     }

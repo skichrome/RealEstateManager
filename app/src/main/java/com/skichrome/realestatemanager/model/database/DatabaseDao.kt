@@ -34,13 +34,13 @@ interface PoiDao
     suspend fun getAllPoi(): List<Poi>
 
     @Query("SELECT * FROM Poi WHERE poiId = :realtyId")
-    suspend fun getPoiOfRealtyById(realtyId: Long): Poi
+    suspend fun getPoiOfRealtyById(realtyId: Int): Poi
 
     @Update
     suspend fun updatePoiOfRealty(poi: Poi): Int
 
     @Query("DELETE FROM Poi WHERE poiId = :poiId")
-    suspend fun deletePoiOfRealtyById(poiId: Long)
+    suspend fun deletePoiOfRealtyById(poiId: Int)
 }
 
 @Dao
@@ -53,13 +53,13 @@ interface RealtyTypeDao
     suspend fun getAllRealtyType(): List<RealtyType>
 
     @Query("SELECT * FROM RealtyType WHERE realtyTypeId = :realtyId")
-    suspend fun getTypeOfRealtyById(realtyId: Long): RealtyType
+    suspend fun getTypeOfRealtyById(realtyId: Int): RealtyType
 
     @Update
     suspend fun updateTypeOfRealty(realtyType: RealtyType): Int
 
     @Query("DELETE FROM RealtyType WHERE realtyTypeId = :realtyId")
-    suspend fun deleteTypeOfRealtyById(realtyId: Long)
+    suspend fun deleteTypeOfRealtyById(realtyId: Int)
 }
 
 @Dao

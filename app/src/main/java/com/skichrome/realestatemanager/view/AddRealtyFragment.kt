@@ -47,6 +47,7 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
     private lateinit var imageAddedSrc: String
     private lateinit var imageAddedTypeFromSpinner: String
     private lateinit var binding: FragmentAddRealtyBinding
+    private var realtyType: Int = -1
     private var realtyStatus: Boolean = false
     private var realtySoldDate: Calendar? = null
     private var canRegisterARealty = false
@@ -102,7 +103,6 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
         materialEditTextViewList.add(addRealtyFragInputPriceTextLayout)
         materialEditTextViewList.add(addRealtyFragInputRoomNumberTextLayout)
         materialEditTextViewList.add(addRealtyFragInputSurfaceTextLayout)
-        materialEditTextViewList.add(addRealtyFragInputTypeTextLayout)
     }
 
     private fun configureRecyclerView()
@@ -143,6 +143,15 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+        }
+        addRealtyFragTypeInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, p3: Long)
+            {
+                realtyType = position
+            }
         }
     }
 
@@ -213,7 +222,8 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
                 city = addRealtyFragCityInput.text.toString(),
                 postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
                 address = addRealtyFragAddressInput.text.toString(),
-                price = addRealtyFragPriceInput.text.toString().toFloat()
+                price = addRealtyFragPriceInput.text.toString().toFloat(),
+                realtyTypeId = realtyType
             )
             viewModel.insertRealty(realtyToBeAdded)
         }
@@ -271,8 +281,7 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
     {
         val alertDialog = AlertDialog.Builder(context!!).apply {
 
-            val alertInflater = layoutInflater.inflate(R.layout.alert_dialog_spinner, null)
-
+            val alertInflater = View.inflate(context, R.layout.alert_dialog_spinner, null)
             setView(alertInflater)
 
             setTitle(getString(R.string.select_picture_type_alert_title))

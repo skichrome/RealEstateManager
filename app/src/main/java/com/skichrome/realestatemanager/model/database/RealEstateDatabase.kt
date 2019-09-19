@@ -2,12 +2,12 @@ package com.skichrome.realestatemanager.model.database
 
 import android.content.ContentValues
 import android.content.Context
-import android.util.Log
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.skichrome.realestatemanager.R
 
 @Database(
-    entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class],
+    entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class, PoiRealty::class],
     version = 1,
     exportSchema = false
 )
@@ -42,29 +42,17 @@ abstract class RealEstateDatabase : RoomDatabase()
                     override fun onCreate(db: SupportSQLiteDatabase)
                     {
                         super.onCreate(db)
-                        Log.e("DATABASE", "Database created")
-
-                        val contentValue = ContentValues()
-                        contentValue.put("price", 120_000f)
-                        contentValue.put("address", "12 avenue du pont")
-                        contentValue.put("postCode", 95000)
-                        contentValue.put("city", "J'ai pas d'inspiration")
-                        contentValue.put("agent", "Bob")
-                        contentValue.put("dateAdded", System.currentTimeMillis())
-                        contentValue.put("fullDescription", "A big description")
-                        contentValue.put("roomNumber", 4)
-                        contentValue.put("status", false)
-                        contentValue.put("surface", 45.57f)
-
-                        db.insert("Realty", OnConflictStrategy.REPLACE, contentValue)
-                    }
-
-                    override fun onOpen(db: SupportSQLiteDatabase)
-                    {
-                        super.onOpen(db)
-                        Log.e("DATABASE", "Database Opened")
+                        insertPrePopulatedCategories(context, db)
                     }
                 })
                 .build()
+
+        private fun insertPrePopulatedCategories(context: Context, db: SupportSQLiteDatabase) =
+            context.resources.getStringArray(R.array.realty_categories).forEachIndexed { index, resource ->
+                val contentValue = ContentValues()
+                contentValue.put("realtyTypeId", index.toLong())
+                contentValue.put("name", resource)
+                db.insert("RealtyType", OnConflictStrategy.IGNORE, contentValue)
+            }
     }
 }
