@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.skichrome.realestatemanager.model.RealEstateDataRepository
 
-class ViewModelFactory(
-    private val dataSource: RealEstateDataRepository
-) : ViewModelProvider.Factory
+class ViewModelFactory(private val dataSource: RealEstateDataRepository) : ViewModelProvider.Factory
 {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T

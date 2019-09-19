@@ -1,41 +1,27 @@
 package com.skichrome.realestatemanager.view
 
-import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
 
-class RealtyListFragment : Fragment()
+class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewModel, ViewModelFactory>()
 {
-    private lateinit var binding: FragmentRealtyListBinding
-    private lateinit var viewModel: RealtyViewModel
     private val adapter = RealtyListAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        binding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_realty_list, container, false)
-        binding.executePendingBindings()
-        return binding.root
-    }
+    override fun getFragmentLayout(): Int = R.layout.fragment_realty_list
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-    {
-        super.onViewCreated(view, savedInstanceState)
+    override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
 
-        val vmFactory = Injection.provideViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, vmFactory).get(RealtyViewModel::class.java)
+    override fun getInjection(): ViewModelFactory = Injection.provideViewModelFactory(context!!)
+
+    override fun configureFragment()
+    {
         binding.realtyViewModel = viewModel
 
         val displayMetrics = DisplayMetrics()

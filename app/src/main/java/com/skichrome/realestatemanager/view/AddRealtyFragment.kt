@@ -2,20 +2,14 @@ package com.skichrome.realestatemanager.view
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -27,13 +21,16 @@ import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
 import com.skichrome.realestatemanager.utils.StorageUtils
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_add_realty.*
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListener, RealtyPhotoAdapter.OnClickPictureListener
+class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel, ViewModelFactory>(),
+    DatePickerDialogFragment.DatePickerListener,
+    RealtyPhotoAdapter.OnClickPictureListener
 {
     // =================================
     //              Fields
@@ -46,29 +43,23 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
     private lateinit var realtyCreationDate: Calendar
     private lateinit var imageAddedSrc: String
     private lateinit var imageAddedTypeFromSpinner: String
-    private lateinit var binding: FragmentAddRealtyBinding
     private var realtyType: Int = -1
     private var realtyStatus: Boolean = false
     private var realtySoldDate: Calendar? = null
     private var canRegisterARealty = false
 
-    private lateinit var viewModel: RealtyViewModel
-
     // =================================
     //        Superclass Methods
     // =================================
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_add_realty, container, false)
-        binding.executePendingBindings()
-        return binding.root
-    }
+    override fun getFragmentLayout(): Int = R.layout.fragment_add_realty
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-    {
-        super.onViewCreated(view, savedInstanceState)
+    override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
 
+    override fun getInjection(): ViewModelFactory = Injection.provideViewModelFactory(context!!)
+
+    override fun configureFragment()
+    {
         populateViewList()
         configureRecyclerView()
         configureViewModel()
@@ -112,9 +103,6 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
 
     private fun configureViewModel()
     {
-        val vmFactory = Injection.provideViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, vmFactory).get(RealtyViewModel::class.java)
-
         viewModel.insertLoading.observe(this, Observer {
             if (!it)
                 findNavController().navigateUp()
