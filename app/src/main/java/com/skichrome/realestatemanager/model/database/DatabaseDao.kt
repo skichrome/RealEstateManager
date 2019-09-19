@@ -15,7 +15,7 @@ interface RealtyDao
     suspend fun getRealtyById(realtyId: Long): Realty
 
     @Insert
-    suspend fun insertRealty(vararg realty: Realty): List<Long>
+    suspend fun insertRealty(realty: Realty): Long
 
     @Update
     suspend fun updateRealty(realty: Realty): Int

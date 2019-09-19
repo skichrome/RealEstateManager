@@ -4,6 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isImgLocationNull"
+            type="Boolean" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -31,7 +40,8 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/rv_realty_picture_content_desc"
                 android:scaleType="centerCrop"
-                android:visibility="invisible" />
+                android:src="@drawable/ic_add_circle_24dp"
+                android:visibility="@{isImgLocationNull ? View.INVISIBLE : View.VISIBLE}" />
 
             <ImageView
                 android:id="@+id/photoRvItemImgDefaultAdd"
@@ -40,7 +50,8 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/rv_add_picture_content_desc"
                 android:src="@drawable/ic_add_circle_24dp"
-                android:tint="@color/colorPrimary" />
+                android:tint="@color/colorPrimary"
+                android:visibility="@{isImgLocationNull ? View.VISIBLE : View.GONE}" />
 
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

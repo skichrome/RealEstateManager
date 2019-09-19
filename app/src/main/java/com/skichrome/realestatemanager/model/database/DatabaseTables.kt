@@ -59,7 +59,7 @@ data class MediaReference(
     var reference: String,
     var shortDesc: String,
     @ColumnInfo(name = "realtyId", index = true)
-    val realtyId: Long
+    var realtyId: Long = -1L
 )
 
 @Entity(

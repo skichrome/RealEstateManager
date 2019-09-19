@@ -1,6 +1,7 @@
 package com.skichrome.realestatemanager.model
 
 import com.skichrome.realestatemanager.androidmanagers.NetManager
+import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
 
@@ -29,5 +30,13 @@ class RealEstateDataRepository(private val netManager: NetManager, private val l
         return localDataSource.getAllRealty()
     }
 
-    suspend fun insertRealty(realty: Realty): List<Long> = localDataSource.createRealty(realty)
+    suspend fun insertRealty(realty: Realty): Long = localDataSource.createRealty(realty)
+
+    suspend fun insertMediaReferences(medias: List<MediaReference?>, realtyId: Long) = medias.forEach {
+        if (it != null)
+        {
+            it.realtyId = realtyId
+            localDataSource.insertMediaReferences(it)
+        }
+    }
 }

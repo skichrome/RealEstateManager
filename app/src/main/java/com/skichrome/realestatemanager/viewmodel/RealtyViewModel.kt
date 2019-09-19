@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skichrome.realestatemanager.model.RealEstateDataRepository
+import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
 import com.skichrome.realestatemanager.utils.backgroundTask
@@ -67,11 +68,15 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
         }
     }
 
-    fun insertRealty(realty: Realty)
+    fun insertRealty(realty: Realty, images: List<MediaReference?>)
     {
         viewModelScope.uiJob {
             _insertLoading.value = true
-            /*val insertionResult =*/ backgroundTask { repository.insertRealty(realty) }
+
+            backgroundTask {
+                val realtyInsertedId = repository.insertRealty(realty)
+                repository.insertMediaReferences(images, realtyInsertedId)
+            }
             _insertLoading.value = false
         }
     }

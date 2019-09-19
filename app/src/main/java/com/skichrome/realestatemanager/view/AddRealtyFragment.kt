@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentAddRealtyBinding
+import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
 import com.skichrome.realestatemanager.utils.StorageUtils
@@ -83,7 +83,7 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-            addPhotoAdapter.addPictureToAdapter(imageAddedSrc)
+            addPhotoAdapter.addPictureToAdapter(MediaReference(reference = imageAddedSrc, shortDesc = imageAddedTypeFromSpinner))
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -225,7 +225,7 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
                 price = addRealtyFragPriceInput.text.toString().toFloat(),
                 realtyTypeId = realtyType
             )
-            viewModel.insertRealty(realtyToBeAdded)
+            viewModel.insertRealty(realtyToBeAdded, addPhotoAdapter.getAllPicturesReferences())
         }
     }
 
@@ -298,7 +298,6 @@ class AddRealtyFragment : Fragment(), DatePickerDialogFragment.DatePickerListene
                     override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, p3: Long)
                     {
                         imageAddedTypeFromSpinner = parent?.getItemAtPosition(position).toString()
-                        Log.e("DEBUG", imageAddedTypeFromSpinner)
                     }
                 }
         }
