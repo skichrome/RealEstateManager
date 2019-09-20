@@ -3,12 +3,11 @@ package com.skichrome.realestatemanager.view
 import androidx.lifecycle.Observer
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
-import com.skichrome.realestatemanager.viewmodel.Injection
+import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
-import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
 import java.lang.ref.WeakReference
 
-class DetailsRealtyFragment : BaseFragment<FragmentRealtyDetailsBinding, RealtyViewModel, ViewModelFactory>(),
+class DetailsRealtyFragment : BaseFragment<FragmentRealtyDetailsBinding, RealtyViewModel>(),
     RealtyPhotoAdapter.OnClickPictureListener
 {
     // =================================
@@ -23,26 +22,16 @@ class DetailsRealtyFragment : BaseFragment<FragmentRealtyDetailsBinding, RealtyV
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_details
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getInjection(): ViewModelFactory = Injection.provideViewModelFactory(context!!)
 
     override fun configureFragment()
     {
         configureViewModel()
         configureRecyclerView()
-        getNavArguments()
     }
 
     // =================================
     //              Methods
     // =================================
-
-    private fun getNavArguments()
-    {
-        arguments?.let {
-            val realtyId = DetailsRealtyFragmentArgs.fromBundle(it).realtyId
-            viewModel.getRealty(realtyId)
-        }
-    }
 
     // --------------- UI --------------
 

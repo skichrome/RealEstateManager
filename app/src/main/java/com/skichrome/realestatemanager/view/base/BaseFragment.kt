@@ -1,4 +1,4 @@
-package com.skichrome.realestatemanager.view
+package com.skichrome.realestatemanager.view.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.skichrome.realestatemanager.viewmodel.Injection
 
-abstract class BaseFragment<T : ViewDataBinding, V : ViewModel, F : ViewModelProvider.Factory> : Fragment()
+abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
 {
     // =================================
     //              Fields
@@ -21,13 +21,12 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel, F : ViewModelPro
     protected val binding: T
         get() = _binding
 
-    private lateinit var _viewModel: V
+    private lateinit var _sharedRealtyViewModel: V
     protected val viewModel: V
-        get() = _viewModel
+        get() = _sharedRealtyViewModel
 
     abstract fun getFragmentLayout(): Int
     abstract fun getViewModelClass(): Class<V>
-    abstract fun getInjection(): F
     abstract fun configureFragment()
 
     // =================================
@@ -50,6 +49,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel, F : ViewModelPro
 
     private fun configureViewModel()
     {
-        _viewModel = ViewModelProviders.of(this, getInjection()).get(getViewModelClass())
+        _sharedRealtyViewModel = activity?.run {
+            ViewModelProviders.of(this, Injection.provideViewModelFactory(context!!)).get(getViewModelClass())
+        } ?: throw Exception("Invalid activity")
     }
 }

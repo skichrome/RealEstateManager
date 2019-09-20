@@ -20,20 +20,19 @@ class MainActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         configureNavigationComponent()
     }
 
     private fun configureNavigationComponent()
     {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navController = findNavController(R.id.activityMainMainNavHostFragment)
         appBarConfiguration =
             AppBarConfiguration(setOf(R.id.realtyListFragment), activity_main_menu_drawer_layout)
 
         setSupportActionBar(toolbar)
         toolbar?.setupWithNavController(navController, appBarConfiguration)
 
-        activity_main_navigation_view?.setupWithNavController(navController)
+        activityMainNavigationView?.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean
     {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navController = findNavController(R.id.activityMainMainNavHostFragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 }

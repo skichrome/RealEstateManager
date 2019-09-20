@@ -1,18 +1,18 @@
 package com.skichrome.realestatemanager.view
 
-import android.util.DisplayMetrics
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
-import com.skichrome.realestatemanager.viewmodel.Injection
+import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
-import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
 import java.lang.ref.WeakReference
 
-class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewModel, ViewModelFactory>(), RealtyListAdapter.RealtyItemListener
+class RealtyListFragment :
+    BaseFragment<FragmentRealtyListBinding, RealtyViewModel>(),
+    RealtyListAdapter.RealtyItemListener
 {
     private val adapter = RealtyListAdapter(callback = WeakReference(this))
 
@@ -20,28 +20,10 @@ class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewMod
 
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
 
-    override fun getInjection(): ViewModelFactory = Injection.provideViewModelFactory(context!!)
-
     override fun configureFragment()
     {
-        binding.realtyViewModel = viewModel
-
-        val displayMetrics = DisplayMetrics()
-        activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val density = displayMetrics.density
-        val width = displayMetrics.widthPixels
-        val spanCount = if (width / density <= 600) 2 else 4
-
-        val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
-        binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
-        binding.realtyListFragmentRecyclerView.layoutManager = layoutManager
-        binding.realtyListFragmentRecyclerView.adapter = adapter
-
-        val largePadding = resources.getDimension(R.dimen.preview_card_spacing).toInt()
-        val smallPadding = resources.getDimension(R.dimen.preview_card_spacing_small).toInt()
-        binding.realtyListFragmentRecyclerView.addItemDecoration(RvItemDecoration(largePadding, smallPadding))
-
-        viewModel.realEstates.observe(this, Observer { it?.let { list -> adapter.replaceRealtyList(list) } })
+        configureViewModel()
+        configureRecyclerView()
     }
 
     override fun onResume()
@@ -51,12 +33,38 @@ class RealtyListFragment : BaseFragment<FragmentRealtyListBinding, RealtyViewMod
     }
 
     // =================================
+    //              Methods
+    // =================================
+
+    private fun configureViewModel()
+    {
+        binding.realtyViewModel = viewModel
+        viewModel.realEstates.observe(this, Observer { it?.let { list -> adapter.replaceRealtyList(list) } })
+    }
+
+    private fun configureRecyclerView()
+    {
+        val gridLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+
+        binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
+        binding.realtyListFragmentRecyclerView.layoutManager = gridLayoutManager
+        binding.realtyListFragmentRecyclerView.adapter = adapter
+
+        val largePadding = resources.getDimension(R.dimen.preview_card_spacing).toInt()
+        val smallPadding = resources.getDimension(R.dimen.preview_card_spacing_small).toInt()
+        binding.realtyListFragmentRecyclerView.addItemDecoration(RvItemDecoration(largePadding, smallPadding))
+    }
+
+    // =================================
     //            Callbacks
     // =================================
 
     override fun onClickRealty(id: Long)
     {
-        val navOptions = RealtyListFragmentDirections.actionRealtyListFragmentToDetailsRealtyFragment(id)
-        findNavController().navigate(navOptions)
+        viewModel.getRealty(id)
+
+        val navHostFragmentTablet = childFragmentManager.findFragmentById(R.id.fragmentRealtyListNavHostFragmentTablet)
+        navHostFragmentTablet?.findNavController()?.navigate(R.id.detailsRealtyFragmentTablet)
+            ?: findNavController().navigate(R.id.detailsRealtyFragment)
     }
 }

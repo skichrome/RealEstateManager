@@ -19,16 +19,15 @@ import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
 import com.skichrome.realestatemanager.utils.StorageUtils
-import com.skichrome.realestatemanager.viewmodel.Injection
+import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
-import com.skichrome.realestatemanager.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_add_realty.*
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel, ViewModelFactory>(),
+class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel>(),
     DatePickerDialogFragment.DatePickerListener,
     RealtyPhotoAdapter.OnClickPictureListener
 {
@@ -53,10 +52,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     // =================================
 
     override fun getFragmentLayout(): Int = R.layout.fragment_add_realty
-
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-
-    override fun getInjection(): ViewModelFactory = Injection.provideViewModelFactory(context!!)
 
     override fun configureFragment()
     {

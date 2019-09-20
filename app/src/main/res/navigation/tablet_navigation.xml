@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tablet_navigation"
+    app:startDestination="@id/emptyFragment">
+
+    <fragment
+        android:id="@+id/emptyFragment"
+        android:name="com.skichrome.realestatemanager.view.EmptyFragment"
+        android:label="EmptyFragment"
+        tools:layout="@layout/fragment_empty_details" />
+    <fragment
+        android:id="@+id/detailsRealtyFragmentTablet"
+        android:name="com.skichrome.realestatemanager.view.DetailsRealtyFragment"
+        android:label="DetailsRealtyFragment"
+        tools:layout="@layout/fragment_realty_details">
+        <argument
+            android:name="realtyId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+</navigation>
