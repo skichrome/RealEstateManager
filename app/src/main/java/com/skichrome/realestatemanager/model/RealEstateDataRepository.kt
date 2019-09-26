@@ -32,15 +32,25 @@ class RealEstateDataRepository(private val netManager: NetManager, private val l
 
     suspend fun getRealty(id: Long): Realty = localDataSource.getRealtyById(id)
 
+    suspend fun updateRealty(realty: Realty): Int = localDataSource.updateRealty(realty)
+
     suspend fun insertRealty(realty: Realty): Long = localDataSource.createRealty(realty)
 
     suspend fun insertMediaReferences(medias: List<MediaReference?>, realtyId: Long) = medias.forEach {
-        if (it != null)
-        {
+        it?.let {
             it.realtyId = realtyId
-            localDataSource.insertMediaReferences(it)
+            localDataSource.insertMediaReference(it)
+        }
+    }
+
+    suspend fun updateMediaReferences(medias: List<MediaReference?>, realtyId: Long) = medias.forEach {
+        it?.let {
+            it.realtyId = realtyId
+            localDataSource.insertMediaReference(it)
         }
     }
 
     suspend fun getMediaReferencesFromRealty(id: Long): List<MediaReference> = localDataSource.getMediaReferencesFromRealtyId(id)
+
+    suspend fun deleteMediaReference(mediaId: Long) = localDataSource.deleteMediaReference(mediaId)
 }

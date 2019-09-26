@@ -33,8 +33,8 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
     val isLoading: ObservableField<Boolean>
         get() = _isLoading
 
-    private val _insertLoading = MutableLiveData<Boolean>()
-    val insertLoading: LiveData<Boolean>
+    private val _insertLoading = MutableLiveData<Boolean?>()
+    val insertLoading: LiveData<Boolean?>
         get() = _insertLoading
 
     private val _realtyTypes = MutableLiveData<List<RealtyType>>()
@@ -57,6 +57,11 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
     // =================================
     //              Methods
     // =================================
+
+    fun resetLoading()
+    {
+        _insertLoading.value = null
+    }
 
     private fun getRealtyTypes()
     {
@@ -97,6 +102,22 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
             backgroundTask {
                 val realtyInsertedId = repository.insertRealty(realty)
                 repository.insertMediaReferences(images, realtyInsertedId)
+            }
+            _insertLoading.value = false
+        }
+    }
+
+    fun updateRealty(realty: Realty, images: List<MediaReference?>)
+    {
+        viewModelScope.uiJob {
+            backgroundTask {
+                repository.updateRealty(realty)
+                repository.updateMediaReferences(images, realty.id)
+
+                realtyDetailedPhotos.value?.forEach {
+                    if (!images.contains(it))
+                        repository.deleteMediaReference(it.mediaReferenceId)
+                }
             }
             _insertLoading.value = false
         }

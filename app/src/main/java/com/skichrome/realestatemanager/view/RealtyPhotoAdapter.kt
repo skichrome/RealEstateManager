@@ -10,7 +10,7 @@ import com.skichrome.realestatemanager.databinding.PhotoRvItemBinding
 import com.skichrome.realestatemanager.model.database.MediaReference
 import java.lang.ref.WeakReference
 
-class RealtyPhotoAdapter(var list: MutableList<MediaReference?>, private val callback: WeakReference<OnClickPictureListener>) :
+class RealtyPhotoAdapter(private var list: MutableList<MediaReference?>, private val callback: WeakReference<OnClickPictureListener>) :
     RecyclerView.Adapter<RealtyPhotoAdapter.RealtyPhotoViewHolder>()
 {
     private lateinit var binding: PhotoRvItemBinding

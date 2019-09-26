@@ -15,7 +15,6 @@ class RealtyListFragment :
     private val adapter = RealtyListAdapter(callback = WeakReference(this))
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_list
-
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
 
     override fun configureFragment()

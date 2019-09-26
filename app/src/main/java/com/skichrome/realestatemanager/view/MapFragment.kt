@@ -86,7 +86,9 @@ class MapFragment : Fragment(), OnMapReadyCallback
     override fun onDestroy()
     {
         binding.mapFragmentMapView?.onDestroy()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        lastLocation?.let {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+        }
         lastLocation = null
         super.onDestroy()
     }

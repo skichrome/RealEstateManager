@@ -10,7 +10,7 @@
         android:title="@string/menu_item_add_name"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/mapFragment"
+        android:id="@+id/action_detailsRealtyFragment_to_addRealtyFragment"
         android:icon="@drawable/ic_edit_24dp"
         android:title="@string/menu_item_edit_name"
         app:showAsAction="ifRoom" />

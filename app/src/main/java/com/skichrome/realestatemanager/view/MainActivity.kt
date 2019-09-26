@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity()
                 return@addOnDestinationChangedListener
 
             val editRealtyVisibility = destination.id == R.id.detailsRealtyFragment
-            toolbar?.menu?.findItem(R.id.action_realtyListFragment_to_addRealtyFragment)?.isVisible = editRealtyVisibility
+            toolbar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)?.isVisible = editRealtyVisibility
 
 
         }

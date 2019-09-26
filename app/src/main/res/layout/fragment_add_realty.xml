@@ -5,6 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="realtyViewModel"
+            type="com.skichrome.realestatemanager.viewmodel.RealtyViewModel" />
+    </data>
+
     <ScrollView
         android:id="@+id/addRealtyFragScrollView"
         android:layout_width="match_parent"
@@ -32,7 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                    android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                    android:text="@{realtyViewModel.realtyDetailed.fullDescription}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Address of Realty -->
@@ -55,7 +63,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPostalAddress"
                     android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                    android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                    android:text="@{realtyViewModel.realtyDetailed.address}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- City and PostCode of Realty -->
@@ -88,7 +97,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        android:text="@{realtyViewModel.realtyDetailed.city}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -107,7 +117,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        android:text="@{String.valueOf(realtyViewModel.realtyDetailed.postCode)}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -139,7 +150,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        android:text="@{String.valueOf(realtyViewModel.realtyDetailed.price)}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -158,7 +170,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        android:text="@{String.valueOf(realtyViewModel.realtyDetailed.surface)}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -197,7 +210,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned"
                         android:singleLine="true"
-                        android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                        android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                        android:text="@{String.valueOf(realtyViewModel.realtyDetailed.roomNumber)}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -221,7 +235,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:tag="@string/add_realty_fragment_edit_text_input_tag" />
+                    android:tag="@string/add_realty_fragment_edit_text_input_tag"
+                    android:text="@{String.valueOf(realtyViewModel.realtyDetailed.agent)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Picture -->

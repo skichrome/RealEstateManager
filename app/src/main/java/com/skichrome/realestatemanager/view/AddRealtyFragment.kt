@@ -47,6 +47,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private var realtySoldDate: Calendar? = null
     private var canRegisterARealty = false
 
+    private var isEditMode = false
+
     // =================================
     //        Superclass Methods
     // =================================
@@ -59,6 +61,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         populateViewList()
         configureRecyclerView()
         configureViewModel()
+        getBundleArguments()
+        configureEditableMode()
         configureDateInput()
         addRealtyFragSubmitBtn.setOnClickListener {
             canRegisterARealty = true
@@ -99,10 +103,49 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun configureViewModel()
     {
+        viewModel.resetLoading()
         viewModel.insertLoading.observe(this, Observer {
-            if (!it)
-                findNavController().navigateUp()
+            it?.let {
+                if (!it)
+                    findNavController().navigateUp()
+            }
         })
+    }
+
+    private fun getBundleArguments()
+    {
+        arguments?.let {
+            isEditMode = AddRealtyFragmentArgs.fromBundle(it).origin == 1L
+        }
+    }
+
+    private fun configureEditableMode()
+    {
+        if (!isEditMode)
+            return
+
+        binding.realtyViewModel = viewModel
+        viewModel.realtyDetailedPhotos.observe(this, Observer {
+            it?.let { list ->
+                val mutableList = mutableListOf<MediaReference?>(null)
+                mutableList.addAll(list)
+                photoAdapter.replacePhotoList(mutableList)
+            }
+        })
+
+        val status = if (viewModel.realtyDetailed.get()!!.status) 1 else 0
+        addRealtyFragStatusSpinner.setSelection(status)
+
+        val type = viewModel.realtyDetailed.get()!!.realtyTypeId
+        addRealtyFragTypeInputSpinner.setSelection(type)
+
+        val dateAdded = viewModel.realtyDetailed.get()!!.dateAdded
+        addRealtyFragDateCreatedEditText.setText(date.format(dateAdded.time))
+        val dateSell = viewModel.realtyDetailed.get()?.dateSell
+
+        dateSell?.let {
+            addRealtyFragSoldDateEditText.setText(date.format(it))
+        }
     }
 
     private fun configureDateInput()
@@ -112,7 +155,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         realtyCreationDate = Calendar.getInstance()
         val displayDate = date.format(realtyCreationDate.time)
 
-        addRealtyFragDateCreatedEditText.setText(displayDate)
+        if (!isEditMode)
+            addRealtyFragDateCreatedEditText.setText(displayDate)
         addRealtyFragDateAddedBtn.setOnClickListener { showDatePicker(0) }
         addRealtyFragDateSoldBtn.setOnClickListener { showDatePicker(1) }
         addRealtyFragStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
@@ -122,7 +166,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 realtyStatus = parent?.getItemAtPosition(position) == spinnerArray[1]
                 addRealtyFragDateSoldBtn.isEnabled = realtyStatus
                 addRealtyFragSoldDateEditText.isEnabled = realtyStatus
-                addRealtyFragSoldDateEditText.text = null
+                if (!isEditMode)
+                    addRealtyFragSoldDateEditText.text = null
                 addRealtyFragSoldDateTextViewLayout.error = null
             }
 
@@ -209,7 +254,12 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 price = addRealtyFragPriceInput.text.toString().toFloat(),
                 realtyTypeId = realtyType
             )
-            viewModel.insertRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
+            if (isEditMode)
+            {
+                realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
+                viewModel.updateRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
+            } else
+                viewModel.insertRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
         }
     }
 

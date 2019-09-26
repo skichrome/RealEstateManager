@@ -1,9 +1,6 @@
 package com.skichrome.realestatemanager.model.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface RealtyDao
@@ -65,7 +62,7 @@ interface RealtyTypeDao
 @Dao
 interface MediaReferenceDao
 {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMediaReference(mediaRef: MediaReference): Long
 
     @Query("SELECT * FROM MediaReference")
