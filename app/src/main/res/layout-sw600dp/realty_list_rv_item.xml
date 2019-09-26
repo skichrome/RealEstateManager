@@ -15,34 +15,48 @@
     <com.google.android.material.card.MaterialCardView
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/material_card_height"
-        android:layout_margin="8dp"
+        android:layout_height="@dimen/material_card_height_tablet"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="0dp"
         app:cardElevation="2dp"
         app:cardPreventCornerOverlap="true">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/realtyPreviewImg"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/preview_card_image_height"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="?attr/colorPrimaryDark"
                 android:contentDescription="@string/realty_preview_picture_content_desc"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_app_logo_default_realty" />
+                android:src="@drawable/ic_app_logo_default_realty"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.709" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.4" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
-                android:padding="8dp">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/realtyListItemName"
@@ -70,6 +84,6 @@
                     android:text='@{"$ " + realty.price}'
                     tools:text="Realty price" />
             </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

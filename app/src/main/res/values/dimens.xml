@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="material_card_height_tablet">100dp</dimen>
     <dimen name="material_card_height">200dp</dimen>
     <dimen name="material_card_width">180dp</dimen>
 

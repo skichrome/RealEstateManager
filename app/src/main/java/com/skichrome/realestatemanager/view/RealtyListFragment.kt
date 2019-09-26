@@ -2,8 +2,6 @@ package com.skichrome.realestatemanager.view
 
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
 import com.skichrome.realestatemanager.view.base.BaseFragment
@@ -44,15 +42,8 @@ class RealtyListFragment :
 
     private fun configureRecyclerView()
     {
-        val gridLayoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
-
         binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
-        binding.realtyListFragmentRecyclerView.layoutManager = gridLayoutManager
         binding.realtyListFragmentRecyclerView.adapter = adapter
-
-        val largePadding = resources.getDimension(R.dimen.preview_card_spacing).toInt()
-        val smallPadding = resources.getDimension(R.dimen.preview_card_spacing_small).toInt()
-        binding.realtyListFragmentRecyclerView.addItemDecoration(RvItemDecoration(largePadding, smallPadding))
     }
 
     // =================================
