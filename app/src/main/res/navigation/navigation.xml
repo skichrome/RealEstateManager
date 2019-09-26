@@ -37,5 +37,13 @@
         <argument
             android:name="realtyId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_detailsRealtyFragment_to_mapFragment"
+            app:destination="@+id/mapFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.skichrome.realestatemanager.view.MapFragment"
+        android:label="MapFragment"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

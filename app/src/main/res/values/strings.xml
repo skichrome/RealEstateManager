@@ -30,18 +30,15 @@
     <string name="add_realty_frag_hint_agent">Agent</string>
     <string name="add_realty_frag_recycler_view_title">Realty pictures</string>
     <string name="add_realty_frag_btn_submit">Submit</string>
+    <string name="add_realty_fragment_edit_text_input_tag">required_input</string>
+    <string name="add_realty_fragment_edit_text_created_date_input_tag">created_date_input</string>
+    <string name="add_realty_fragment_edit_text_sold_date_input_tag">sold_date_input</string>
+    <string name="add_realty_frag_error_input_field">Required field</string>
+    <string name="add_realty_fragment_btn_set_date">set</string>
 
     <string-array name="add_realty_frag_hint_status_spinner">
         <item name="add_realty_frag_hint_status_false">Available</item>
         <item name="add_realty_frag_hint_status_true">Sold</item>
-    </string-array>
-
-    <string-array name="realty_categories">
-        <item name="type_flat">Flat</item>
-        <item name="type_penthouse">Penthouse</item>
-        <item name="type_mansion">Mansion</item>
-        <item name="type_house">House</item>
-        <item name="type_duplex">Duplex</item>
     </string-array>
 
     <string-array name="realty_picture_type">
@@ -58,11 +55,22 @@
         <item name="type_cellar">Cellar</item>
     </string-array>
 
-    <string name="add_realty_fragment_edit_text_input_tag">required_input</string>
-    <string name="add_realty_fragment_edit_text_created_date_input_tag">created_date_input</string>
-    <string name="add_realty_fragment_edit_text_sold_date_input_tag">sold_date_input</string>
-    <string name="add_realty_frag_error_input_field">Required field</string>
-    <string name="addRealtyFragmentBtnSetDate">set</string>
+    <!-- Database pre-fill -->
+    <string-array name="realty_categories">
+        <item name="type_flat">Flat</item>
+        <item name="type_penthouse">Penthouse</item>
+        <item name="type_mansion">Mansion</item>
+        <item name="type_house">House</item>
+        <item name="type_duplex">Duplex</item>
+    </string-array>
+
+    <string-array name="near_realty_poi">
+        <item name="poi_school">School</item>
+        <item name="poi_gas">Gas Station</item>
+        <item name="poi_trade">Trade</item>
+        <item name="poi_park">Park</item>
+        <item name="poi_cash">Cash Machine</item>
+    </string-array>
 
     <!-- Delete Picture Alert Dialog -->
     <string name="delete_picture_alert_title">Warning</string>
@@ -97,6 +105,8 @@
 
         Quisque eu fermentum ex. Vestibulum volutpat sapien sit amet sapien feugiat ultricies. Pellentesque non dapibus dolor. Aenean non scelerisque dui, et aliquet sapien. Mauris quis maximus sem. Vestibulum quis metus molestie, sodales lacus eu, lobortis ipsum. Sed sed orci semper, pharetra odio quis, imperdiet eros. Aliquam et eros efficitur ante imperdiet rutrum. Sed magna libero, aliquam scelerisque pulvinar id, sodales in ligula. Phasellus id enim ut ex tincidunt consectetur. Aliquam sagittis, mi nec sodales maximus, mauris odio dignissim risus, et pulvinar ante neque et libero. Aenean venenatis iaculis libero a aliquam. Etiam ut nunc vitae augue suscipit vulputate. Curabitur elementum metus quis ipsum consequat, quis mattis lectus feugiat. Mauris rhoncus varius aliquam. Sed id ante lacinia, rhoncus leo at, condimentum sem.
     </string>
+
+    <!-- Realty details Fragment -->
     <string name="realty_details_fragment_description_title">Description</string>
     <string name="realty_details_fragment_medias_title">Medias</string>
 </resources>

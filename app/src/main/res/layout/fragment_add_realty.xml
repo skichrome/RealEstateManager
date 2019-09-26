@@ -281,7 +281,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
                 android:tag="@string/add_realty_fragment_edit_text_input_tag"
-                android:text="@string/addRealtyFragmentBtnSetDate"
+                android:text="@string/add_realty_fragment_btn_set_date"
                 app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/addRealtyFragInputDateCreatedTextLayout" />
@@ -341,7 +341,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:tag="@string/add_realty_fragment_edit_text_input_tag"
-                android:text="@string/addRealtyFragmentBtnSetDate"
+                android:text="@string/add_realty_fragment_btn_set_date"
                 app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutStatusSellingDate" />

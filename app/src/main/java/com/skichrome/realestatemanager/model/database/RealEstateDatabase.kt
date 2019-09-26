@@ -43,6 +43,7 @@ abstract class RealEstateDatabase : RoomDatabase()
                     {
                         super.onCreate(db)
                         insertPrePopulatedCategories(context, db)
+                        insertPrePopulatedPoi(context, db)
                     }
                 })
                 .build()
@@ -54,5 +55,14 @@ abstract class RealEstateDatabase : RoomDatabase()
                 contentValue.put("name", resource)
                 db.insert("RealtyType", OnConflictStrategy.IGNORE, contentValue)
             }
+
+        private fun insertPrePopulatedPoi(context: Context, db: SupportSQLiteDatabase) =
+            context.resources.getStringArray(R.array.near_realty_poi).forEachIndexed { index, resource ->
+                val contentValues = ContentValues()
+                contentValues.put("poiId", index.toLong())
+                contentValues.put("name", resource)
+                db.insert("Poi", OnConflictStrategy.IGNORE, contentValues)
+            }
+
     }
 }
