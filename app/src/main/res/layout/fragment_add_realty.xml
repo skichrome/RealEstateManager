@@ -236,7 +236,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:tag="@string/add_realty_fragment_edit_text_input_tag"
-                    android:text="@{String.valueOf(realtyViewModel.realtyDetailed.agent)}" />
+                    android:text="@{realtyViewModel.agent}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Picture -->

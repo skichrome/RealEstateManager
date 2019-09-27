@@ -12,8 +12,12 @@ import java.util.*
             entity = RealtyType::class,
             parentColumns = ["realtyTypeId"],
             childColumns = ["realty_type_id"]
-        )
-    ]
+        ),
+        ForeignKey(
+            entity = Agent::class,
+            parentColumns = ["agentId"],
+            childColumns = ["agent_id"]
+        )]
 )
 data class Realty(
     @PrimaryKey(autoGenerate = true) var id: Long = 0L,
@@ -27,8 +31,8 @@ data class Realty(
     var status: Boolean = false,
     val dateAdded: Date,
     var dateSell: Date? = null,
-    val agent: String,
-    @ColumnInfo(name = "realty_type_id", index = true) val realtyTypeId: Int
+    @ColumnInfo(name = "agent_id", index = true) val agentId: Long = 1L,
+    @ColumnInfo(name = "realty_type_id", index = true) var realtyTypeId: Int
 )
 
 @Entity
@@ -39,7 +43,7 @@ data class Poi(
 
 @Entity
 data class RealtyType(
-    @PrimaryKey(autoGenerate = true) val realtyTypeId: Int = 0,
+    @PrimaryKey(autoGenerate = true) var realtyTypeId: Int = 0,
     var name: String
 )
 
@@ -73,4 +77,10 @@ data class MediaReference(
 data class PoiRealty(
     val realtyId: Long,
     @ColumnInfo(index = true) val poiId: Int
+)
+
+@Entity
+data class Agent(
+    @PrimaryKey val agentId: Long = 1L,
+    val name: String
 )

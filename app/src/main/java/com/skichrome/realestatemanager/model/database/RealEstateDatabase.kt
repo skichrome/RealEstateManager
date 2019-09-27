@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.skichrome.realestatemanager.R
 
 @Database(
-    entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class, PoiRealty::class],
+    entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class, PoiRealty::class, Agent::class],
     version = 1,
     exportSchema = false
 )
@@ -18,6 +18,7 @@ abstract class RealEstateDatabase : RoomDatabase()
     abstract fun poiDao(): PoiDao
     abstract fun realtyTypeDao(): RealtyTypeDao
     abstract fun mediaReferenceDao(): MediaReferenceDao
+    abstract fun agentDao(): AgentDao
 
     companion object
     {
@@ -63,6 +64,5 @@ abstract class RealEstateDatabase : RoomDatabase()
                 contentValues.put("name", resource)
                 db.insert("Poi", OnConflictStrategy.IGNORE, contentValues)
             }
-
     }
 }

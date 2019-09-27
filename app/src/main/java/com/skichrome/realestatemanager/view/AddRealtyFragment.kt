@@ -247,19 +247,28 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 fullDescription = addRealtyFragDescriptionInput.text.toString(),
                 dateSell = if (realtySoldDate == null) null else Date(realtySoldDate!!.time.time),
                 dateAdded = Date(realtyCreationDate.time.time),
-                agent = addRealtyFragAgentInput.text.toString(),
                 city = addRealtyFragCityInput.text.toString(),
                 postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
                 address = addRealtyFragAddressInput.text.toString(),
                 price = addRealtyFragPriceInput.text.toString().toFloat(),
                 realtyTypeId = realtyType
             )
+
+            val agentName = addRealtyFragAgentInput.text.toString()
+            val storedName = viewModel.agent.get()
+            storedName?.let {
+                if (it != agentName)
+                    viewModel.updateAgentName(agentName)
+            } ?: viewModel.insertAgentName(agentName)
+
+            val pictures = photoAdapter.getAllPicturesReferences()
+
             if (isEditMode)
             {
                 realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
-                viewModel.updateRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
+                viewModel.updateRealty(realtyToBeAdded, pictures)
             } else
-                viewModel.insertRealty(realtyToBeAdded, photoAdapter.getAllPicturesReferences())
+                viewModel.insertRealty(realtyToBeAdded, pictures)
         }
     }
 

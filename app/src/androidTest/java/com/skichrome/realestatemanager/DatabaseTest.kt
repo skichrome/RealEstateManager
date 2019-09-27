@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager
 
+import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -28,8 +29,11 @@ class DatabaseTest
         private lateinit var poiDao: PoiDao
         private lateinit var realtyTypeDao: RealtyTypeDao
         private lateinit var mediaReferenceDao: MediaReferenceDao
+        private lateinit var agentDao: AgentDao
 
         private const val AUTO_GENERATED_ID = 1L
+
+        private val AGENT = Agent(name = "Boris")
 
         private val REALTY = Realty(
             id = AUTO_GENERATED_ID,
@@ -37,7 +41,6 @@ class DatabaseTest
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",
-            agent = "Bob",
             dateAdded = Date.from(Instant.now()),
             fullDescription = "A big description",
             roomNumber = 4,
@@ -45,28 +48,36 @@ class DatabaseTest
             surface = 45.57f,
             realtyTypeId = AUTO_GENERATED_ID.toInt()
         )
+
         private val REALTY2 = Realty(
-            id = AUTO_GENERATED_ID + 1,
+            id = AUTO_GENERATED_ID + 1L,
             price = 120_000f,
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",
-            agent = "Bob",
             dateAdded = Date.from(Instant.now()),
             fullDescription = "A big description",
             roomNumber = 4,
             status = false,
             surface = 45.57f,
-            realtyTypeId = AUTO_GENERATED_ID.toInt()
+            realtyTypeId = AUTO_GENERATED_ID.toInt() + 1
         )
+
         private val POI = Poi(
             poiId = AUTO_GENERATED_ID.toInt(),
             name = "School"
         )
+
         private val REALTY_TYPE = RealtyType(
             realtyTypeId = AUTO_GENERATED_ID.toInt(),
             name = "Penthouse"
         )
+
+        private val REALTY_TYPE2 = RealtyType(
+            realtyTypeId = AUTO_GENERATED_ID.toInt() + 1,
+            name = "Penthouse"
+        )
+
         private val MEDIA_REF = MediaReference(
             mediaReferenceId = AUTO_GENERATED_ID,
             realtyId = AUTO_GENERATED_ID,
@@ -97,6 +108,7 @@ class DatabaseTest
         poiDao = database.poiDao()
         realtyTypeDao = database.realtyTypeDao()
         mediaReferenceDao = database.mediaReferenceDao()
+        agentDao = database.agentDao()
     }
 
     @After
@@ -105,57 +117,58 @@ class DatabaseTest
     {
         database.close()
     }
-
     // =================================
-    // Realty DAO Test
+    //  Realty DAO Test
     // =================================
 
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealty() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        realtyDao.insertRealty(REALTY2)
-        val storedRealty = realtyDao.getAllRealty()
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insert(REALTY, REALTY2)
 
+        val storedRealty = realtyDao.getAllRealty()
         assertEquals(listOf(REALTY, REALTY2), storedRealty)
     }
 
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealty() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insert(REALTY, REALTY2)
+
         val storedRealty = realtyDao.getAllRealty().first()
         storedRealty.status = true
-        realtyDao.updateRealty(storedRealty)
+        realtyDao.update(storedRealty)
 
         val updatedRealtyList = realtyDao.getAllRealty()
-        assertEquals(listOf(storedRealty), updatedRealtyList)
+        assertEquals(listOf(storedRealty, REALTY2), updatedRealtyList)
     }
 
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealty() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE)
+        realtyDao.insert(REALTY)
+
         val storedRealty = realtyDao.getAllRealty().first()
         realtyDao.deleteRealtyById(storedRealty.id)
 
         val expectedEmptyList = realtyDao.getAllRealty()
-        assert(expectedEmptyList.isEmpty())
+        assertEquals(true, expectedEmptyList.isEmpty())
     }
 
     // =================================
-    // Poi DAO Test
+    //  Poi DAO Test
     // =================================
 
     @Test
     @Throws(Exception::class)
     fun insertAndGetPoi() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        poiDao.insertPoi(POI)
+        poiDao.insert(POI)
 
         val storedPoi = poiDao.getAllPoi()
         assertEquals(listOf(POI), storedPoi)
@@ -165,13 +178,11 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetPoi() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        val insertedPoiId = poiDao.insertPoi(POI)
+        poiDao.insert(POI)
 
-        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId.toInt())
+        val storedPoi = poiDao.getAllPoi().first()
         storedPoi.name = "restaurant"
-        poiDao.updatePoiOfRealty(storedPoi)
+        poiDao.update(storedPoi)
 
         val updatedPoi = poiDao.getAllPoi()
         assertEquals(listOf(storedPoi), updatedPoi)
@@ -180,80 +191,82 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeletePoi() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        val insertedPoiId = poiDao.insertPoi(POI)
+        poiDao.insert(POI)
 
-        val storedPoi = poiDao.getPoiOfRealtyById(insertedPoiId.toInt())
+        val storedPoi = poiDao.getAllPoi().first()
         poiDao.deletePoiOfRealtyById(storedPoi.poiId)
 
         val expectedEmptyList = poiDao.getAllPoi()
-        assert(expectedEmptyList.isEmpty())
+        assertEquals(true, expectedEmptyList.isEmpty())
     }
 
     // =================================
-    // RealtyType DAO Test
+    //  RealtyType DAO Test
     // =================================
 
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealtyType() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
 
         val storedType = realtyTypeDao.getAllRealtyType()
-        assertEquals(listOf(REALTY_TYPE), storedType)
+        assertEquals(listOf(REALTY_TYPE, REALTY_TYPE2), storedType)
     }
 
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealtyType() = runBlocking {
-        val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
 
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId.toInt())
+        val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
         storedRealtyType.name = "House"
-        realtyTypeDao.updateTypeOfRealty(storedRealtyType)
+        realtyTypeDao.update(storedRealtyType)
 
         val updatedType = realtyTypeDao.getAllRealtyType()
-        assertEquals(listOf(storedRealtyType), updatedType)
+        assertEquals(listOf(storedRealtyType, REALTY_TYPE2), updatedType)
     }
 
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealtyType() = runBlocking {
-        val insertedTypeId = realtyTypeDao.insertRealtyType(REALTY_TYPE)
+        realtyTypeDao.insert(REALTY_TYPE)
 
-        val storedRealtyType = realtyTypeDao.getTypeOfRealtyById(insertedTypeId.toInt())
+        val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
         realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyTypeId)
 
         val expectedEmptyList = realtyTypeDao.getAllRealtyType()
-        assert(expectedEmptyList.isEmpty())
+
+        Log.wtf("TESTS", "Realty : $expectedEmptyList")
+        assertEquals(true, expectedEmptyList.isEmpty())
     }
 
     // =================================
-    // MediaReference DAO Test
+    //  MediaReference DAO Test
     // =================================
 
     @Test
     @Throws(Exception::class)
     fun insertAndGetMediaReference() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insert(REALTY, REALTY2)
+        mediaReferenceDao.insert(MEDIA_REF)
 
-        val storedMediaRef = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId)
+        val storedMediaRef = mediaReferenceDao.getAllMedias()
         assertEquals(listOf(MEDIA_REF), storedMediaRef)
     }
 
     @Test
     @Throws(Exception::class)
     fun updateAndGetMediaReference() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insert(REALTY, REALTY2)
+        mediaReferenceDao.insert(MEDIA_REF)
 
-        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId).first()
+        val storedMediaReference = mediaReferenceDao.getAllMedias().first()
         storedMediaReference.reference = "https://new-reference.fr/"
-        mediaReferenceDao.updateMediaOfRealty(storedMediaReference)
+        mediaReferenceDao.update(storedMediaReference)
 
         val updatedMediaRef = mediaReferenceDao.getAllMedias()
         assertEquals(listOf(storedMediaReference), updatedMediaRef)
@@ -262,14 +275,39 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteMediaReference() = runBlocking {
-        realtyTypeDao.insertRealtyType(REALTY_TYPE)
-        realtyDao.insertRealty(REALTY)
-        val insertedMediaRefId = mediaReferenceDao.insertMediaReference(MEDIA_REF)
+        agentDao.insert(AGENT)
+        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insert(REALTY, REALTY2)
+        mediaReferenceDao.insert(MEDIA_REF)
 
-        val storedMediaReference = mediaReferenceDao.getMediaOfRealtyById(insertedMediaRefId).first()
+        val storedMediaReference = mediaReferenceDao.getAllMedias().first()
         mediaReferenceDao.deleteMediaOfRealtyById(storedMediaReference.realtyId)
 
         val expectedEmptyList = mediaReferenceDao.getAllMedias()
-        assert(expectedEmptyList.isEmpty())
+        assertEquals(true, expectedEmptyList.isEmpty())
+    }
+
+    // =================================
+    //  Agent DAO Test
+    // =================================
+
+    @Test
+    @Throws(Exception::class)
+    fun insertAndGetAgent() = runBlocking {
+        agentDao.insert(AGENT)
+        val storedAgentName = agentDao.getAgentName()
+        assertEquals(AGENT.name, storedAgentName)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateAgent() = runBlocking {
+        agentDao.insert(AGENT)
+
+        val newAgent = Agent(AGENT.agentId, "New Name")
+        agentDao.update(newAgent)
+
+        val storedAgent = agentDao.getAgentName()
+        assertEquals(newAgent.name, storedAgent)
     }
 }

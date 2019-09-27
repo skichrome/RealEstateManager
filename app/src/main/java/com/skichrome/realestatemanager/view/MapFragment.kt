@@ -62,30 +62,30 @@ class MapFragment : Fragment(), OnMapReadyCallback
     override fun onStart()
     {
         super.onStart()
-        binding.mapFragmentMapView?.onStart()
+        binding.mapFragmentMapView.onStart()
     }
 
     override fun onResume()
     {
         super.onResume()
-        binding.mapFragmentMapView?.onResume()
+        binding.mapFragmentMapView.onResume()
     }
 
     override fun onPause()
     {
-        binding.mapFragmentMapView?.onPause()
+        binding.mapFragmentMapView.onPause()
         super.onPause()
     }
 
     override fun onStop()
     {
-        binding.mapFragmentMapView?.onStop()
+        binding.mapFragmentMapView.onStop()
         super.onStop()
     }
 
     override fun onDestroy()
     {
-        binding.mapFragmentMapView?.onDestroy()
+        binding.mapFragmentMapView.onDestroy()
         lastLocation?.let {
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }
