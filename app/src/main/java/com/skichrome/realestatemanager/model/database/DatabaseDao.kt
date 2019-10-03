@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.model.database
 
+import android.database.Cursor
 import androidx.room.*
 
 interface BaseDao<T>
@@ -28,6 +29,10 @@ interface RealtyDao : BaseDao<Realty>
 
     @Query("DELETE FROM Realty WHERE id = :realtyId")
     suspend fun deleteRealtyById(realtyId: Long)
+
+    //ContentProvider
+    @Query("SELECT * FROM Realty WHERE id = :realtyId")
+    fun getRealtyByIdWithCursor(realtyId: Long): Cursor
 }
 
 @Dao

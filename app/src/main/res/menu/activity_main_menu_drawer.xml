@@ -13,5 +13,11 @@
         <item
             android:id="@+id/itemOne"
             android:title="@string/realty_fragment_name" />
+        <item
+            android:id="@+id/actionGlobalMapFragment"
+            android:title="@string/menu_drawer_item_map_title" />
+        <item
+            android:id="@+id/actionGlobalSettingsFragment"
+            android:title="@string/menu_drawer_item_settings_title" />
     </group>
 </menu>

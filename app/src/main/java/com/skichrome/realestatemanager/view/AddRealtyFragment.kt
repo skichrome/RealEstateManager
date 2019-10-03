@@ -87,7 +87,6 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private fun populateViewList()
     {
         materialEditTextViewList.add(addRealtyFragInputAddressTextLayout)
-        materialEditTextViewList.add(addRealtyFragInputAgentTextLayout)
         materialEditTextViewList.add(addRealtyFragCityInputLayout)
         materialEditTextViewList.add(addRealtyFragInputNameTextLayout)
         materialEditTextViewList.add(addRealtyFragPostCodeLayout)
@@ -253,13 +252,6 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 price = addRealtyFragPriceInput.text.toString().toFloat(),
                 realtyTypeId = realtyType
             )
-
-            val agentName = addRealtyFragAgentInput.text.toString()
-            val storedName = viewModel.agent.get()
-            storedName?.let {
-                if (it != agentName)
-                    viewModel.updateAgentName(agentName)
-            } ?: viewModel.insertAgentName(agentName)
 
             val pictures = photoAdapter.getAllPicturesReferences()
 

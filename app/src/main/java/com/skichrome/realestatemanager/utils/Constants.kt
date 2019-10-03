@@ -2,6 +2,8 @@ package com.skichrome.realestatemanager.utils
 
 import android.Manifest
 
+const val DATABASE_NAME = "RealEstateManagerDatabase.db"
+
 const val REQUEST_IMAGE_CAPTURE = 10
 
 const val LOCATION_RC = 123

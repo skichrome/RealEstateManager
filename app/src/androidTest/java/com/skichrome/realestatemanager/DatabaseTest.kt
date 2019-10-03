@@ -113,10 +113,8 @@ class DatabaseTest
 
     @After
     @Throws(IOException::class)
-    fun closeDb()
-    {
-        database.close()
-    }
+    fun closeDb() = database.close()
+
     // =================================
     //  Realty DAO Test
     // =================================

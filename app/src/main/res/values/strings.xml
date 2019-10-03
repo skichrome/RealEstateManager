@@ -9,6 +9,8 @@
     <string name="menu_item_add_name">Add</string>
     <string name="menu_item_edit_name">Edit</string>
     <string name="menu_item_search_name">Search</string>
+    <string name="menu_drawer_item_map_title">map</string>
+    <string name="menu_drawer_item_settings_title">Settings</string>
 
     <!-- images contentDescriptions -->
     <string name="realty_preview_picture_content_desc">This is a preview picture of a realty</string>
@@ -109,4 +111,10 @@
     <!-- Realty details Fragment -->
     <string name="realty_details_fragment_description_title">Description</string>
     <string name="realty_details_fragment_medias_title">Medias</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_fragment_username_title">Username</string>
+    <string name="settings_fragment_username_default_value">Modify me in app settings</string>
+    <string name="settings_fragment_username_summary">Select your username to identify you on this system</string>
+    <string name="settings_fragment_username_key">agentUsername</string>
 </resources>

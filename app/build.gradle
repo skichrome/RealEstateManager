@@ -4,7 +4,22 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
+def apiProperties = new Properties()
+apiProperties.load(new FileInputStream(rootProject.file("apikey.properties")))
+
 android {
+    signingConfigs {
+        release {
+            def keyStorePropertiesFile = rootProject.file("keystore.properties")
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(keyStorePropertiesFile))
+
+            storeFile file(keystoreProperties['keystore_file'])
+            storePassword keystoreProperties['keystore_file_pwd']
+            keyAlias keystoreProperties['keystore_alias']
+            keyPassword keystoreProperties['keystore_pwd']
+        }
+    }
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.skichrome.realestatemanager"
@@ -13,11 +28,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GEOCODING_API_KEY", apiProperties['google_geocoding_api'])
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue("string", "MAP_API_KEY", apiProperties['android_google_map_sdk_api_release'])
+        }
+        debug {
+            resValue("string", "MAP_API_KEY", apiProperties['android_google_map_sdk_api_debug'])
         }
     }
     compileOptions {
@@ -40,10 +62,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
 
     // Tests
-    testImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -57,6 +79,9 @@ dependencies {
 
     // Design library
     implementation 'com.google.android.material:material:1.1.0-alpha10'
+
+    //Preferences Screen
+    implementation 'androidx.preference:preference:1.1.0'
 
     // Easy Permissions
     implementation 'pub.devrel:easypermissions:3.0.0'
@@ -79,8 +104,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    kapt 'com.github.bumptech.glide:compiler:4.10.0'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
 
     // Play services : map and location
     implementation 'com.google.android.gms:play-services-maps:17.0.0'

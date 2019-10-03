@@ -2,9 +2,11 @@ package com.skichrome.realestatemanager.model.database
 
 import android.content.ContentValues
 import android.content.Context
+import androidx.preference.PreferenceManager
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.skichrome.realestatemanager.R
+import com.skichrome.realestatemanager.utils.DATABASE_NAME
 
 @Database(
     entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class, PoiRealty::class, Agent::class],
@@ -36,7 +38,7 @@ abstract class RealEstateDatabase : RoomDatabase()
             Room.databaseBuilder(
                 context.applicationContext,
                 RealEstateDatabase::class.java,
-                "RealEstateManagerDatabase.db"
+                DATABASE_NAME
             )
                 .addCallback(object : RoomDatabase.Callback()
                 {
@@ -45,6 +47,7 @@ abstract class RealEstateDatabase : RoomDatabase()
                         super.onCreate(db)
                         insertPrePopulatedCategories(context, db)
                         insertPrePopulatedPoi(context, db)
+                        insertDefaultAgentName(context, db)
                     }
                 })
                 .build()
@@ -64,5 +67,15 @@ abstract class RealEstateDatabase : RoomDatabase()
                 contentValues.put("name", resource)
                 db.insert("Poi", OnConflictStrategy.IGNORE, contentValues)
             }
+
+        private fun insertDefaultAgentName(context: Context, db: SupportSQLiteDatabase)
+        {
+            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val defaultAgentName = sharedPrefs.getString("agentUsername", context.getString(R.string.settings_fragment_username_default_value))
+
+            val contentValues = ContentValues()
+            contentValues.put("name", defaultAgentName)
+            db.insert("Agent", OnConflictStrategy.REPLACE, contentValues)
+        }
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skichrome.realestatemanager.model.RealEstateDataRepository
-import com.skichrome.realestatemanager.model.database.Agent
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
@@ -132,28 +131,6 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
     }
 
     // ---------- Agent Name ---------- //
-
-    fun insertAgentName(agentName: String)
-    {
-        viewModelScope.uiJob {
-            ioTask {
-                val agent = Agent(name = agentName)
-                repository.insertAgent(agent)
-            }
-            getAgentName()
-        }
-    }
-
-    fun updateAgentName(agentName: String)
-    {
-        viewModelScope.uiJob {
-            ioTask {
-                val agent = Agent(name = agentName)
-                repository.updateAgent(agent)
-            }
-            getAgentName()
-        }
-    }
 
     private fun getAgentName()
     {
