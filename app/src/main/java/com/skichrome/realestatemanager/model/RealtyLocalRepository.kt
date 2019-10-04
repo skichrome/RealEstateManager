@@ -5,7 +5,7 @@ import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.RealEstateDatabase
 import com.skichrome.realestatemanager.model.database.Realty
 
-class RealEstateLocalRepository(private val db: RealEstateDatabase)
+class RealtyLocalRepository(private val db: RealEstateDatabase)
 {
     // ---------- Realty ---------- //
 
@@ -18,6 +18,8 @@ class RealEstateLocalRepository(private val db: RealEstateDatabase)
     suspend fun getAllRealty() = db.realtyDao().getAllRealty()
 
     suspend fun getAllRealtyTypes() = db.realtyTypeDao().getAllRealtyType()
+
+    suspend fun getRealtyWithoutLatLngDefined() = db.realtyDao().getRealtyListLatLngNull()
 
     // ---------- MediaReference ---------- //
 

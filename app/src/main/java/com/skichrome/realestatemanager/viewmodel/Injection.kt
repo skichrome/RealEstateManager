@@ -2,29 +2,35 @@ package com.skichrome.realestatemanager.viewmodel
 
 import android.content.Context
 import com.skichrome.realestatemanager.androidmanagers.NetManager
-import com.skichrome.realestatemanager.model.RealEstateDataRepository
-import com.skichrome.realestatemanager.model.RealEstateLocalRepository
+import com.skichrome.realestatemanager.model.RealtyLocalRepository
+import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.RealEstateDatabase
+import com.skichrome.realestatemanager.model.retrofit.RealtyRemoteRepository
 
 object Injection
 {
-    private fun provideRealtyRepository(context: Context): RealEstateLocalRepository
+    private fun provideLocalRealtyRepo(context: Context): RealtyLocalRepository
     {
         val db = RealEstateDatabase.getInstance(context)
-        return RealEstateLocalRepository(db)
+        return RealtyLocalRepository(db)
     }
 
-    private fun provideRealtyDataSource(context: Context): RealEstateDataRepository
+    private fun provideRemoteRealtyRepo(): RealtyRemoteRepository
+    {
+        return RealtyRemoteRepository()
+    }
+
+    private fun provideRealtyRepo(context: Context): RealtyRepository
     {
         val netManager = NetManager(context)
-        val realtyRepo = provideRealtyRepository(context)
-        return RealEstateDataRepository(netManager, realtyRepo)
+        val realtyRepo = provideLocalRealtyRepo(context)
+        val remoteDataSource = provideRemoteRealtyRepo()
+        return RealtyRepository(netManager, realtyRepo, remoteDataSource)
     }
 
     fun provideViewModelFactory(context: Context): ViewModelFactory
     {
-        val realtyRepo = provideRealtyDataSource(context)
-
+        val realtyRepo = provideRealtyRepo(context)
         return ViewModelFactory(realtyRepo)
     }
 }

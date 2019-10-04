@@ -30,6 +30,9 @@ interface RealtyDao : BaseDao<Realty>
     @Query("DELETE FROM Realty WHERE id = :realtyId")
     suspend fun deleteRealtyById(realtyId: Long)
 
+    @Query("SELECT * FROM Realty WHERE latitude IS NULL OR longitude IS NULL")
+    suspend fun getRealtyListLatLngNull(): List<Realty>
+
     //ContentProvider
     @Query("SELECT * FROM Realty WHERE id = :realtyId")
     fun getRealtyByIdWithCursor(realtyId: Long): Cursor

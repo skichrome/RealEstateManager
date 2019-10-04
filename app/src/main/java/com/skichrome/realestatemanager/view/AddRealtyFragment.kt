@@ -223,47 +223,6 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         }
     }
 
-    private fun getMaterialInputTextData()
-    {
-        for (layout in materialEditTextViewList)
-        {
-            val textInput = layout.findViewWithTag<TextInputEditText>(getString(R.string.add_realty_fragment_edit_text_input_tag))
-            val str: String? = textInput?.text?.toString()
-
-            if (textInput != null && str == null || str == "")
-            {
-                textInput.error = getString(R.string.add_realty_frag_error_input_field)
-                canRegisterARealty = false
-            }
-        }
-
-        if (canRegisterARealty)
-        {
-            val realtyToBeAdded = Realty(
-                status = realtyStatus,
-                surface = addRealtyFragSurfaceInput.text.toString().toFloat(),
-                roomNumber = addRealtyFragRoomNumberInput.text.toString().toInt(),
-                fullDescription = addRealtyFragDescriptionInput.text.toString(),
-                dateSell = if (realtySoldDate == null) null else Date(realtySoldDate!!.time.time),
-                dateAdded = Date(realtyCreationDate.time.time),
-                city = addRealtyFragCityInput.text.toString(),
-                postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
-                address = addRealtyFragAddressInput.text.toString(),
-                price = addRealtyFragPriceInput.text.toString().toFloat(),
-                realtyTypeId = realtyType
-            )
-
-            val pictures = photoAdapter.getAllPicturesReferences()
-
-            if (isEditMode)
-            {
-                realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
-                viewModel.updateRealty(realtyToBeAdded, pictures)
-            } else
-                viewModel.insertRealty(realtyToBeAdded, pictures)
-        }
-    }
-
     private fun getDateInputData()
     {
         val dateCreated = addRealtyFragDateCreatedEditText?.text?.toString()
@@ -287,6 +246,50 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                     getString(R.string.add_realty_frag_error_input_field)
                 } else null
         }
+    }
+
+    private fun getMaterialInputTextData()
+    {
+        for (layout in materialEditTextViewList)
+        {
+            val textInput = layout.findViewWithTag<TextInputEditText>(getString(R.string.add_realty_fragment_edit_text_input_tag))
+            val str: String = textInput?.text?.toString() ?: ""
+
+            if (str == "")
+            {
+                textInput.error = getString(R.string.add_realty_frag_error_input_field)
+                canRegisterARealty = false
+            }
+        }
+
+        if (canRegisterARealty)
+            storeInDataBase()
+    }
+
+    private fun storeInDataBase()
+    {
+        val realtyToBeAdded = Realty(
+            status = realtyStatus,
+            surface = addRealtyFragSurfaceInput.text.toString().toFloat(),
+            roomNumber = addRealtyFragRoomNumberInput.text.toString().toInt(),
+            fullDescription = addRealtyFragDescriptionInput.text.toString(),
+            dateSell = if (realtySoldDate == null) null else Date(realtySoldDate!!.time.time),
+            dateAdded = Date(realtyCreationDate.time.time),
+            city = addRealtyFragCityInput.text.toString(),
+            postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
+            address = addRealtyFragAddressInput.text.toString(),
+            price = addRealtyFragPriceInput.text.toString().toFloat(),
+            realtyTypeId = realtyType
+        )
+
+        val pictures = photoAdapter.getAllPicturesReferences()
+
+        if (isEditMode)
+        {
+            realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
+            viewModel.updateRealty(realtyToBeAdded, pictures)
+        } else
+            viewModel.insertRealty(realtyToBeAdded, pictures)
     }
 
     // =================================

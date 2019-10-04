@@ -109,6 +109,7 @@ dependencies {
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
 
     // Play services : map and location
     implementation 'com.google.android.gms:play-services-maps:17.0.0'

@@ -5,18 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skichrome.realestatemanager.model.RealEstateDataRepository
+import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
 import com.skichrome.realestatemanager.utils.backgroundTask
+import com.skichrome.realestatemanager.utils.ioJob
 import com.skichrome.realestatemanager.utils.ioTask
 import com.skichrome.realestatemanager.utils.uiJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewModel()
+class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 {
     // =================================
     //              Fields
@@ -57,6 +58,7 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
     {
         getAgentName()
         getRealtyTypes()
+        updateLatLngOfRealty()
     }
 
     // =================================
@@ -139,6 +141,35 @@ class RealtyViewModel(private val repository: RealEstateDataRepository) : ViewMo
                 repository.getAgentName()
             }
             _agent.set(agentDb)
+        }
+    }
+
+    // ---------- LatLng ---------- //
+
+    fun updateLatLngOfRealty()
+    {
+        viewModelScope.ioJob {
+            val realtyNotUpdated = ioTask {
+                repository.getRealtyLatitudeNotDefined()
+            }
+
+            realtyNotUpdated.forEach { realty ->
+                val latLng = ioTask {
+                    val addr = realty.address
+                    val pc = realty.postCode
+                    val city = realty.city
+
+                    repository.getLatLngFromAddress(addr, pc, city)
+                }
+
+                latLng?.let {
+                    if (it.isEmpty())
+                        return@let
+                    realty.latitude = it.first().geometry?.location?.lat
+                    realty.longitude = it.first().geometry?.location?.lng
+                    repository.updateRealty(realty)
+                }
+            }
         }
     }
 

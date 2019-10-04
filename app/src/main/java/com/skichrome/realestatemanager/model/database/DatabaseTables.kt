@@ -28,6 +28,8 @@ data class Realty(
     val address: String,
     val postCode: Int,
     val city: String,
+    var latitude: Double? = null,
+    var longitude: Double? = null,
     var status: Boolean = false,
     val dateAdded: Date,
     var dateSell: Date? = null,

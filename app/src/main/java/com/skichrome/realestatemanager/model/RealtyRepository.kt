@@ -1,43 +1,33 @@
 package com.skichrome.realestatemanager.model
 
+import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.Agent
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
+import com.skichrome.realestatemanager.model.retrofit.RealtyRemoteRepository
+import com.skichrome.realestatemanager.model.retrofit.Result
 
-class RealEstateDataRepository(private val netManager: NetManager, private val localDataSource: RealEstateLocalRepository)
+class RealtyRepository(
+    private val netManager: NetManager,
+    private val localDataSource: RealtyLocalRepository,
+    private val remoteDataSource: RealtyRemoteRepository
+)
 {
     // ---------- Realty ---------- //
 
-    suspend fun getAllRealtyTypes(): List<RealtyType>
-    {
-        netManager.isConnectedToInternet?.let {
-            //            if (it)
-//            {
-//                return emptyList()
-//            }
-        }
-        return localDataSource.getAllRealtyTypes()
-    }
+    suspend fun getAllRealtyTypes(): List<RealtyType> = localDataSource.getAllRealtyTypes()
 
-    suspend fun getAllRealty(): List<Realty>
-    {
-        netManager.isConnectedToInternet?.let {
-            //            if (it)
-//            {
-//                // Todo Remote synchronisation
-//                return emptyList()
-//            }
-        }
-        return localDataSource.getAllRealty()
-    }
+    suspend fun getAllRealty(): List<Realty> = localDataSource.getAllRealty()
 
     suspend fun getRealty(id: Long): Realty = localDataSource.getRealtyById(id)
 
     suspend fun updateRealty(realty: Realty): Int = localDataSource.updateRealty(realty)
 
     suspend fun insertRealty(realty: Realty): Long = localDataSource.insertRealty(realty)
+
+    suspend fun getRealtyLatitudeNotDefined() = localDataSource.getRealtyWithoutLatLngDefined()
 
     // ---------- MediaReference ---------- //
 
@@ -66,4 +56,20 @@ class RealEstateDataRepository(private val netManager: NetManager, private val l
     suspend fun updateAgent(agent: Agent): Int = localDataSource.updateAgent(agent)
 
     suspend fun getAgentName(): String = localDataSource.getAgentName()
+
+    // ---------- LatLng ---------- //
+
+    suspend fun getLatLngFromAddress(address: String, postCode: Int, city: String): List<Result>?
+    {
+        netManager.isConnectedToInternet?.let {
+            if (it)
+            {
+                val result = remoteDataSource.getLatLngFromPhysicalAddress(address, postCode, city)
+                Log.e("Debug", "Realty not updated : ${result.body()}")
+                if (result.isSuccessful)
+                    return result.body()?.results
+            }
+        }
+        return null
+    }
 }
