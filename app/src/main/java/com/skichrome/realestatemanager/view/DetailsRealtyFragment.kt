@@ -1,13 +1,14 @@
 package com.skichrome.realestatemanager.view
 
 import androidx.lifecycle.Observer
+import com.google.android.gms.maps.MapView
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
-import com.skichrome.realestatemanager.view.base.BaseFragment
+import com.skichrome.realestatemanager.view.base.BaseMapFragment
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import java.lang.ref.WeakReference
 
-class DetailsRealtyFragment : BaseFragment<FragmentRealtyDetailsBinding, RealtyViewModel>(),
+class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, RealtyViewModel>(),
     RealtyPhotoAdapter.OnClickPictureListener
 {
     // =================================
@@ -22,6 +23,7 @@ class DetailsRealtyFragment : BaseFragment<FragmentRealtyDetailsBinding, RealtyV
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_details
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
+    override fun getMap(): MapView = binding.realtyDetailsFragmentMapView
 
     override fun configureFragment()
     {

@@ -3,6 +3,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -158,6 +159,17 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationPostCode"
                 app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentLocationPostCode"
                 tools:text="city" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/realtyDetailsFragmentMapView"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_margin="8dp"
+                app:elevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationPostCode"
+                map:liteMode="true" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

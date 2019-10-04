@@ -2,36 +2,30 @@ package com.skichrome.realestatemanager.view
 
 import android.content.IntentSender
 import android.location.Location
-import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentMapsBinding
 import com.skichrome.realestatemanager.utils.CHECK_SETTINGS_RC
 import com.skichrome.realestatemanager.utils.LOCATION_RC
 import com.skichrome.realestatemanager.utils.MANIFEST_LOCATION_PERM
+import com.skichrome.realestatemanager.view.base.BaseMapFragment
+import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class MapFragment : Fragment(), OnMapReadyCallback
+class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
 {
     // =================================
     //              Fields
     // =================================
 
-    private lateinit var binding: FragmentMapsBinding
-    private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var lastLocation: Location? = null
@@ -40,18 +34,12 @@ class MapFragment : Fragment(), OnMapReadyCallback
     //        Superclass Methods
     // =================================
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_maps, container, false)
-        binding.mapFragmentMapView.onCreate(arguments)
-        return binding.root
-    }
+    override fun getFragmentLayout(): Int = R.layout.fragment_maps
+    override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
+    override fun getMap(): MapView = binding.mapFragmentMapView
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    override fun configureFragment()
     {
-        super.onViewCreated(view, savedInstanceState)
-        binding.mapFragmentMapView.getMapAsync(this)
-
         binding.mapFragmentFab.setOnClickListener {
             lastLocation?.let {
                 configureMap()
@@ -59,33 +47,8 @@ class MapFragment : Fragment(), OnMapReadyCallback
         }
     }
 
-    override fun onStart()
-    {
-        super.onStart()
-        binding.mapFragmentMapView.onStart()
-    }
-
-    override fun onResume()
-    {
-        super.onResume()
-        binding.mapFragmentMapView.onResume()
-    }
-
-    override fun onPause()
-    {
-        binding.mapFragmentMapView.onPause()
-        super.onPause()
-    }
-
-    override fun onStop()
-    {
-        binding.mapFragmentMapView.onStop()
-        super.onStop()
-    }
-
     override fun onDestroy()
     {
-        binding.mapFragmentMapView.onDestroy()
         lastLocation?.let {
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }
@@ -93,9 +56,9 @@ class MapFragment : Fragment(), OnMapReadyCallback
         super.onDestroy()
     }
 
-    override fun onMapReady(mapReady: GoogleMap)
+    override fun onMapReady(gMap: GoogleMap)
     {
-        map = mapReady
+        super.onMapReady(gMap)
         configureLocationPermission()
     }
 
