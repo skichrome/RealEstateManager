@@ -9,6 +9,7 @@ import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
+import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
 import com.skichrome.realestatemanager.utils.backgroundTask
 import com.skichrome.realestatemanager.utils.ioJob
 import com.skichrome.realestatemanager.utils.ioTask
@@ -46,6 +47,10 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val realtyDetailed: ObservableField<Realty>
         get() = _realtyDetailed
 
+    private val _realtyDetailedLatLng = MutableLiveData<RealtyMinimalForMap>()
+    val realtyDetailedLatLng: LiveData<RealtyMinimalForMap>
+        get() = _realtyDetailedLatLng
+
     private val _realtyDetailedPhotos = MutableLiveData<List<MediaReference>>()
     val realtyDetailedPhotos: MutableLiveData<List<MediaReference>>
         get() = _realtyDetailedPhotos
@@ -58,7 +63,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     {
         getAgentName()
         getRealtyTypes()
-        updateLatLngOfRealty()
+        getRealtyWithoutLatLngAndUpdate()
     }
 
     // =================================
@@ -93,10 +98,19 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun getRealty(id: Long)
     {
         uiScope.uiJob {
-            _realtyDetailed.set(
-                ioTask {
-                    repository.getRealty(id)
-                })
+            val realty = ioTask {
+                repository.getRealty(id)
+            }
+            _realtyDetailed.set(realty)
+
+            val realtyLat = realty.latitude
+            val realtyLng = realty.longitude
+
+            if (realtyLat == null || realtyLng == null)
+                updateLatLngOfRealty(listOf(realty))
+            else
+                _realtyDetailedLatLng.value = RealtyMinimalForMap(realty.id, realtyLat, realtyLng)
+
             _realtyDetailedPhotos.value = ioTask {
                 repository.getMediaReferencesFromRealty(id)
             }
@@ -146,12 +160,19 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     // ---------- LatLng ---------- //
 
-    fun updateLatLngOfRealty()
+    fun getRealtyWithoutLatLngAndUpdate()
     {
         viewModelScope.ioJob {
             val realtyNotUpdated = ioTask {
                 repository.getRealtyLatitudeNotDefined()
             }
+            updateLatLngOfRealty(realtyNotUpdated)
+        }
+    }
+
+    private fun updateLatLngOfRealty(realtyNotUpdated: List<Realty>)
+    {
+        viewModelScope.ioJob {
 
             realtyNotUpdated.forEach { realty ->
                 val latLng = ioTask {

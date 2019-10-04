@@ -1,7 +1,11 @@
 package com.skichrome.realestatemanager.view
 
 import androidx.lifecycle.Observer
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
@@ -31,6 +35,12 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
         configureRecyclerView()
     }
 
+    override fun onMapReady(gMap: GoogleMap)
+    {
+        super.onMapReady(gMap)
+        configureMapPosition()
+    }
+
     // =================================
     //              Methods
     // =================================
@@ -46,6 +56,22 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     {
         binding.realtyDetailsFragmentRecyclerView.adapter = photoAdapter
         viewModel.realtyDetailedPhotos.observe(this, Observer { it?.let { list -> photoAdapter.replacePhotoList(list) } })
+    }
+
+    private fun configureMapPosition()
+    {
+        viewModel.realtyDetailedLatLng.observe(this, Observer {
+            it?.let { realtyMinimal ->
+                val latLng = LatLng(realtyMinimal.latitude, realtyMinimal.longitude)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
+
+                map.apply {
+                    val markerOpt = MarkerOptions()
+                        .position(latLng)
+                    addMarker(markerOpt)
+                }
+            }
+        })
     }
 
     // =================================

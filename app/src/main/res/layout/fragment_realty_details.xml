@@ -164,11 +164,12 @@
                 android:id="@+id/realtyDetailsFragmentMapView"
                 android:layout_width="0dp"
                 android:layout_height="300dp"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 app:elevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationPostCode"
+                app:layout_constraintBottom_toBottomOf="parent"
                 map:liteMode="true" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
