@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils
 {
@@ -37,5 +38,18 @@ public class Utils
     {
         @SuppressLint("WifiManagerPotentialLeak") WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
+    }
+
+    // --------------------------------------------------------
+
+    public static String getTodayDateLocaleEU()
+    {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        return dateFormat.format(new Date());
+    }
+
+    public static int convertEuroToDollar(int euros)
+    {
+        return (int) Math.round(euros * (1 / 0.812));
     }
 }
