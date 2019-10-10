@@ -113,8 +113,21 @@
     <string name="realty_details_fragment_medias_title">Medias</string>
 
     <!-- Settings Fragment -->
+    <string name="settings_fragment_category_credentials">Credentials</string>
+    <string name="settings_fragment_category_notification">Notifications</string>
+
     <string name="settings_fragment_username_title">Username</string>
     <string name="settings_fragment_username_default_value">Modify me in app settings</string>
     <string name="settings_fragment_username_summary">Select your username to identify you on this system</string>
     <string name="settings_fragment_username_key">agentUsername</string>
+
+    <string name="settings_fragment_notification_title">New realty inserted notification</string>
+    <string name="settings_fragment_notification_summary">Modify notification settings in system settings</string>
+    <string name="settings_fragment_notification_key">notification</string>
+
+    <!-- System Notification -->
+    <string name="notification_description">Be notified when the app has successfully saved your real estate.</string>
+    <string name="notification_channel_name">Content saved notification</string>
+    <string name="notification_content_text_inserted">Successfully inserted !</string>
+    <string name="notification_content_text_updated">Successfully updated !</string>
 </resources>

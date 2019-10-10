@@ -10,3 +10,5 @@ const val LOCATION_RC = 123
 const val MANIFEST_LOCATION_PERM = Manifest.permission.ACCESS_FINE_LOCATION
 
 const val CHECK_SETTINGS_RC = 124
+
+const val NOTIFICATION_ID = 123456

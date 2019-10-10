@@ -17,6 +17,7 @@ import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentAddRealtyBinding
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
+import com.skichrome.realestatemanager.utils.NOTIFICATION_ID
 import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
 import com.skichrome.realestatemanager.utils.StorageUtils
 import com.skichrome.realestatemanager.view.base.BaseFragment
@@ -106,7 +107,21 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         viewModel.insertLoading.observe(this, Observer {
             it?.let {
                 if (!it)
+                {
+                    val editModeText =
+                        if (isEditMode) getString(R.string.notification_content_text_updated)
+                        else getString(R.string.notification_content_text_inserted)
+
+                    val notificationHelper = NotificationHelper(context)
+
+                    val builder = notificationHelper.getNotificationBuilder(
+                        getString(R.string.app_name),
+                        editModeText
+                    )
+                    notificationHelper.notify(NOTIFICATION_ID, builder)
+
                     findNavController().navigateUp()
+                }
             }
         })
     }

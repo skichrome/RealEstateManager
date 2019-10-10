@@ -3,11 +3,18 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Credentials">
+    <PreferenceCategory android:title="@string/settings_fragment_category_credentials">
         <EditTextPreference
             android:defaultValue="@string/settings_fragment_username_default_value"
             android:key="@string/settings_fragment_username_key"
             android:summary="@string/settings_fragment_username_summary"
             android:title="@string/settings_fragment_username_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_fragment_category_notification">
+        <Preference
+            android:key="@string/settings_fragment_notification_key"
+            android:summary="@string/settings_fragment_notification_summary"
+            android:title="@string/settings_fragment_notification_title" />
     </PreferenceCategory>
 </PreferenceScreen>
