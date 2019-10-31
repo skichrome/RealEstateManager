@@ -7,12 +7,11 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(
-    foreignKeys = [
-        ForeignKey(
-            entity = RealtyType::class,
-            parentColumns = ["realtyTypeId"],
-            childColumns = ["realty_type_id"]
-        ),
+    foreignKeys = [ForeignKey(
+        entity = RealtyType::class,
+        parentColumns = ["realtyTypeId"],
+        childColumns = ["realty_type_id"]
+    ),
         ForeignKey(
             entity = Agent::class,
             parentColumns = ["agentId"],
@@ -39,26 +38,24 @@ data class Realty(
 
 @Entity
 data class Poi(
-    @PrimaryKey(autoGenerate = true) val poiId: Int = 0,
+    @PrimaryKey val poiId: Int,
     var name: String
 )
 
 @Entity
 data class RealtyType(
-    @PrimaryKey(autoGenerate = true) var realtyTypeId: Int = 0,
+    @PrimaryKey var realtyTypeId: Int,
     var name: String
 )
 
 @Entity(
-    foreignKeys = [
-        ForeignKey(
-            entity = Realty::class,
-            parentColumns = ["id"],
-            childColumns = ["realtyId"],
-            onUpdate = ForeignKey.CASCADE,
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+    foreignKeys = [ForeignKey(
+        entity = Realty::class,
+        parentColumns = ["id"],
+        childColumns = ["realtyId"],
+        onUpdate = ForeignKey.CASCADE,
+        onDelete = ForeignKey.CASCADE
+    )]
 )
 data class MediaReference(
     @PrimaryKey(autoGenerate = true) val mediaReferenceId: Long = 0L,
@@ -83,6 +80,7 @@ data class PoiRealty(
 
 @Entity
 data class Agent(
-    @PrimaryKey val agentId: Long = 1L,
-    val name: String
+    @PrimaryKey val agentId: Long,
+    val name: String,
+    val lastUpdate: Date? = null
 )

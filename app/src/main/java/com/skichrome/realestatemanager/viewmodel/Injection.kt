@@ -3,9 +3,9 @@ package com.skichrome.realestatemanager.viewmodel
 import android.content.Context
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.RealtyLocalRepository
+import com.skichrome.realestatemanager.model.RealtyRemoteRepository
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.RealEstateDatabase
-import com.skichrome.realestatemanager.model.retrofit.RealtyRemoteRepository
 
 object Injection
 {

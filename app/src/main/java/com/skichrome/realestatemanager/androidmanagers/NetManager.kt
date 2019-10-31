@@ -3,6 +3,7 @@ package com.skichrome.realestatemanager.androidmanagers
 import android.content.Context
 import android.net.ConnectivityManager
 
+@Suppress("DEPRECATION") // Todo
 class NetManager(appContext: Context)
 {
     private val conManager: ConnectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

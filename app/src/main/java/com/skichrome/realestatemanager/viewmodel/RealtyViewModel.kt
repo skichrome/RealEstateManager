@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.MediaReference
+import com.skichrome.realestatemanager.model.database.Poi
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.RealtyType
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
@@ -43,6 +44,10 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val realtyTypes: LiveData<List<RealtyType>>
         get() = _realtyTypes
 
+    private val _poi = MutableLiveData<List<Poi>>()
+    val poi: LiveData<List<Poi>>
+        get() = _poi
+
     private val _realtyDetailed = ObservableField<Realty>()
     val realtyDetailed: ObservableField<Realty>
         get() = _realtyDetailed
@@ -63,6 +68,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     {
         getAgentName()
         getRealtyTypes()
+        getAllPoi()
         getRealtyWithoutLatLngAndUpdate()
     }
 
@@ -82,6 +88,15 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         uiScope.uiJob {
             _realtyTypes.value = ioTask {
                 repository.getAllRealtyTypes()
+            }
+        }
+    }
+
+    private fun getAllPoi()
+    {
+        uiScope.uiJob {
+            _poi.value = ioTask {
+                repository.getAllPoi()
             }
         }
     }
@@ -186,8 +201,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                 latLng?.let {
                     if (it.isEmpty())
                         return@let
-                    realty.latitude = it.first().geometry?.location?.lat
-                    realty.longitude = it.first().geometry?.location?.lng
+                    realty.latitude = it.first().geometry.location.lat
+                    realty.longitude = it.first().geometry.location.lng
                     repository.updateRealty(realty)
                 }
             }

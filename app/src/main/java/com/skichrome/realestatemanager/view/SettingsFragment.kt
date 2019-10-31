@@ -46,7 +46,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     val defaultValue = getString(R.string.settings_fragment_username_default_value)
                     val agentName = pref?.getString(key, defaultValue) ?: defaultValue
 
-                    val agent = Agent(name = agentName)
+                    val agent = Agent(agentId = 1L, name = agentName)
                     RealEstateDatabase.getInstance(context!!).agentDao().update(agent)
                 }
             }

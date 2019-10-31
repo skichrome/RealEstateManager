@@ -33,7 +33,7 @@ class DatabaseTest
 
         private const val AUTO_GENERATED_ID = 1L
 
-        private val AGENT = Agent(name = "Boris")
+        private val AGENT = Agent(agentId = 1L, name = "Boris", lastUpdate = Date())
 
         private val REALTY = Realty(
             id = AUTO_GENERATED_ID,
@@ -122,9 +122,9 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealty() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
-        realtyDao.insert(REALTY, REALTY2)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insertIgnore(REALTY, REALTY2)
 
         val storedRealty = realtyDao.getAllRealty()
         assertEquals(listOf(REALTY, REALTY2), storedRealty)
@@ -133,9 +133,9 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealty() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
-        realtyDao.insert(REALTY, REALTY2)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insertIgnore(REALTY, REALTY2)
 
         val storedRealty = realtyDao.getAllRealty().first()
         storedRealty.status = true
@@ -148,9 +148,9 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealty() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE)
-        realtyDao.insert(REALTY)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE)
+        realtyDao.insertIgnore(REALTY)
 
         val storedRealty = realtyDao.getAllRealty().first()
         realtyDao.deleteRealtyById(storedRealty.id)
@@ -166,7 +166,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetPoi() = runBlocking {
-        poiDao.insert(POI)
+        poiDao.insertIgnore(POI)
 
         val storedPoi = poiDao.getAllPoi()
         assertEquals(listOf(POI), storedPoi)
@@ -176,7 +176,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetPoi() = runBlocking {
-        poiDao.insert(POI)
+        poiDao.insertIgnore(POI)
 
         val storedPoi = poiDao.getAllPoi().first()
         storedPoi.name = "restaurant"
@@ -189,7 +189,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeletePoi() = runBlocking {
-        poiDao.insert(POI)
+        poiDao.insertIgnore(POI)
 
         val storedPoi = poiDao.getAllPoi().first()
         poiDao.deletePoiOfRealtyById(storedPoi.poiId)
@@ -205,7 +205,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetRealtyType() = runBlocking {
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
 
         val storedType = realtyTypeDao.getAllRealtyType()
         assertEquals(listOf(REALTY_TYPE, REALTY_TYPE2), storedType)
@@ -214,7 +214,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetRealtyType() = runBlocking {
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
 
         val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
         storedRealtyType.name = "House"
@@ -227,7 +227,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteRealtyType() = runBlocking {
-        realtyTypeDao.insert(REALTY_TYPE)
+        realtyTypeDao.insertIgnore(REALTY_TYPE)
 
         val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
         realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyTypeId)
@@ -245,10 +245,10 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetMediaReference() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
-        realtyDao.insert(REALTY, REALTY2)
-        mediaReferenceDao.insert(MEDIA_REF)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insertIgnore(REALTY, REALTY2)
+        mediaReferenceDao.insertIgnore(MEDIA_REF)
 
         val storedMediaRef = mediaReferenceDao.getAllMedias()
         assertEquals(listOf(MEDIA_REF), storedMediaRef)
@@ -257,10 +257,10 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAndGetMediaReference() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
-        realtyDao.insert(REALTY, REALTY2)
-        mediaReferenceDao.insert(MEDIA_REF)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insertIgnore(REALTY, REALTY2)
+        mediaReferenceDao.insertIgnore(MEDIA_REF)
 
         val storedMediaReference = mediaReferenceDao.getAllMedias().first()
         storedMediaReference.reference = "https://new-reference.fr/"
@@ -273,10 +273,10 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndDeleteMediaReference() = runBlocking {
-        agentDao.insert(AGENT)
-        realtyTypeDao.insert(REALTY_TYPE, REALTY_TYPE2)
-        realtyDao.insert(REALTY, REALTY2)
-        mediaReferenceDao.insert(MEDIA_REF)
+        agentDao.insertIgnore(AGENT)
+        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
+        realtyDao.insertIgnore(REALTY, REALTY2)
+        mediaReferenceDao.insertIgnore(MEDIA_REF)
 
         val storedMediaReference = mediaReferenceDao.getAllMedias().first()
         mediaReferenceDao.deleteMediaOfRealtyById(storedMediaReference.realtyId)
@@ -292,7 +292,7 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun insertAndGetAgent() = runBlocking {
-        agentDao.insert(AGENT)
+        agentDao.insertIgnore(AGENT)
         val storedAgentName = agentDao.getAgentName()
         assertEquals(AGENT.name, storedAgentName)
     }
@@ -300,9 +300,9 @@ class DatabaseTest
     @Test
     @Throws(Exception::class)
     fun updateAgent() = runBlocking {
-        agentDao.insert(AGENT)
+        agentDao.insertIgnore(AGENT)
 
-        val newAgent = Agent(AGENT.agentId, "New Name")
+        val newAgent = Agent(AGENT.agentId, "New Name", Date())
         agentDao.update(newAgent)
 
         val storedAgent = agentDao.getAgentName()

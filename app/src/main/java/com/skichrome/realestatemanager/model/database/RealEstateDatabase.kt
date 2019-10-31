@@ -45,28 +45,10 @@ abstract class RealEstateDatabase : RoomDatabase()
                     override fun onCreate(db: SupportSQLiteDatabase)
                     {
                         super.onCreate(db)
-                        insertPrePopulatedCategories(context, db)
-                        insertPrePopulatedPoi(context, db)
                         insertDefaultAgentName(context, db)
                     }
                 })
                 .build()
-
-        private fun insertPrePopulatedCategories(context: Context, db: SupportSQLiteDatabase) =
-            context.resources.getStringArray(R.array.realty_categories).forEachIndexed { index, resource ->
-                val contentValue = ContentValues()
-                contentValue.put("realtyTypeId", index.toLong())
-                contentValue.put("name", resource)
-                db.insert("RealtyType", OnConflictStrategy.IGNORE, contentValue)
-            }
-
-        private fun insertPrePopulatedPoi(context: Context, db: SupportSQLiteDatabase) =
-            context.resources.getStringArray(R.array.near_realty_poi).forEachIndexed { index, resource ->
-                val contentValues = ContentValues()
-                contentValues.put("poiId", index.toLong())
-                contentValues.put("name", resource)
-                db.insert("Poi", OnConflictStrategy.IGNORE, contentValues)
-            }
 
         private fun insertDefaultAgentName(context: Context, db: SupportSQLiteDatabase)
         {
@@ -74,6 +56,7 @@ abstract class RealEstateDatabase : RoomDatabase()
             val defaultAgentName = sharedPrefs.getString("agentUsername", context.getString(R.string.settings_fragment_username_default_value))
 
             val contentValues = ContentValues()
+            contentValues.put("agentId", 1L)
             contentValues.put("name", defaultAgentName)
             db.insert("Agent", OnConflictStrategy.REPLACE, contentValues)
         }

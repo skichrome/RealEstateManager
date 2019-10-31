@@ -1,15 +1,17 @@
 package com.skichrome.realestatemanager.utils
 
 import com.skichrome.realestatemanager.BuildConfig
-import com.skichrome.realestatemanager.model.retrofit.MainGeocoding
+import com.skichrome.realestatemanager.model.retrofit.GeoCoding
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface RetrofitService
+interface GoogleRetrofitService
 {
     companion object
     {
@@ -17,11 +19,13 @@ interface RetrofitService
         private const val FORMAT = "json"
         private const val API_KEY = BuildConfig.GEOCODING_API_KEY
 
-        val retrofitService: RetrofitService = Retrofit.Builder()
+        private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+        val service: GoogleRetrofitService = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-            .create(RetrofitService::class.java)
+            .create(GoogleRetrofitService::class.java)
     }
 
     @GET("{outputFormat}")
@@ -29,5 +33,5 @@ interface RetrofitService
         @Path("outputFormat") format: String = FORMAT,
         @Query("address") address: String,
         @Query("key") apiKey: String = API_KEY
-    ): Response<MainGeocoding>
+    ): Response<GeoCoding>
 }

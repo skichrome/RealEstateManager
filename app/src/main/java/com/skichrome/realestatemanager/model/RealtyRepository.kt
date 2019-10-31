@@ -2,12 +2,8 @@ package com.skichrome.realestatemanager.model
 
 import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
-import com.skichrome.realestatemanager.model.database.Agent
-import com.skichrome.realestatemanager.model.database.MediaReference
-import com.skichrome.realestatemanager.model.database.Realty
-import com.skichrome.realestatemanager.model.database.RealtyType
-import com.skichrome.realestatemanager.model.retrofit.RealtyRemoteRepository
-import com.skichrome.realestatemanager.model.retrofit.Result
+import com.skichrome.realestatemanager.model.database.*
+import com.skichrome.realestatemanager.model.retrofit.Results
 
 class RealtyRepository(
     private val netManager: NetManager,
@@ -16,8 +12,6 @@ class RealtyRepository(
 )
 {
     // ---------- Realty ---------- //
-
-    suspend fun getAllRealtyTypes(): List<RealtyType> = localDataSource.getAllRealtyTypes()
 
     suspend fun getAllRealty(): List<Realty> = localDataSource.getAllRealty()
 
@@ -57,9 +51,55 @@ class RealtyRepository(
 
     suspend fun getAgentName(): String = localDataSource.getAgentName()
 
+    // ---------- RealtyType ---------- //
+
+    suspend fun getAllRealtyTypes(): List<RealtyType>
+    {
+        netManager.isConnectedToInternet?.let { isConnected ->
+            if (isConnected)
+            {
+                val remoteResult = remoteDataSource.getAllRealtyTypes()
+                if (remoteResult.isSuccessful)
+                {
+                    val resultList: MutableList<RealtyType> = mutableListOf()
+                    remoteResult.body()?.results?.forEach {
+                        val realtyType = RealtyType(realtyTypeId = it.id, name = it.name)
+                        localDataSource.insertRealtyType(realtyType)
+                        resultList.add(realtyType)
+                    }
+                    return resultList
+                }
+            }
+        }
+        return localDataSource.getAllRealtyTypes()
+    }
+
+    // ---------- Poi ---------- //
+
+    suspend fun getAllPoi(): List<Poi>
+    {
+        netManager.isConnectedToInternet?.let { isConnected ->
+            if (isConnected)
+            {
+                val remoteResult = remoteDataSource.getAllPoi()
+                if (remoteResult.isSuccessful)
+                {
+                    val resultList: MutableList<Poi> = mutableListOf()
+                    remoteResult.body()?.results?.forEach {
+                        val poi = Poi(poiId = it.id, name = it.name)
+                        localDataSource.insertPoi(poi)
+                        resultList.add(poi)
+                    }
+                    return resultList
+                }
+            }
+        }
+        return localDataSource.getAllPoi()
+    }
+
     // ---------- LatLng ---------- //
 
-    suspend fun getLatLngFromAddress(address: String, postCode: Int, city: String): List<Result>?
+    suspend fun getLatLngFromAddress(address: String, postCode: Int, city: String): List<Results>?
     {
         netManager.isConnectedToInternet?.let {
             if (it)
