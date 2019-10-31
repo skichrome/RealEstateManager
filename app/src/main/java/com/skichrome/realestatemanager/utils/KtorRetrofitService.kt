@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.utils
 
+import com.skichrome.realestatemanager.model.retrofit.RemoteAgent
 import com.skichrome.realestatemanager.model.retrofit.RemotePoi
 import com.skichrome.realestatemanager.model.retrofit.RemoteRealtyType
 import com.squareup.moshi.Moshi
@@ -29,4 +30,7 @@ interface KtorRetrofitService
 
     @GET("all-poi")
     suspend fun getAllPoi(): Response<RemotePoi>
+
+    @GET("all-agents")
+    suspend fun getAllAgents(): Response<RemoteAgent>
 }

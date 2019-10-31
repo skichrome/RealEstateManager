@@ -30,7 +30,7 @@ class RealtyLocalRepository(private val db: RealEstateDatabase)
 
     suspend fun updateAgent(agent: Agent) = db.agentDao().update(agent)
 
-    suspend fun getAgentName() = db.agentDao().getAgentName()
+    suspend fun getAllAgents() = db.agentDao().getAllAgents()
 
     // ---------- RealtyType ---------- //
 

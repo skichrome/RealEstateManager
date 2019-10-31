@@ -1,11 +1,10 @@
 package com.skichrome.realestatemanager.model.database
 
-import android.content.ContentValues
 import android.content.Context
-import androidx.preference.PreferenceManager
-import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.skichrome.realestatemanager.R
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.skichrome.realestatemanager.utils.DATABASE_NAME
 
 @Database(
@@ -39,26 +38,6 @@ abstract class RealEstateDatabase : RoomDatabase()
                 context.applicationContext,
                 RealEstateDatabase::class.java,
                 DATABASE_NAME
-            )
-                .addCallback(object : RoomDatabase.Callback()
-                {
-                    override fun onCreate(db: SupportSQLiteDatabase)
-                    {
-                        super.onCreate(db)
-                        insertDefaultAgentName(context, db)
-                    }
-                })
-                .build()
-
-        private fun insertDefaultAgentName(context: Context, db: SupportSQLiteDatabase)
-        {
-            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val defaultAgentName = sharedPrefs.getString("agentUsername", context.getString(R.string.settings_fragment_username_default_value))
-
-            val contentValues = ContentValues()
-            contentValues.put("agentId", 1L)
-            contentValues.put("name", defaultAgentName)
-            db.insert("Agent", OnConflictStrategy.REPLACE, contentValues)
-        }
+            ).build()
     }
 }

@@ -89,4 +89,7 @@ interface AgentDao : BaseDao<Agent>
 {
     @Query("SELECT name FROM Agent LIMIT 1")
     suspend fun getAgentName(): String
+
+    @Query("SELECT * FROM Agent")
+    suspend fun getAllAgents(): List<Agent>
 }

@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.skichrome.realestatemanager.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -40,7 +41,17 @@ class MainActivity : AppCompatActivity()
 
         toolbar?.setupWithNavController(navController, appBarConfiguration)
         toolbar?.inflateMenu(R.menu.toolbar_activity_main)
+
         toolbar?.setOnMenuItemClickListener {
+            if (it.itemId == R.id.changeCurrentAgent)
+            {
+                val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+                sharedPrefs.edit()
+                    .putLong(getString(R.string.settings_fragment_username_key), -1L)
+                    .apply()
+                finish()
+                return@setOnMenuItemClickListener true
+            }
             return@setOnMenuItemClickListener it.onNavDestinationSelected(navController) || super.onOptionsItemSelected(it)
         }
     }
@@ -48,7 +59,6 @@ class MainActivity : AppCompatActivity()
     private fun configureNavController(navController: NavController)
     {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
             toolbar?.menu?.clear()
             if (destination.id != R.id.mapFragment)
                 toolbar?.inflateMenu(R.menu.toolbar_activity_main)
@@ -58,8 +68,6 @@ class MainActivity : AppCompatActivity()
 
             val editRealtyVisibility = destination.id == R.id.detailsRealtyFragment
             toolbar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)?.isVisible = editRealtyVisibility
-
-
         }
     }
 

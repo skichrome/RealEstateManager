@@ -4,12 +4,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skichrome.realestatemanager.model.RealtyRepository
-import com.skichrome.realestatemanager.model.database.MediaReference
-import com.skichrome.realestatemanager.model.database.Poi
-import com.skichrome.realestatemanager.model.database.Realty
-import com.skichrome.realestatemanager.model.database.RealtyType
+import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
 import com.skichrome.realestatemanager.utils.backgroundTask
 import com.skichrome.realestatemanager.utils.ioJob
@@ -48,6 +44,10 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val poi: LiveData<List<Poi>>
         get() = _poi
 
+    private val _agent = MutableLiveData<List<Agent>>()
+    val agent: LiveData<List<Agent>>
+        get() = _agent
+
     private val _realtyDetailed = ObservableField<Realty>()
     val realtyDetailed: ObservableField<Realty>
         get() = _realtyDetailed
@@ -60,13 +60,9 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val realtyDetailedPhotos: MutableLiveData<List<MediaReference>>
         get() = _realtyDetailedPhotos
 
-    private val _agent = ObservableField<String>()
-    val agent: ObservableField<String>
-        get() = _agent
-
     init
     {
-        getAgentName()
+        getAllAgents()
         getRealtyTypes()
         getAllPoi()
         getRealtyWithoutLatLngAndUpdate()
@@ -134,7 +130,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     fun insertRealty(realty: Realty, images: List<MediaReference?>)
     {
-        viewModelScope.uiJob {
+        uiScope.uiJob {
             _insertLoading.value = true
 
             backgroundTask {
@@ -147,7 +143,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     fun updateRealty(realty: Realty, images: List<MediaReference?>)
     {
-        viewModelScope.uiJob {
+        uiScope.uiJob {
             backgroundTask {
                 repository.updateRealty(realty)
                 repository.updateMediaReferences(images, realty.id)
@@ -161,23 +157,32 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         }
     }
 
-    // ---------- Agent Name ---------- //
+    // ---------- Agent ---------- //
 
-    private fun getAgentName()
+    private fun getAllAgents()
     {
-        viewModelScope.uiJob {
+        uiScope.uiJob {
             val agentDb = ioTask {
-                repository.getAgentName()
+                repository.getAllAgents()
             }
-            _agent.set(agentDb)
+            _agent.value = agentDb
+        }
+    }
+
+    fun createNewAgent(newAgent: Agent)
+    {
+        uiScope.uiJob {
+            ioTask {
+                repository.insertAgent(newAgent)
+            }
         }
     }
 
     // ---------- LatLng ---------- //
 
-    fun getRealtyWithoutLatLngAndUpdate()
+    private fun getRealtyWithoutLatLngAndUpdate()
     {
-        viewModelScope.ioJob {
+        uiScope.ioJob {
             val realtyNotUpdated = ioTask {
                 repository.getRealtyLatitudeNotDefined()
             }
@@ -187,7 +192,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     private fun updateLatLngOfRealty(realtyNotUpdated: List<Realty>)
     {
-        viewModelScope.ioJob {
+        uiScope.ioJob {
 
             realtyNotUpdated.forEach { realty ->
                 val latLng = ioTask {

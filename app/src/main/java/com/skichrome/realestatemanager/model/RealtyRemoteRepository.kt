@@ -11,4 +11,6 @@ class RealtyRemoteRepository
     suspend fun getAllRealtyTypes() = KtorRetrofitService.service.getAllRealtyTypes()
 
     suspend fun getAllPoi() = KtorRetrofitService.service.getAllPoi()
+
+    suspend fun getAllAgents() = KtorRetrofitService.service.getAllAgents()
 }

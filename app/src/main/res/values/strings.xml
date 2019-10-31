@@ -117,7 +117,6 @@
     <string name="settings_fragment_category_notification">Notifications</string>
 
     <string name="settings_fragment_username_title">Username</string>
-    <string name="settings_fragment_username_default_value">Modify me in app settings</string>
     <string name="settings_fragment_username_summary">Select your username to identify you on this system</string>
     <string name="settings_fragment_username_key">agentUsername</string>
 
@@ -130,4 +129,10 @@
     <string name="notification_channel_name">Content saved notification</string>
     <string name="notification_content_text_inserted">Successfully inserted !</string>
     <string name="notification_content_text_updated">Successfully updated !</string>
+
+    <!-- Agent alertDialog related strings -->
+    <string name="current_user_actions_change">Logout and quit</string>
+    <string name="current_user_actions_alert_dialog_title">Select your profile</string>
+    <string name="current_user_actions_alert_dialog_positive_btn">Apply</string>
+    <string name="current_user_actions_alert_dialog_new_agent">Enter new agent name</string>
 </resources>

@@ -49,7 +49,7 @@ class RealtyRepository(
 
     suspend fun updateAgent(agent: Agent): Int = localDataSource.updateAgent(agent)
 
-    suspend fun getAgentName(): String = localDataSource.getAgentName()
+    suspend fun getAllAgents(): List<Agent> = localDataSource.getAllAgents()
 
     // ---------- RealtyType ---------- //
 

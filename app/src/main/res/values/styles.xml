@@ -10,8 +10,7 @@
 
     <!-- Toolbar style -->
     <style name="toolbarStyle" parent="AppTheme">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@color/textColorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="colorControlNormal">@color/textColorPrimaryDark</item>
         <item name="android:tint">@color/textColorPrimaryDark</item>
     </style>
