@@ -4,6 +4,8 @@ import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.retrofit.AgentResults
+import com.skichrome.realestatemanager.model.retrofit.PoiRealtyResults
+import com.skichrome.realestatemanager.model.retrofit.RealtyResults
 import com.skichrome.realestatemanager.model.retrofit.Results
 
 class RealtyRepository(
@@ -22,6 +24,8 @@ class RealtyRepository(
                 try
                 {
                     synchronizeAgents()
+                    synchronizePoiRealty()
+                    synchronizeRealty()
                 } catch (e: Exception)
                 {
                     Log.e("Server Synchronization", "Synchronization error", e)
@@ -35,12 +39,38 @@ class RealtyRepository(
 
     private suspend fun synchronizeAgents()
     {
-        val agentConverted = AgentResults.fromLocalToRemote(getAllAgents())
-        val results = remoteDataSource.uploadAgents(agentConverted)
+        val agentRemote = AgentResults.fromLocalToRemote(getAllAgents())
+        if (agentRemote.isEmpty())
+            return
+        val results = remoteDataSource.uploadAgents(agentRemote)
 
         val status = results.body()?.status ?: false
         if (!status)
             throw Exception("An error occurred when trying to synchronize Agents")
+    }
+
+    private suspend fun synchronizePoiRealty()
+    {
+        val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(getAllPoiRealty())
+        if (poiRealtyRemote.isEmpty())
+            return
+        val results = remoteDataSource.uploadPoiRealty(poiRealtyRemote)
+
+        val status = results.body()?.status ?: false
+        if (!status)
+            throw Exception("An error occurred when trying to synchronize PoiRealty")
+    }
+
+    private suspend fun synchronizeRealty()
+    {
+        val poiRealtyRemote = RealtyResults.fromLocalToRemote(getAllRealty())
+        if (poiRealtyRemote.isEmpty())
+            return
+        val results = remoteDataSource.uploadRealty(poiRealtyRemote)
+
+        val status = results.body()?.status ?: false
+        if (!status)
+            throw Exception("An error occurred when trying to synchronize PoiRealty")
     }
 
     // ---------- Realty ---------- //
@@ -78,8 +108,6 @@ class RealtyRepository(
     // ---------- Agent ---------- //
 
     suspend fun insertAgent(agent: Agent): Long = localDataSource.insertAgent(agent)
-
-    suspend fun updateAgent(agent: Agent): Int = localDataSource.updateAgent(agent)
 
     suspend fun getAllAgents(): List<Agent> = localDataSource.getAllAgents()
 
@@ -127,6 +155,13 @@ class RealtyRepository(
             }
         }
         return localDataSource.getAllPoi()
+    }
+
+    // ---------- PoiRealty ---------- //
+
+    suspend fun getAllPoiRealty(): List<PoiRealty>
+    {
+        return localDataSource.getAllPoiRealty()
     }
 
     // ---------- LatLng ---------- //

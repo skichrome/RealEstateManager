@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.model.retrofit
 
+import com.skichrome.realestatemanager.model.database.Poi
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -17,3 +18,25 @@ data class PoiResults(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String
 )
+{
+    companion object
+    {
+        fun fromRemoteToLocal(poiRealtyResults: List<PoiResults>): List<Poi>
+        {
+            val localPoiList: MutableList<Poi> = mutableListOf()
+            poiRealtyResults.forEach {
+                localPoiList.add(Poi(poiId = it.id, name = it.name))
+            }
+            return localPoiList
+        }
+
+        fun fromLocalToRemote(poiRealty: List<Poi>): List<PoiResults>
+        {
+            val remotePoiList: MutableList<PoiResults> = mutableListOf()
+            poiRealty.forEach {
+                remotePoiList.add(PoiResults(id = it.poiId, name = it.name))
+            }
+            return remotePoiList
+        }
+    }
+}

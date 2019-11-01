@@ -26,8 +26,7 @@ data class AgentResults(
         {
             val localAgentList: MutableList<Agent> = mutableListOf()
             agentResults.forEach {
-                val agent = Agent(agentId = it.id, name = it.name, lastUpdate = it.lastUpdate)
-                localAgentList.add(agent)
+                localAgentList.add(Agent(agentId = it.id, name = it.name, lastUpdate = it.lastUpdate))
             }
             return localAgentList
         }
@@ -36,8 +35,7 @@ data class AgentResults(
         {
             val remoteAgentList: MutableList<AgentResults> = mutableListOf()
             agents.forEach {
-                val agentResult = AgentResults(id = it.agentId, lastUpdate = it.lastUpdate, name = it.name)
-                remoteAgentList.add(agentResult)
+                remoteAgentList.add(AgentResults(id = it.agentId, lastUpdate = it.lastUpdate, name = it.name))
             }
             return remoteAgentList
         }

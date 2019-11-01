@@ -27,6 +27,9 @@ interface KtorRetrofitService
 
     // ---------- GET ---------- //
 
+    @GET("currency-conversion-rate")
+    suspend fun getCurrentConversionRate(): Response<ConversionRate>
+
     @GET("all-realty-types")
     suspend fun getAllRealtyTypes(): Response<RemoteRealtyType>
 
@@ -36,8 +39,23 @@ interface KtorRetrofitService
     @GET("all-agents")
     suspend fun getAllAgents(): Response<RemoteAgent>
 
+    @GET("all-poi-realty")
+    suspend fun getAllPoiRealty(): Response<PoiRealtyResults>
+
+    @GET("all-realty")
+    suspend fun getAllRealty(): Response<RemoteRealty>
+
     // ---------- POST ---------- //
+
+    @POST("agent/update")
+    suspend fun uploadAgent(@Body agent: AgentResults): Response<PostResponse>
 
     @POST("all-agents")
     suspend fun uploadAllAgents(@Body agents: List<AgentResults>): Response<PostResponse>
+
+    @POST("all-poi-realty")
+    suspend fun uploadAllPoiRealty(@Body poiRealty: List<PoiRealtyResults>): Response<PostResponse>
+
+    @POST("all-realty")
+    suspend fun uploadAllRealty(@Body realty: List<RealtyResults>): Response<PostResponse>
 }

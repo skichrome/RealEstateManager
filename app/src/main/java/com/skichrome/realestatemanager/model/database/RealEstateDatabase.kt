@@ -19,6 +19,7 @@ abstract class RealEstateDatabase : RoomDatabase()
     abstract fun poiDao(): PoiDao
     abstract fun realtyTypeDao(): RealtyTypeDao
     abstract fun mediaReferenceDao(): MediaReferenceDao
+    abstract fun poiRealtyDao(): PoiRealtyDao
     abstract fun agentDao(): AgentDao
 
     companion object

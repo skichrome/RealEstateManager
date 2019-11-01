@@ -1,6 +1,8 @@
 package com.skichrome.realestatemanager.model
 
 import com.skichrome.realestatemanager.model.retrofit.AgentResults
+import com.skichrome.realestatemanager.model.retrofit.PoiRealtyResults
+import com.skichrome.realestatemanager.model.retrofit.RealtyResults
 import com.skichrome.realestatemanager.utils.GoogleRetrofitService
 import com.skichrome.realestatemanager.utils.KtorRetrofitService
 
@@ -19,5 +21,11 @@ class RealtyRemoteRepository
 
     // ---------- POST ---------- //
 
+    suspend fun updateAgent(agent: AgentResults) = KtorRetrofitService.service.uploadAgent(agent)
+
     suspend fun uploadAgents(agents: List<AgentResults>) = KtorRetrofitService.service.uploadAllAgents(agents)
+
+    suspend fun uploadPoiRealty(poiRealtyList: List<PoiRealtyResults>) = KtorRetrofitService.service.uploadAllPoiRealty(poiRealtyList)
+
+    suspend fun uploadRealty(realtyList: List<RealtyResults>) = KtorRetrofitService.service.uploadAllRealty(realtyList)
 }

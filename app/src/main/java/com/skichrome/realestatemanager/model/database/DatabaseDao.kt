@@ -85,6 +85,13 @@ interface MediaReferenceDao : BaseDao<MediaReference>
 }
 
 @Dao
+interface PoiRealtyDao : BaseDao<PoiRealty>
+{
+    @Query("SELECT * FROM PoiRealty")
+    suspend fun getAllPoiRealty(): List<PoiRealty>
+}
+
+@Dao
 interface AgentDao : BaseDao<Agent>
 {
     @Query("SELECT name FROM Agent LIMIT 1")
