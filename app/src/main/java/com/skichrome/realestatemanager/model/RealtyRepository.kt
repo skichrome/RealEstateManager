@@ -3,6 +3,7 @@ package com.skichrome.realestatemanager.model
 import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
+import com.skichrome.realestatemanager.model.retrofit.AgentResults
 import com.skichrome.realestatemanager.model.retrofit.Results
 
 class RealtyRepository(
@@ -11,6 +12,37 @@ class RealtyRepository(
     private val remoteDataSource: RealtyRemoteRepository
 )
 {
+    // ---------- Remote synchronisation ---------- //
+
+    suspend fun synchronizeWithRemote(): Boolean
+    {
+        netManager.isConnectedToInternet?.let { isConnected ->
+            if (isConnected)
+            {
+                try
+                {
+                    synchronizeAgents()
+                } catch (e: Exception)
+                {
+                    Log.e("Server Synchronization", "Synchronization error", e)
+                    return false
+                }
+            }
+            return isConnected
+        }
+        return false
+    }
+
+    private suspend fun synchronizeAgents()
+    {
+        val agentConverted = AgentResults.fromLocalToRemote(getAllAgents())
+        val results = remoteDataSource.uploadAgents(agentConverted)
+
+        val status = results.body()?.status ?: false
+        if (!status)
+            throw Exception("An error occurred when trying to synchronize Agents")
+    }
+
     // ---------- Realty ---------- //
 
     suspend fun getAllRealty(): List<Realty> = localDataSource.getAllRealty()
@@ -105,7 +137,6 @@ class RealtyRepository(
             if (it)
             {
                 val result = remoteDataSource.getLatLngFromPhysicalAddress(address, postCode, city)
-                Log.e("Debug", "Realty not updated : ${result.body()}")
                 if (result.isSuccessful)
                     return result.body()?.results
             }

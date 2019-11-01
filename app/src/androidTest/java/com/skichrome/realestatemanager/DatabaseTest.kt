@@ -16,8 +16,6 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import java.time.Instant
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest
@@ -33,7 +31,7 @@ class DatabaseTest
 
         private const val AUTO_GENERATED_ID = 1L
 
-        private val AGENT = Agent(agentId = 1L, name = "Boris", lastUpdate = Date())
+        private val AGENT = Agent(agentId = 1L, name = "Boris", lastUpdate = System.currentTimeMillis())
 
         private val REALTY = Realty(
             id = AUTO_GENERATED_ID,
@@ -41,12 +39,13 @@ class DatabaseTest
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",
-            dateAdded = Date.from(Instant.now()),
+            dateAdded = System.currentTimeMillis(),
             fullDescription = "A big description",
             roomNumber = 4,
             status = false,
             surface = 45.57f,
-            realtyTypeId = AUTO_GENERATED_ID.toInt()
+            realtyTypeId = AUTO_GENERATED_ID.toInt(),
+            agentId = 1L
         )
 
         private val REALTY2 = Realty(
@@ -55,12 +54,13 @@ class DatabaseTest
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",
-            dateAdded = Date.from(Instant.now()),
+            dateAdded = System.currentTimeMillis(),
             fullDescription = "A big description",
             roomNumber = 4,
             status = false,
             surface = 45.57f,
-            realtyTypeId = AUTO_GENERATED_ID.toInt() + 1
+            realtyTypeId = AUTO_GENERATED_ID.toInt() + 1,
+            agentId = 1L
         )
 
         private val POI = Poi(
@@ -302,7 +302,7 @@ class DatabaseTest
     fun updateAgent() = runBlocking {
         agentDao.insertIgnore(AGENT)
 
-        val newAgent = Agent(AGENT.agentId, "New Name", Date())
+        val newAgent = Agent(AGENT.agentId, "New Name", System.currentTimeMillis())
         agentDao.update(newAgent)
 
         val storedAgent = agentDao.getAgentName()

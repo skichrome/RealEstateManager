@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.viewmodel
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -66,6 +67,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         getRealtyTypes()
         getAllPoi()
         getRealtyWithoutLatLngAndUpdate()
+
+        synchroniseDatabase()
     }
 
     // =================================
@@ -75,6 +78,15 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun resetLoading()
     {
         _insertLoading.value = null
+    }
+
+    private fun synchroniseDatabase()
+    {
+        uiScope.ioJob {
+            ioTask {
+                repository.synchronizeWithRemote()
+            }
+        }
     }
 
     // ---------- Realty / MediaReference ---------- //
@@ -200,9 +212,9 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                     val pc = realty.postCode
                     val city = realty.city
 
+                    Log.e("Debug", "$realty")
                     repository.getLatLngFromAddress(addr, pc, city)
                 }
-
                 latLng?.let {
                     if (it.isEmpty())
                         return@let

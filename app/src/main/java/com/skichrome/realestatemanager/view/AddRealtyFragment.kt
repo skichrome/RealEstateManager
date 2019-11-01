@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.skichrome.realestatemanager.R
@@ -154,7 +156,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         addRealtyFragTypeInputSpinner.setSelection(type)
 
         val dateAdded = viewModel.realtyDetailed.get()!!.dateAdded
-        addRealtyFragDateCreatedEditText.setText(date.format(dateAdded.time))
+        addRealtyFragDateCreatedEditText.setText(date.format(dateAdded))
         val dateSell = viewModel.realtyDetailed.get()?.dateSell
 
         dateSell?.let {
@@ -175,7 +177,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         addRealtyFragDateSoldBtn.setOnClickListener { showDatePicker(1) }
         addRealtyFragStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, p3: Long)
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long)
             {
                 realtyStatus = parent?.getItemAtPosition(position) == spinnerArray[1]
                 addRealtyFragDateSoldBtn.isEnabled = realtyStatus
@@ -185,15 +187,16 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 addRealtyFragSoldDateTextViewLayout.error = null
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
         addRealtyFragTypeInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
-            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, p3: Long)
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long)
             {
-                realtyType = position
+                realtyType = position + 1
+                Log.e("Debug", "Value : $realtyType")
             }
         }
     }
@@ -283,18 +286,22 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun storeInDataBase()
     {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val agentId = sharedPrefs.getLong(getString(R.string.settings_fragment_username_key), -1)
+
         val realtyToBeAdded = Realty(
             status = realtyStatus,
             surface = addRealtyFragSurfaceInput.text.toString().toFloat(),
             roomNumber = addRealtyFragRoomNumberInput.text.toString().toInt(),
             fullDescription = addRealtyFragDescriptionInput.text.toString(),
-            dateSell = if (realtySoldDate == null) null else Date(realtySoldDate!!.time.time),
-            dateAdded = Date(realtyCreationDate.time.time),
+            dateSell = realtySoldDate?.timeInMillis,
+            dateAdded = realtyCreationDate.timeInMillis,
             city = addRealtyFragCityInput.text.toString(),
             postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
             address = addRealtyFragAddressInput.text.toString(),
             price = addRealtyFragPriceInput.text.toString().toFloat(),
-            realtyTypeId = realtyType
+            realtyTypeId = realtyType,
+            agentId = agentId
         )
 
         val pictures = photoAdapter.getAllPicturesReferences()

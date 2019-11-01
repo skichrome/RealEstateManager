@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class RemotePoi(
     @Json(name = "status") val status: String,
-    @Json(name = "last_updated") val lastUpdated: String,
+    @Json(name = "system_date") val lastUpdated: String,
     @Json(name = "lang") val lang: String,
     @Json(name = "num_results") val numResults: Int,
     @Json(name = "result") val results: List<PoiResults> = emptyList()

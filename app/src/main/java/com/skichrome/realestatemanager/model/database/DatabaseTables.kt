@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -30,9 +29,9 @@ data class Realty(
     var latitude: Double? = null,
     var longitude: Double? = null,
     var status: Boolean = false,
-    val dateAdded: Date,
-    var dateSell: Date? = null,
-    @ColumnInfo(name = "agent_id", index = true) val agentId: Long = 1L,
+    val dateAdded: Long,
+    var dateSell: Long? = null,
+    @ColumnInfo(name = "agent_id", index = true) val agentId: Long,
     @ColumnInfo(name = "realty_type_id", index = true) var realtyTypeId: Int
 )
 
@@ -82,5 +81,5 @@ data class PoiRealty(
 data class Agent(
     @PrimaryKey val agentId: Long,
     val name: String,
-    val lastUpdate: Date? = null
+    val lastUpdate: Long? = null
 )
