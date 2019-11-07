@@ -41,6 +41,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private val photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
     private val materialEditTextViewList = arrayListOf<TextInputLayout>()
     private val date = SimpleDateFormat.getDateInstance()
+    private lateinit var checkBoxPoiAdapter: CheckboxAdapter
     private lateinit var spinnerArray: Array<String>
     private lateinit var realtyCreationDate: Calendar
     private lateinit var imageAddedSrc: String
@@ -100,6 +101,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun configureRecyclerView()
     {
+        checkBoxPoiAdapter = CheckboxAdapter(context!!, emptyList())
+        binding.addRealtyFragCheckBoxesRecyclerView.adapter = checkBoxPoiAdapter
         binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
     }
 
@@ -126,6 +129,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                 }
             }
         })
+        viewModel.poi.observe(this, Observer { it?.let { list -> checkBoxPoiAdapter.replaceCheckboxData(list) } })
     }
 
     private fun getBundleArguments()
@@ -311,7 +315,11 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
             realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
             viewModel.updateRealty(realtyToBeAdded, pictures)
         } else
-            viewModel.insertRealty(realtyToBeAdded, pictures)
+        {
+            val insertedId = viewModel.insertRealty(realtyToBeAdded, pictures)
+            Log.e("MainAct", "Item clicked : $insertedId")
+            viewModel.insertPoiRealty(checkBoxPoiAdapter.getSelectedId(), insertedId)
+        }
     }
 
     // =================================

@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.model
 
-import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.retrofit.AgentResults
@@ -14,63 +13,66 @@ class RealtyRepository(
     private val remoteDataSource: RealtyRemoteRepository
 )
 {
+    private fun isConnected(): Boolean = netManager.isConnectedToInternet?.let { isConnected ->
+        return isConnected
+    } ?: false
+
     // ---------- Remote synchronisation ---------- //
 
-    suspend fun synchronizeWithRemote(): Boolean
+    suspend fun synchronizeAgents()
     {
-        netManager.isConnectedToInternet?.let { isConnected ->
-            if (isConnected)
+        if (isConnected())
+        {
+            val agentRemote = AgentResults.fromLocalToRemote(getAllAgents())
+            if (agentRemote.isEmpty())
+                return
+            val results = remoteDataSource.uploadAgents(agentRemote)
+
+            val status = results.body()?.status ?: false
+            if (!status)
+                throw Exception("An error occurred when trying to synchronize Agents")
+        }
+    }
+
+    suspend fun synchronizePoiRealty()
+    {
+        if (isConnected())
+        {
+            val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(getAllPoiRealty())
+            if (poiRealtyRemote.isEmpty())
+                return
+            val results = remoteDataSource.uploadPoiRealty(poiRealtyRemote)
+
+            val status = results.body()?.status ?: false
+            if (!status)
+                throw Exception("An error occurred when trying to synchronize PoiRealty")
+        }
+    }
+
+    suspend fun synchronizeRealty()
+    {
+        if (isConnected())
+        {
+            val poiRealtyRemote = RealtyResults.fromLocalToRemote(getAllRealty())
+            if (poiRealtyRemote.isEmpty())
+                return
+            val results = remoteDataSource.uploadRealty(poiRealtyRemote)
+
+            val status = results.body()?.status ?: false
+            if (!status)
+                throw Exception("An error occurred when trying to synchronize PoiRealty")
+
+            val remoteResults = remoteDataSource.getAllAgents()
+            if (remoteResults.isSuccessful)
             {
-                try
-                {
-                    synchronizeAgents()
-                    synchronizePoiRealty()
-                    synchronizeRealty()
-                } catch (e: Exception)
-                {
-                    Log.e("Server Synchronization", "Synchronization error", e)
-                    return false
+                remoteResults.body()?.results?.let {
+                    val convertedList = AgentResults.fromRemoteToLocal(it)
+                    convertedList.forEach { agent ->
+                        insertAgent(agent)
+                    }
                 }
             }
-            return isConnected
         }
-        return false
-    }
-
-    private suspend fun synchronizeAgents()
-    {
-        val agentRemote = AgentResults.fromLocalToRemote(getAllAgents())
-        if (agentRemote.isEmpty())
-            return
-        val results = remoteDataSource.uploadAgents(agentRemote)
-
-        val status = results.body()?.status ?: false
-        if (!status)
-            throw Exception("An error occurred when trying to synchronize Agents")
-    }
-
-    private suspend fun synchronizePoiRealty()
-    {
-        val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(getAllPoiRealty())
-        if (poiRealtyRemote.isEmpty())
-            return
-        val results = remoteDataSource.uploadPoiRealty(poiRealtyRemote)
-
-        val status = results.body()?.status ?: false
-        if (!status)
-            throw Exception("An error occurred when trying to synchronize PoiRealty")
-    }
-
-    private suspend fun synchronizeRealty()
-    {
-        val poiRealtyRemote = RealtyResults.fromLocalToRemote(getAllRealty())
-        if (poiRealtyRemote.isEmpty())
-            return
-        val results = remoteDataSource.uploadRealty(poiRealtyRemote)
-
-        val status = results.body()?.status ?: false
-        if (!status)
-            throw Exception("An error occurred when trying to synchronize PoiRealty")
     }
 
     // ---------- Realty ---------- //
@@ -115,20 +117,18 @@ class RealtyRepository(
 
     suspend fun getAllRealtyTypes(): List<RealtyType>
     {
-        netManager.isConnectedToInternet?.let { isConnected ->
-            if (isConnected)
+        if (isConnected())
+        {
+            val remoteResult = remoteDataSource.getAllRealtyTypes()
+            if (remoteResult.isSuccessful)
             {
-                val remoteResult = remoteDataSource.getAllRealtyTypes()
-                if (remoteResult.isSuccessful)
-                {
-                    val resultList: MutableList<RealtyType> = mutableListOf()
-                    remoteResult.body()?.results?.forEach {
-                        val realtyType = RealtyType(realtyTypeId = it.id, name = it.name)
-                        localDataSource.insertRealtyType(realtyType)
-                        resultList.add(realtyType)
-                    }
-                    return resultList
+                val resultList: MutableList<RealtyType> = mutableListOf()
+                remoteResult.body()?.results?.forEach {
+                    val realtyType = RealtyType(realtyTypeId = it.id, name = it.name)
+                    localDataSource.insertRealtyType(realtyType)
+                    resultList.add(realtyType)
                 }
+                return resultList
             }
         }
         return localDataSource.getAllRealtyTypes()
@@ -138,20 +138,18 @@ class RealtyRepository(
 
     suspend fun getAllPoi(): List<Poi>
     {
-        netManager.isConnectedToInternet?.let { isConnected ->
-            if (isConnected)
+        if (isConnected())
+        {
+            val remoteResult = remoteDataSource.getAllPoi()
+            if (remoteResult.isSuccessful)
             {
-                val remoteResult = remoteDataSource.getAllPoi()
-                if (remoteResult.isSuccessful)
-                {
-                    val resultList: MutableList<Poi> = mutableListOf()
-                    remoteResult.body()?.results?.forEach {
-                        val poi = Poi(poiId = it.id, name = it.name)
-                        localDataSource.insertPoi(poi)
-                        resultList.add(poi)
-                    }
-                    return resultList
+                val resultList: MutableList<Poi> = mutableListOf()
+                remoteResult.body()?.results?.forEach {
+                    val poi = Poi(poiId = it.id, name = it.name)
+                    localDataSource.insertPoi(poi)
+                    resultList.add(poi)
                 }
+                return resultList
             }
         }
         return localDataSource.getAllPoi()
@@ -164,17 +162,20 @@ class RealtyRepository(
         return localDataSource.getAllPoiRealty()
     }
 
+    suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>)
+    {
+        localDataSource.insertPoiRealty(poiRealty)
+    }
+
     // ---------- LatLng ---------- //
 
     suspend fun getLatLngFromAddress(address: String, postCode: Int, city: String): List<Results>?
     {
-        netManager.isConnectedToInternet?.let {
-            if (it)
-            {
-                val result = remoteDataSource.getLatLngFromPhysicalAddress(address, postCode, city)
-                if (result.isSuccessful)
-                    return result.body()?.results
-            }
+        if (isConnected())
+        {
+            val result = remoteDataSource.getLatLngFromPhysicalAddress(address, postCode, city)
+            if (result.isSuccessful)
+                return result.body()?.results
         }
         return null
     }

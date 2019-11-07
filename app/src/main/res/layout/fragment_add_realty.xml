@@ -285,7 +285,6 @@
                 android:layout_marginEnd="8dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/addRealtyFragSubmitBtn"
                 app:layout_constraintEnd_toStartOf="@+id/addRealtyFragDateSoldBtn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addRealtyFragInputDateCreatedTextLayout">
@@ -336,6 +335,18 @@
                 app:layout_constraintBottom_toTopOf="@+id/addRealtyFragLinearLayoutStatusSellingDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addRealtyFragLinearLayoutStatusSellingDate" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addRealtyFragCheckBoxesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/addRealtyFragSubmitBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addRealtyFragLinearLayoutStatusSellingDate"
+                app:spanCount="3" />
 
             <!-- Submit button -->
             <Button

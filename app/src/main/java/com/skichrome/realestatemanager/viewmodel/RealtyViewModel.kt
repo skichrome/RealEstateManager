@@ -8,10 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
-import com.skichrome.realestatemanager.utils.backgroundTask
-import com.skichrome.realestatemanager.utils.ioJob
-import com.skichrome.realestatemanager.utils.ioTask
-import com.skichrome.realestatemanager.utils.uiJob
+import com.skichrome.realestatemanager.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,9 +80,22 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     private fun synchroniseDatabase()
     {
         uiScope.ioJob {
-            ioTask {
-                repository.synchronizeWithRemote()
+            try
+            {
+                val agentSync = ioTaskAsync {
+                    repository.synchronizeAgents()
+                }
+                ioTask {
+                    repository.synchronizeRealty()
+                }
+                val poiRealtySync = ioTaskAsync {
+                    repository.synchronizePoiRealty()
+                }
+            } catch (e: Exception)
+            {
+                Log.e("Server Synchronization", "Synchronization error", e)
             }
+
         }
     }
 
@@ -140,17 +150,20 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         }
     }
 
-    fun insertRealty(realty: Realty, images: List<MediaReference?>)
+    fun insertRealty(realty: Realty, images: List<MediaReference?>): Long
     {
+        var insertedId = -1L
         uiScope.uiJob {
             _insertLoading.value = true
 
-            backgroundTask {
+            insertedId = backgroundTask {
                 val realtyInsertedId = repository.insertRealty(realty)
                 repository.insertMediaReferences(images, realtyInsertedId)
+                return@backgroundTask realtyInsertedId
             }
             _insertLoading.value = false
         }
+        return insertedId
     }
 
     fun updateRealty(realty: Realty, images: List<MediaReference?>)
@@ -166,6 +179,21 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                 }
             }
             _insertLoading.value = false
+        }
+    }
+
+    // ---------- PoiRealty ---------- //
+
+    fun insertPoiRealty(poi: List<Int>, realtyId: Long)
+    {
+        uiScope.ioJob {
+            ioTask {
+                val poiRealtyList = mutableListOf<PoiRealty>()
+                poi.forEach {
+                    poiRealtyList.add(PoiRealty(realtyId = realtyId, poiId = it))
+                }
+                repository.insertPoiRealty(poiRealtyList.toTypedArray())
+            }
         }
     }
 

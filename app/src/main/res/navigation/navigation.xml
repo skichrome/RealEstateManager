@@ -14,7 +14,7 @@
         tools:layout="@layout/fragment_realty_list">
         <action
             android:id="@+id/action_realtyListFragment_to_addRealtyFragment"
-            app:destination="@id/addRealtyFragment" />
+            app:destination="@+id/addRealtyFragment" />
         <action
             android:id="@+id/action_realtyListFragment_to_detailsRealtyFragment"
             app:destination="@id/detailsRealtyFragment" />

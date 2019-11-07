@@ -47,4 +47,6 @@ class RealtyLocalRepository(private val db: RealEstateDatabase)
     // ---------- PoiRealty ---------- //
 
     suspend fun getAllPoiRealty() = db.poiRealtyDao().getAllPoiRealty()
+
+    suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>) = db.poiRealtyDao().insertReplace(*poiRealty)
 }
