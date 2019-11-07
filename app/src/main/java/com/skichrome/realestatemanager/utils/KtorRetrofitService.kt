@@ -40,7 +40,7 @@ interface KtorRetrofitService
     suspend fun getAllAgents(): Response<RemoteAgent>
 
     @GET("all-poi-realty")
-    suspend fun getAllPoiRealty(): Response<PoiRealtyResults>
+    suspend fun getAllPoiRealty(): Response<RemotePoiRealty>
 
     @GET("all-realty")
     suspend fun getAllRealty(): Response<RemoteRealty>

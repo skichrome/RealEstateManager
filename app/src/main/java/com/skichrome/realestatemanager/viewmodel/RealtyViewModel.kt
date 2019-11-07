@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.viewmodel
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
-import com.skichrome.realestatemanager.utils.*
+import com.skichrome.realestatemanager.utils.backgroundTask
+import com.skichrome.realestatemanager.utils.ioJob
+import com.skichrome.realestatemanager.utils.ioTask
+import com.skichrome.realestatemanager.utils.uiJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -64,8 +66,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         getRealtyTypes()
         getAllPoi()
         getRealtyWithoutLatLngAndUpdate()
-
-        synchroniseDatabase()
     }
 
     // =================================
@@ -75,28 +75,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun resetLoading()
     {
         _insertLoading.value = null
-    }
-
-    private fun synchroniseDatabase()
-    {
-        uiScope.ioJob {
-            try
-            {
-                val agentSync = ioTaskAsync {
-                    repository.synchronizeAgents()
-                }
-                ioTask {
-                    repository.synchronizeRealty()
-                }
-                val poiRealtySync = ioTaskAsync {
-                    repository.synchronizePoiRealty()
-                }
-            } catch (e: Exception)
-            {
-                Log.e("Server Synchronization", "Synchronization error", e)
-            }
-
-        }
     }
 
     // ---------- Realty / MediaReference ---------- //
@@ -140,7 +118,9 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
             val realtyLng = realty.longitude
 
             if (realtyLat == null || realtyLng == null)
-                updateLatLngOfRealty(listOf(realty))
+            {
+                //updateLatLngOfRealty(listOf(realty))
+            }
             else
                 _realtyDetailedLatLng.value = RealtyMinimalForMap(realty.id, realtyLat, realtyLng)
 
@@ -226,7 +206,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
             val realtyNotUpdated = ioTask {
                 repository.getRealtyLatitudeNotDefined()
             }
-            updateLatLngOfRealty(realtyNotUpdated)
+            //updateLatLngOfRealty(realtyNotUpdated)
         }
     }
 
@@ -239,8 +219,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                     val addr = realty.address
                     val pc = realty.postCode
                     val city = realty.city
-
-                    Log.e("Debug", "$realty")
                     repository.getLatLngFromAddress(addr, pc, city)
                 }
                 latLng?.let {

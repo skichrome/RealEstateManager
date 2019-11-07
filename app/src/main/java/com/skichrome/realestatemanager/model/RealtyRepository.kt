@@ -2,9 +2,6 @@ package com.skichrome.realestatemanager.model
 
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
-import com.skichrome.realestatemanager.model.retrofit.AgentResults
-import com.skichrome.realestatemanager.model.retrofit.PoiRealtyResults
-import com.skichrome.realestatemanager.model.retrofit.RealtyResults
 import com.skichrome.realestatemanager.model.retrofit.Results
 
 class RealtyRepository(
@@ -16,64 +13,6 @@ class RealtyRepository(
     private fun isConnected(): Boolean = netManager.isConnectedToInternet?.let { isConnected ->
         return isConnected
     } ?: false
-
-    // ---------- Remote synchronisation ---------- //
-
-    suspend fun synchronizeAgents()
-    {
-        if (isConnected())
-        {
-            val agentRemote = AgentResults.fromLocalToRemote(getAllAgents())
-            if (agentRemote.isEmpty())
-                return
-            val results = remoteDataSource.uploadAgents(agentRemote)
-
-            val status = results.body()?.status ?: false
-            if (!status)
-                throw Exception("An error occurred when trying to synchronize Agents")
-        }
-    }
-
-    suspend fun synchronizePoiRealty()
-    {
-        if (isConnected())
-        {
-            val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(getAllPoiRealty())
-            if (poiRealtyRemote.isEmpty())
-                return
-            val results = remoteDataSource.uploadPoiRealty(poiRealtyRemote)
-
-            val status = results.body()?.status ?: false
-            if (!status)
-                throw Exception("An error occurred when trying to synchronize PoiRealty")
-        }
-    }
-
-    suspend fun synchronizeRealty()
-    {
-        if (isConnected())
-        {
-            val poiRealtyRemote = RealtyResults.fromLocalToRemote(getAllRealty())
-            if (poiRealtyRemote.isEmpty())
-                return
-            val results = remoteDataSource.uploadRealty(poiRealtyRemote)
-
-            val status = results.body()?.status ?: false
-            if (!status)
-                throw Exception("An error occurred when trying to synchronize PoiRealty")
-
-            val remoteResults = remoteDataSource.getAllAgents()
-            if (remoteResults.isSuccessful)
-            {
-                remoteResults.body()?.results?.let {
-                    val convertedList = AgentResults.fromRemoteToLocal(it)
-                    convertedList.forEach { agent ->
-                        insertAgent(agent)
-                    }
-                }
-            }
-        }
-    }
 
     // ---------- Realty ---------- //
 

@@ -8,6 +8,8 @@ class RealtyLocalRepository(private val db: RealEstateDatabase)
 
     suspend fun insertRealty(realty: Realty) = db.realtyDao().insertIgnore(realty)
 
+    suspend fun insertRealtyList(realty: Array<Realty>) = db.realtyDao().insertIgnore(*realty)
+
     suspend fun updateRealty(realty: Realty) = db.realtyDao().update(realty)
 
     suspend fun getRealtyById(id: Long) = db.realtyDao().getRealtyById(realtyId = id)
@@ -27,6 +29,8 @@ class RealtyLocalRepository(private val db: RealEstateDatabase)
     // ---------- Agent ---------- //
 
     suspend fun insertAgent(agent: Agent) = db.agentDao().insertIgnore(agent)
+
+    suspend fun insertAgentList(agent: Array<Agent>) = db.agentDao().insertIgnore(*agent)
 
     suspend fun updateAgent(agent: Agent) = db.agentDao().update(agent)
 

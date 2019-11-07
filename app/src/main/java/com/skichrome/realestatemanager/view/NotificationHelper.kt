@@ -61,7 +61,7 @@ class NotificationHelper(context: Context?) : ContextWrapper(context)
         NotificationCompat.Builder(applicationContext, getString(R.string.notification_channel_name))
             .setContentTitle(title)
             .setContentIntent(intent)
-            .setSmallIcon(R.drawable.ic_app_logo_default_realty)
+            .setSmallIcon(R.drawable.real_estate_logo)
             .setContentText(content)
             .setAutoCancel(true)
 

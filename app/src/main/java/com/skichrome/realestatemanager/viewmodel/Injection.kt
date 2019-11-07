@@ -2,6 +2,7 @@ package com.skichrome.realestatemanager.viewmodel
 
 import android.content.Context
 import com.skichrome.realestatemanager.androidmanagers.NetManager
+import com.skichrome.realestatemanager.model.OnlineSyncRepository
 import com.skichrome.realestatemanager.model.RealtyLocalRepository
 import com.skichrome.realestatemanager.model.RealtyRemoteRepository
 import com.skichrome.realestatemanager.model.RealtyRepository
@@ -9,6 +10,23 @@ import com.skichrome.realestatemanager.model.database.RealEstateDatabase
 
 object Injection
 {
+    // =======================================
+    //                  Fields
+    // =======================================
+
+    private var netManager: NetManager? = null
+
+    // =======================================
+    //                 Methods
+    // =======================================
+
+    private fun getNetManager(context: Context) =
+        netManager ?: synchronized(this) {
+            netManager ?: NetManager(context).also {
+                netManager = it
+            }
+        }
+
     private fun provideLocalRealtyRepo(context: Context): RealtyLocalRepository
     {
         val db = RealEstateDatabase.getInstance(context)
@@ -20,17 +38,35 @@ object Injection
         return RealtyRemoteRepository()
     }
 
+    // --------- RealtyViewModel --------- //
+
     private fun provideRealtyRepo(context: Context): RealtyRepository
     {
-        val netManager = NetManager(context)
-        val realtyRepo = provideLocalRealtyRepo(context)
-        val remoteDataSource = provideRemoteRealtyRepo()
-        return RealtyRepository(netManager, realtyRepo, remoteDataSource)
+        val nm = getNetManager(context)
+        val localRealtyRepo = provideLocalRealtyRepo(context)
+        val remoteRealtyRepo = provideRemoteRealtyRepo()
+        return RealtyRepository(nm, localRealtyRepo, remoteRealtyRepo)
     }
 
     fun provideViewModelFactory(context: Context): ViewModelFactory
     {
         val realtyRepo = provideRealtyRepo(context)
-        return ViewModelFactory(realtyRepo)
+        return ViewModelFactory(realtyRepository = realtyRepo)
+    }
+
+    // --------- SyncViewModel --------- //
+
+    private fun provideOnlineSyncRepo(context: Context): OnlineSyncRepository
+    {
+        val nm = getNetManager(context)
+        val localSyncRepo = provideLocalRealtyRepo(context)
+        val remoteSyncRepo = provideRemoteRealtyRepo()
+        return OnlineSyncRepository(nm, localSyncRepo, remoteSyncRepo)
+    }
+
+    fun provideSyncViewModelFactory(context: Context): ViewModelFactory
+    {
+        val syncRepo = provideOnlineSyncRepo(context)
+        return ViewModelFactory(onlineSyncRepository = syncRepo)
     }
 }
