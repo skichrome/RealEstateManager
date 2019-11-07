@@ -2,10 +2,7 @@ package com.skichrome.realestatemanager.viewmodel
 
 import android.content.Context
 import com.skichrome.realestatemanager.androidmanagers.NetManager
-import com.skichrome.realestatemanager.model.OnlineSyncRepository
-import com.skichrome.realestatemanager.model.RealtyLocalRepository
-import com.skichrome.realestatemanager.model.RealtyRemoteRepository
-import com.skichrome.realestatemanager.model.RealtyRepository
+import com.skichrome.realestatemanager.model.*
 import com.skichrome.realestatemanager.model.database.RealEstateDatabase
 
 object Injection
@@ -27,15 +24,15 @@ object Injection
             }
         }
 
-    private fun provideLocalRealtyRepo(context: Context): RealtyLocalRepository
+    private fun provideLocalRealtyRepo(context: Context): LocalRepository
     {
         val db = RealEstateDatabase.getInstance(context)
-        return RealtyLocalRepository(db)
+        return LocalRepository(db)
     }
 
-    private fun provideRemoteRealtyRepo(): RealtyRemoteRepository
+    private fun provideRemoteRealtyRepo(): RemoteRepository
     {
-        return RealtyRemoteRepository()
+        return RemoteRepository()
     }
 
     // --------- RealtyViewModel --------- //
@@ -68,5 +65,21 @@ object Injection
     {
         val syncRepo = provideOnlineSyncRepo(context)
         return ViewModelFactory(onlineSyncRepository = syncRepo)
+    }
+
+    // --------- SignInViewModel --------- //
+
+    private fun provideSignInRepository(context: Context): SignInRepository
+    {
+        val nm = getNetManager(context)
+        val localSyncRepo = provideLocalRealtyRepo(context)
+        val remoteSyncRepo = provideRemoteRealtyRepo()
+        return SignInRepository(nm, localSyncRepo, remoteSyncRepo)
+    }
+
+    fun provideSignInViewModelFactory(context: Context): ViewModelFactory
+    {
+        val signInRepo = provideSignInRepository(context)
+        return ViewModelFactory(signInRepository = signInRepo)
     }
 }

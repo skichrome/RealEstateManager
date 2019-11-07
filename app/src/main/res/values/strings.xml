@@ -16,6 +16,8 @@
     <string name="realty_preview_picture_content_desc">This is a preview picture of a realty</string>
     <string name="rv_realty_picture_content_desc">Picture of a realty added by the user</string>
     <string name="rv_add_picture_content_desc">Click here to add new picture into picture list</string>
+    <string name="activity_sign_in_rv_item_logo_user_content_desc">User profile default picture</string>
+    <string name="activity_sign_in_application_logo_content_desc">Application logo</string>
 
     <!-- Add Realty Fragment -->
     <string name="add_realty_frag_hint_desc">Description</string>
@@ -91,23 +93,6 @@
     <string name="realty_details_fragment_rooms_title">Rooms</string>
     <string name="realty_details_fragment_location_title">Location</string>
 
-    <!-- Long text simulation -->
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lectus id augue vulputate porta non vitae felis. Aliquam facilisis orci ut justo blandit, nec eleifend libero pharetra. Etiam tortor mauris, ultricies et eros sit amet, semper lacinia justo. Nunc quis urna erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris vel finibus orci. Proin quam lorem, cursus a felis ut, ultrices fringilla metus. Maecenas sed neque et lectus dictum feugiat sit amet a diam. Proin in nibh leo. Integer quam magna, varius vel leo ac, lacinia pulvinar lacus. Morbi a odio in purus interdum efficitur eget vitae dolor. Sed tempor id tellus ac luctus. Sed porta leo tortor, nec sodales dui pharetra sit amet. Donec aliquet lacus aliquet leo tempus, tempor faucibus sapien luctus.
-    </string>
-
-    <string name="lorem_ipsum_long">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lectus id augue vulputate porta non vitae felis. Aliquam facilisis orci ut justo blandit, nec eleifend libero pharetra. Etiam tortor mauris, ultricies et eros sit amet, semper lacinia justo. Nunc quis urna erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris vel finibus orci. Proin quam lorem, cursus a felis ut, ultrices fringilla metus. Maecenas sed neque et lectus dictum feugiat sit amet a diam. Proin in nibh leo. Integer quam magna, varius vel leo ac, lacinia pulvinar lacus. Morbi a odio in purus interdum efficitur eget vitae dolor. Sed tempor id tellus ac luctus. Sed porta leo tortor, nec sodales dui pharetra sit amet. Donec aliquet lacus aliquet leo tempus, tempor faucibus sapien luctus.
-
-        Integer pulvinar tellus eu felis tincidunt laoreet. Duis aliquam condimentum lectus, quis eleifend erat viverra ac. Proin lacinia egestas ipsum. Aliquam vestibulum nisl eu enim fermentum, non efficitur lectus lobortis. Suspendisse finibus dolor nec elit imperdiet, non consequat sem sodales. Sed accumsan sapien sit amet elit faucibus vulputate. Donec quis gravida justo, vitae viverra leo. Integer sodales libero lorem, in iaculis felis aliquam at. Aenean auctor tortor dui, eu viverra arcu tincidunt vitae. Mauris id tempus purus, in tempor erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla a faucibus mauris. In vehicula placerat mollis. Nulla id orci eget metus finibus gravida at vel ex.
-
-        Integer quis quam vel ligula egestas lacinia tincidunt vel mi. Integer dictum lectus lacus, sodales varius arcu suscipit sed. Nullam a nisi sagittis, dignissim enim vitae, porttitor ipsum. Maecenas laoreet varius posuere. Mauris non sollicitudin mi. Praesent consequat semper neque, tempor euismod nisl vulputate nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin nunc quam, tincidunt in iaculis vel, dapibus id arcu.
-
-        Integer vel hendrerit sapien, non sodales nisl. Maecenas sed nibh nec eros tempus scelerisque quis non libero. Fusce sed sapien consectetur, venenatis justo sit amet, egestas sem. Pellentesque ut efficitur leo. Vestibulum sagittis volutpat mollis. In et maximus orci. Morbi fermentum mollis malesuada. Suspendisse potenti. Nam interdum leo sed tincidunt ultricies. Ut finibus lorem ac tellus posuere, at commodo urna feugiat. Integer et turpis nec leo mattis consequat. Cras justo felis, auctor sed mattis vitae, luctus nec ligula. In elementum velit ornare dolor auctor, vel congue odio posuere. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed ultrices vehicula malesuada.
-
-        Quisque eu fermentum ex. Vestibulum volutpat sapien sit amet sapien feugiat ultricies. Pellentesque non dapibus dolor. Aenean non scelerisque dui, et aliquet sapien. Mauris quis maximus sem. Vestibulum quis metus molestie, sodales lacus eu, lobortis ipsum. Sed sed orci semper, pharetra odio quis, imperdiet eros. Aliquam et eros efficitur ante imperdiet rutrum. Sed magna libero, aliquam scelerisque pulvinar id, sodales in ligula. Phasellus id enim ut ex tincidunt consectetur. Aliquam sagittis, mi nec sodales maximus, mauris odio dignissim risus, et pulvinar ante neque et libero. Aenean venenatis iaculis libero a aliquam. Etiam ut nunc vitae augue suscipit vulputate. Curabitur elementum metus quis ipsum consequat, quis mattis lectus feugiat. Mauris rhoncus varius aliquam. Sed id ante lacinia, rhoncus leo at, condimentum sem.
-    </string>
-
     <!-- Realty details Fragment -->
     <string name="realty_details_fragment_description_title">Description</string>
     <string name="realty_details_fragment_medias_title">Medias</string>
@@ -135,4 +120,12 @@
     <string name="current_user_actions_alert_dialog_title">Select your profile</string>
     <string name="current_user_actions_alert_dialog_positive_btn">Apply</string>
     <string name="current_user_actions_alert_dialog_new_agent">Enter new agent name</string>
+
+    <!-- Login screen -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="activity_sign_in_hint">Select an existing profile or enter new profile name</string>
+    <string name="activity_sign_in_prompt_username">New profile name…</string>
+    <string name="activity_sign_in_btn_sign_in">Register</string>
+    <string name="activity_sign_in_no_internet_hint_text">No active internet connexion has been detected, please connect to a network to create a new profile.</string>
+    <string name="activity_sign_in_toast_bad_username">Please enter a valid username</string>
 </resources>

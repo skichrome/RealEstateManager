@@ -1,4 +1,4 @@
-package com.skichrome.realestatemanager.view
+package com.skichrome.realestatemanager.view.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

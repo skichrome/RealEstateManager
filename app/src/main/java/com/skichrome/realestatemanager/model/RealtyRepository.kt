@@ -6,13 +6,11 @@ import com.skichrome.realestatemanager.model.retrofit.Results
 
 class RealtyRepository(
     private val netManager: NetManager,
-    private val localDataSource: RealtyLocalRepository,
-    private val remoteDataSource: RealtyRemoteRepository
+    private val localDataSource: LocalRepository,
+    private val remoteDataSource: RemoteRepository
 )
 {
-    private fun isConnected(): Boolean = netManager.isConnectedToInternet?.let { isConnected ->
-        return isConnected
-    } ?: false
+    private fun isConnected(): Boolean = netManager.isConnectedToInternet ?: false
 
     // ---------- Realty ---------- //
 

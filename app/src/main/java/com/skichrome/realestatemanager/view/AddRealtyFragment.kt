@@ -23,6 +23,8 @@ import com.skichrome.realestatemanager.utils.NOTIFICATION_ID
 import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
 import com.skichrome.realestatemanager.utils.StorageUtils
 import com.skichrome.realestatemanager.view.base.BaseFragment
+import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
+import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import kotlinx.android.synthetic.main.fragment_add_realty.*
 import java.io.IOException

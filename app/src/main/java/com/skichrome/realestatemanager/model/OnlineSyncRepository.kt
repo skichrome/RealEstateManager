@@ -7,17 +7,15 @@ import com.skichrome.realestatemanager.model.retrofit.RealtyResults
 
 class OnlineSyncRepository(
     private val netManager: NetManager,
-    private val localDataSource: RealtyLocalRepository,
-    private val remoteDataSource: RealtyRemoteRepository
+    private val localDataSource: LocalRepository,
+    private val remoteDataSource: RemoteRepository
 )
 {
     // =======================================
     //                 Methods
     // =======================================
 
-    private fun isConnected(): Boolean = netManager.isConnectedToInternet?.let { isConnected ->
-        return isConnected
-    } ?: false
+    private fun isConnected(): Boolean = netManager.isConnectedToInternet ?: false
 
     private fun throwExceptionIfStatusIsFalse(status: Boolean, origin: String)
     {

@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
+import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import java.lang.ref.WeakReference
 

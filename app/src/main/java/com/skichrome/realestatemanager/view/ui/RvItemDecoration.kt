@@ -1,4 +1,4 @@
-package com.skichrome.realestatemanager.view
+package com.skichrome.realestatemanager.view.ui
 
 import android.graphics.Rect
 import android.view.View

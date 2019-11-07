@@ -6,7 +6,7 @@ import com.skichrome.realestatemanager.model.retrofit.RealtyResults
 import com.skichrome.realestatemanager.utils.GoogleRetrofitService
 import com.skichrome.realestatemanager.utils.KtorRetrofitService
 
-class RealtyRemoteRepository
+class RemoteRepository
 {
     // ---------- GET ---------- //
 

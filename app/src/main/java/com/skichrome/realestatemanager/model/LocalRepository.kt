@@ -2,7 +2,7 @@ package com.skichrome.realestatemanager.model
 
 import com.skichrome.realestatemanager.model.database.*
 
-class RealtyLocalRepository(private val db: RealEstateDatabase)
+class LocalRepository(private val db: RealEstateDatabase)
 {
     // ---------- Realty ---------- //
 
