@@ -1,9 +1,7 @@
 package com.skichrome.realestatemanager.model
 
 import com.skichrome.realestatemanager.androidmanagers.NetManager
-import com.skichrome.realestatemanager.model.retrofit.AgentResults
-import com.skichrome.realestatemanager.model.retrofit.PoiRealtyResults
-import com.skichrome.realestatemanager.model.retrofit.RealtyResults
+import com.skichrome.realestatemanager.model.retrofit.*
 
 class OnlineSyncRepository(
     private val netManager: NetManager,
@@ -21,6 +19,38 @@ class OnlineSyncRepository(
     {
         if (!status)
             throw Exception("An error occurred when trying to synchronize $origin")
+    }
+
+    // ---------- Poi & RealtyTypes ---------- //
+
+    suspend fun synchronizePoi()
+    {
+        if (isConnected())
+        {
+            val poiRemote = remoteDataSource.getAllPoi()
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi")
+
+            poiRemote.body()?.results?.let {
+                PoiResults.fromRemoteToLocal(it).apply {
+                    localDataSource.insertPoiList(this.toTypedArray())
+                }
+            }
+        }
+    }
+
+    suspend fun synchronizeRealtyTypes()
+    {
+        if (isConnected())
+        {
+            val poiRemote = remoteDataSource.getAllRealtyTypes()
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi")
+
+            poiRemote.body()?.results?.let {
+                RealtyTypeResults.fromRemoteToLocal(it).apply {
+                    localDataSource.insertRealtyTypeList(this.toTypedArray())
+                }
+            }
+        }
     }
 
     // ---------- Agents ---------- //

@@ -39,6 +39,12 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
             try
             {
                 ioTask {
+                    repository.synchronizePoi()
+                }
+                ioTask {
+                    repository.synchronizeRealtyTypes()
+                }
+                ioTask {
                     repository.synchronizeAgents()
                 }
                 ioTask {
