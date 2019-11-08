@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.viewmodel
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,13 +8,10 @@ import androidx.lifecycle.ViewModel
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
-import com.skichrome.realestatemanager.utils.backgroundTask
-import com.skichrome.realestatemanager.utils.ioJob
-import com.skichrome.realestatemanager.utils.ioTask
-import com.skichrome.realestatemanager.utils.uiJob
+import com.skichrome.realestatemanager.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 
 class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 {
@@ -21,8 +19,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     //              Fields
     // =================================
 
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val viewModelJob = SupervisorJob()
+    private val uiScope = CoroutineScope(Dispatchers.Default + viewModelJob)
 
     private val _realEstates = MutableLiveData<List<Realty>>() // can be observed from fragment
     val realEstates: LiveData<List<Realty>>
@@ -35,10 +33,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     private val _insertLoading = MutableLiveData<Boolean?>()
     val insertLoading: LiveData<Boolean?>
         get() = _insertLoading
-
-    private val _realtyTypes = MutableLiveData<List<RealtyType>>()
-    val realtyTypes: LiveData<List<RealtyType>>
-        get() = _realtyTypes
 
     private val _poi = MutableLiveData<List<Poi>>()
     val poi: LiveData<List<Poi>>
@@ -57,13 +51,16 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         get() = _realtyDetailedLatLng
 
     private val _realtyDetailedPhotos = MutableLiveData<List<MediaReference>>()
-    val realtyDetailedPhotos: MutableLiveData<List<MediaReference>>
+    val realtyDetailedPhotos: LiveData<List<MediaReference>>
         get() = _realtyDetailedPhotos
+
+    private val _poiRealty = MutableLiveData<List<PoiRealty>>()
+    val poiRealty: LiveData<List<PoiRealty>>
+        get() = _poiRealty
 
     init
     {
         getAllAgents()
-        getRealtyTypes()
         getAllPoi()
         getRealtyWithoutLatLngAndUpdate()
     }
@@ -78,15 +75,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     }
 
     // ---------- Realty / MediaReference ---------- //
-
-    private fun getRealtyTypes()
-    {
-        uiScope.uiJob {
-            _realtyTypes.value = ioTask {
-                repository.getAllRealtyTypes()
-            }
-        }
-    }
 
     private fun getAllPoi()
     {
@@ -109,7 +97,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun getRealty(id: Long)
     {
         uiScope.uiJob {
-            val realty = ioTask {
+            val realty = backgroundTask {
                 repository.getRealty(id)
             }
             _realtyDetailed.set(realty)
@@ -119,62 +107,85 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
             if (realtyLat == null || realtyLng == null)
             {
-                //updateLatLngOfRealty(listOf(realty))
-            }
-            else
+                backgroundTask {
+                    //updateLatLngOfRealty(listOf(realty))
+                }
+            } else
                 _realtyDetailedLatLng.value = RealtyMinimalForMap(realty.id, realtyLat, realtyLng)
 
-            _realtyDetailedPhotos.value = ioTask {
+            val mediaRefTask = ioTaskAsync {
                 repository.getMediaReferencesFromRealty(id)
             }
+
+            _poiRealty.value = ioTask {
+                repository.getAllPoiRealtyFromRealtyId(id)
+            }
+
+            _realtyDetailedPhotos.value = mediaRefTask.await()
         }
     }
 
-    fun insertRealty(realty: Realty, images: List<MediaReference?>): Long
+    fun insertRealtyAndDependencies(realty: Realty, images: List<MediaReference?>, poiList: List<Int>)
     {
-        var insertedId = -1L
         uiScope.uiJob {
             _insertLoading.value = true
 
-            insertedId = backgroundTask {
-                val realtyInsertedId = repository.insertRealty(realty)
-                repository.insertMediaReferences(images, realtyInsertedId)
-                return@backgroundTask realtyInsertedId
+            val insertedId = backgroundTask {
+                repository.insertRealty(realty)
             }
+            val mediaRefTask = backgroundTaskAsync {
+                repository.insertMediaReferences(images, insertedId)
+            }
+            backgroundTask {
+                insertPoiRealty(poiList, insertedId)
+            }
+            mediaRefTask.await()
             _insertLoading.value = false
         }
-        return insertedId
     }
 
-    fun updateRealty(realty: Realty, images: List<MediaReference?>)
+    fun updateRealty(realty: Realty, images: List<MediaReference?>, updatedPoiList: List<Int>)
     {
         uiScope.uiJob {
             backgroundTask {
                 repository.updateRealty(realty)
-                repository.updateMediaReferences(images, realty.id)
+            }
 
+            val mediaRefTask = backgroundTaskAsync {
+                repository.updateMediaReferences(images, realty.id)
                 realtyDetailedPhotos.value?.forEach {
                     if (!images.contains(it))
                         repository.deleteMediaReference(it.mediaReferenceId)
                 }
             }
+
+            backgroundTask {
+                updatePoiRealty(updatedPoiList, realty.id)
+            }
+
+            mediaRefTask.await()
             _insertLoading.value = false
         }
     }
 
     // ---------- PoiRealty ---------- //
 
-    fun insertPoiRealty(poi: List<Int>, realtyId: Long)
+    private suspend fun insertPoiRealty(poi: List<Int>, realtyId: Long)
     {
-        uiScope.ioJob {
-            ioTask {
-                val poiRealtyList = mutableListOf<PoiRealty>()
-                poi.forEach {
-                    poiRealtyList.add(PoiRealty(realtyId = realtyId, poiId = it))
-                }
-                repository.insertPoiRealty(poiRealtyList.toTypedArray())
-            }
+        val poiRealtyList = mutableListOf<PoiRealty>()
+        poi.forEach {
+            poiRealtyList.add(PoiRealty(realtyId = realtyId, poiId = it))
         }
+        repository.insertPoiRealty(poiRealtyList.toTypedArray())
+    }
+
+    private suspend fun updatePoiRealty(poi: List<Int>, realtyId: Long)
+    {
+        repository.deletePoiRealtyFromRealtyId(realtyId)
+        val poiRealtyList = mutableListOf<PoiRealty>().apply {
+            poi.forEach { poiInt -> add(PoiRealty(realtyId = realtyId, poiId = poiInt)) }
+        }
+        repository.insertPoiRealty(poiRealtyList.toTypedArray())
     }
 
     // ---------- Agent ---------- //
@@ -189,15 +200,6 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         }
     }
 
-    fun createNewAgent(newAgent: Agent)
-    {
-        uiScope.uiJob {
-            ioTask {
-                repository.insertAgent(newAgent)
-            }
-        }
-    }
-
     // ---------- LatLng ---------- //
 
     private fun getRealtyWithoutLatLngAndUpdate()
@@ -206,28 +208,28 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
             val realtyNotUpdated = ioTask {
                 repository.getRealtyLatitudeNotDefined()
             }
-            //updateLatLngOfRealty(realtyNotUpdated)
+            Log.d("RealtyViewModel", "Realty that need to update their location : \n$realtyNotUpdated")
+            ioTask {
+                //updateLatLngOfRealty(realtyNotUpdated)
+            }
         }
     }
 
-    private fun updateLatLngOfRealty(realtyNotUpdated: List<Realty>)
+    private suspend fun updateLatLngOfRealty(realtyNotUpdated: List<Realty>)
     {
-        uiScope.ioJob {
-
-            realtyNotUpdated.forEach { realty ->
-                val latLng = ioTask {
-                    val addr = realty.address
-                    val pc = realty.postCode
-                    val city = realty.city
-                    repository.getLatLngFromAddress(addr, pc, city)
-                }
-                latLng?.let {
-                    if (it.isEmpty())
-                        return@let
-                    realty.latitude = it.first().geometry.location.lat
-                    realty.longitude = it.first().geometry.location.lng
-                    repository.updateRealty(realty)
-                }
+        realtyNotUpdated.forEach { realty ->
+            val latLng = ioTask {
+                val addr = realty.address
+                val pc = realty.postCode
+                val city = realty.city
+                repository.getLatLngFromAddress(addr, pc, city)
+            }
+            latLng?.let {
+                if (it.isEmpty())
+                    return@let
+                realty.latitude = it.first().geometry.location.lat
+                realty.longitude = it.first().geometry.location.lng
+                repository.updateRealty(realty)
             }
         }
     }

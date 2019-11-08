@@ -46,8 +46,6 @@ class RealtyRepository(
 
     // ---------- Agent ---------- //
 
-    suspend fun insertAgent(agent: Agent): Long = localDataSource.insertAgent(agent)
-
     suspend fun getAllAgents(): List<Agent> = localDataSource.getAllAgents()
 
     // ---------- RealtyType ---------- //
@@ -94,15 +92,11 @@ class RealtyRepository(
 
     // ---------- PoiRealty ---------- //
 
-    suspend fun getAllPoiRealty(): List<PoiRealty>
-    {
-        return localDataSource.getAllPoiRealty()
-    }
+    suspend fun getAllPoiRealtyFromRealtyId(realtyId: Long): List<PoiRealty> = localDataSource.getPoiRealtyFromRealtyId(realtyId)
 
-    suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>)
-    {
-        localDataSource.insertPoiRealty(poiRealty)
-    }
+    suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>) = localDataSource.insertPoiRealty(poiRealty)
+
+    suspend fun deletePoiRealtyFromRealtyId(realtyId: Long) = localDataSource.deletePoiRealtyByRealtyId(realtyId)
 
     // ---------- LatLng ---------- //
 

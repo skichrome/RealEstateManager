@@ -35,6 +35,7 @@ class RealtyListAdapter(private var realtyList: List<Realty> = listOf(), private
     {
         fun bind(item: Realty, callback: WeakReference<RealtyItemListener>)
         {
+            item.realtyTypeId = item.realtyTypeId - 1
             binding.realty = item
             binding.root.setOnClickListener { callback.get()?.onClickRealty(item.id) }
             binding.executePendingBindings()

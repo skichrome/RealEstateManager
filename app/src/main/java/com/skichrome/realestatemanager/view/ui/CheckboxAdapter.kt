@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.model.database.Poi
+import com.skichrome.realestatemanager.model.database.PoiRealty
 
-class CheckboxAdapter(val context: Context, private var items: List<Poi>) : RecyclerView.Adapter<CheckboxAdapter.CheckBoxesViewHolder>()
+class CheckboxAdapter(val context: Context, private var items: MutableList<Checkboxes> = mutableListOf()) :
+    RecyclerView.Adapter<CheckboxAdapter.CheckBoxesViewHolder>()
 {
     // =======================================
     //                  Fields
@@ -25,7 +27,8 @@ class CheckboxAdapter(val context: Context, private var items: List<Poi>) : Recy
         return CheckBoxesViewHolder(cb)
     }
 
-    override fun onBindViewHolder(holder: CheckBoxesViewHolder, position: Int) = holder.setText(items[position].name)
+    override fun onBindViewHolder(holder: CheckBoxesViewHolder, position: Int) =
+        holder.setText(items[position].checkboxName, items[position].isChecked)
 
     override fun getItemCount(): Int = items.size
 
@@ -39,22 +42,37 @@ class CheckboxAdapter(val context: Context, private var items: List<Poi>) : Recy
 
         checkboxList.forEachIndexed { index, item ->
             if (item.isChecked)
-                idList.add(index)
+                idList.add(index + 1)
         }
         return idList
     }
 
-    fun replaceCheckboxData(newItems: List<Poi>)
+    fun replaceCheckboxData(newPoiList: List<Poi>)
     {
-        items = newItems
+        val newItemList = mutableListOf<Checkboxes>()
+        newPoiList.forEach {
+            newItemList.add(Checkboxes(it.name, false))
+        }
+        items = newItemList
+        notifyDataSetChanged()
+    }
+
+    fun setCheckboxesChecked(checkedList: List<PoiRealty>)
+    {
+        checkedList.forEach {
+            items[it.poiId - 1].isChecked = true
+        }
         notifyDataSetChanged()
     }
 
     class CheckBoxesViewHolder(private val checkBox: CheckBox) : RecyclerView.ViewHolder(checkBox)
     {
-        fun setText(displayText: String)
+        fun setText(displayText: String, isChecked: Boolean = false)
         {
             checkBox.text = displayText
+            checkBox.isChecked = isChecked
         }
     }
+
+    data class Checkboxes(val checkboxName: String, var isChecked: Boolean)
 }

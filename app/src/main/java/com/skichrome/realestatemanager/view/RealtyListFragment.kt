@@ -1,12 +1,15 @@
 package com.skichrome.realestatemanager.view
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
 import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.view.ui.RealtyListAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import kotlinx.android.synthetic.main.toolbar.*
 import java.lang.ref.WeakReference
 
 class RealtyListFragment :
@@ -20,6 +23,7 @@ class RealtyListFragment :
 
     override fun configureFragment()
     {
+        configureTabletNavController()
         configureViewModel()
         configureRecyclerView()
     }
@@ -46,16 +50,43 @@ class RealtyListFragment :
         binding.realtyListFragmentRecyclerView.adapter = adapter
     }
 
+    private fun configureTabletNavController()
+    {
+        childFragmentManager.findFragmentById(R.id.fragmentRealtyListNavHostFragmentTablet)
+            ?.findNavController()
+            ?.apply {
+                addOnDestinationChangedListener { _, destination, _ ->
+
+                    activity?.toolbar?.menu
+                        ?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
+                        ?.isVisible = destination.id != R.id.emptyFragment
+                }
+
+                activity?.toolbar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
+                    ?.setOnMenuItemClickListener {
+                        val options = RealtyListFragmentDirections.actionRealtyListFragmentToAddRealtyFragment(true)
+                        activity?.findNavController(R.id.activityMainMainNavHostFragment)
+                            ?.navigate(options)
+                        return@setOnMenuItemClickListener true
+                    }
+            }
+
+    }
+
     // =================================
     //            Callbacks
     // =================================
 
     override fun onClickRealty(id: Long)
     {
-        viewModel.getRealty(id)
-
         val navHostFragmentTablet = childFragmentManager.findFragmentById(R.id.fragmentRealtyListNavHostFragmentTablet)
-        navHostFragmentTablet?.findNavController()?.navigate(R.id.detailsRealtyFragmentTablet)
-            ?: findNavController().navigate(R.id.detailsRealtyFragment)
+        navHostFragmentTablet?.findNavController()?.apply {
+            val bundle = bundleOf("realtyId" to id)
+            navigate(R.id.detailsRealtyFragmentTablet, bundle)
+        }
+            ?: findNavController().apply {
+                val options = RealtyListFragmentDirections.actionRealtyListFragmentToDetailsRealtyFragment(id)
+                navigate(options)
+            }
     }
 }

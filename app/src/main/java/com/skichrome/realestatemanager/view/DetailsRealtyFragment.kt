@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.view
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,7 +33,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     override fun configureFragment()
     {
-        configureViewModel()
+        getBundleArgs()
         configureRecyclerView()
     }
 
@@ -46,10 +47,27 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     //              Methods
     // =================================
 
+    private fun getBundleArgs()
+    {
+        arguments?.let {
+            var realtyId = DetailsRealtyFragmentArgs.fromBundle(it).realtyId
+
+            if (realtyId == -1L)
+                realtyId = it.getLong("realtyId")
+
+            Log.e("RealtyViewModel", "realtyId : ${it.getLong("realtyId")}")
+
+            if (realtyId == -1L)
+                throw Exception("Something went wrong during DetailsRealtyFragment initialisation")
+            configureViewModel(realtyId)
+        }
+    }
+
     // --------------- UI --------------
 
-    private fun configureViewModel()
+    private fun configureViewModel(realtyToDetail: Long)
     {
+        viewModel.getRealty(realtyToDetail)
         binding.realtyViewModel = viewModel
     }
 

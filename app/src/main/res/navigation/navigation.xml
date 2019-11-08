@@ -12,12 +12,13 @@
         android:name="com.skichrome.realestatemanager.view.RealtyListFragment"
         android:label="Realty List"
         tools:layout="@layout/fragment_realty_list">
-        <action
-            android:id="@+id/action_realtyListFragment_to_addRealtyFragment"
-            app:destination="@+id/addRealtyFragment" />
+
         <action
             android:id="@+id/action_realtyListFragment_to_detailsRealtyFragment"
             app:destination="@id/detailsRealtyFragment" />
+        <action
+            android:id="@+id/action_realtyListFragment_to_addRealtyFragment"
+            app:destination="@id/addRealtyFragment" />
     </fragment>
 
     <fragment
@@ -26,9 +27,9 @@
         android:label="AddRealtyFragment"
         tools:layout="@layout/fragment_add_realty">
         <argument
-            android:name="origin"
-            android:defaultValue="-1L"
-            app:argType="long" />
+            android:name="editMode"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -41,11 +42,11 @@
             app:destination="@+id/mapFragment" />
         <action
             android:id="@+id/action_detailsRealtyFragment_to_addRealtyFragment"
-            app:destination="@id/addRealtyFragment">
-            <argument
-                android:name="origin"
-                android:defaultValue="1L" />
-        </action>
+            app:destination="@id/addRealtyFragment" />
+        <argument
+            android:name="realtyId"
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 
     <fragment

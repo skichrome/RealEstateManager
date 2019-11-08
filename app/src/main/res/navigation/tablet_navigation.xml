@@ -12,6 +12,7 @@
         android:name="com.skichrome.realestatemanager.view.EmptyFragment"
         android:label="EmptyFragment"
         tools:layout="@layout/fragment_empty_details" />
+
     <fragment
         android:id="@+id/detailsRealtyFragmentTablet"
         android:name="com.skichrome.realestatemanager.view.DetailsRealtyFragment"
@@ -22,4 +23,8 @@
             android:defaultValue="-1L"
             app:argType="long" />
     </fragment>
+    <action
+        android:id="@+id/action_global_detailsRealtyFragmentTablet"
+        app:destination="@id/detailsRealtyFragmentTablet" />
+
 </navigation>

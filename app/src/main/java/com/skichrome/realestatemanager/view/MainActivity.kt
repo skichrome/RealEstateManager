@@ -60,7 +60,9 @@ class MainActivity : AppCompatActivity()
     {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             toolbar?.menu?.clear()
-            if (destination.id != R.id.mapFragment)
+            if (destination.id == R.id.detailsRealtyFragment ||
+                destination.id == R.id.realtyListFragment
+            )
                 toolbar?.inflateMenu(R.menu.toolbar_activity_main)
 
             if (resources.getBoolean(R.bool.isTablet))

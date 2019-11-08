@@ -15,10 +15,11 @@
     <com.google.android.material.card.MaterialCardView
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/material_card_height"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/material_card_height"
         android:layout_margin="8dp"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="6dp"
         app:cardElevation="2dp"
         app:cardPreventCornerOverlap="true">
 
@@ -45,7 +46,7 @@
                 android:padding="8dp">
 
                 <TextView
-                    android:id="@+id/realtyListItemName"
+                    android:id="@+id/realtyListItemType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="2dp"

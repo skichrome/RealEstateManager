@@ -89,6 +89,12 @@ interface PoiRealtyDao : BaseDao<PoiRealty>
 {
     @Query("SELECT * FROM PoiRealty")
     suspend fun getAllPoiRealty(): List<PoiRealty>
+
+    @Query("SELECT * FROM PoiRealty WHERE realtyId = :realtyId")
+    suspend fun getPoIRealtyFromRealtyId(realtyId: Long): List<PoiRealty>
+
+    @Query("DELETE FROM PoiRealty WHERE realtyId = :realtyId")
+    suspend fun deletePoiRealtyFromRealtyId(realtyId: Long): Int
 }
 
 @Dao

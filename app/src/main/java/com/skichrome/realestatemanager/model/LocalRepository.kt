@@ -52,5 +52,9 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun getAllPoiRealty() = db.poiRealtyDao().getAllPoiRealty()
 
+    suspend fun getPoiRealtyFromRealtyId(realtyId: Long) = db.poiRealtyDao().getPoIRealtyFromRealtyId(realtyId = realtyId)
+
+    suspend fun deletePoiRealtyByRealtyId(realtyId: Long) = db.poiRealtyDao().deletePoiRealtyFromRealtyId(realtyId = realtyId)
+
     suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>) = db.poiRealtyDao().insertReplace(*poiRealty)
 }

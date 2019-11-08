@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -103,7 +102,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun configureRecyclerView()
     {
-        checkBoxPoiAdapter = CheckboxAdapter(context!!, emptyList())
+        checkBoxPoiAdapter = CheckboxAdapter(context!!)
         binding.addRealtyFragCheckBoxesRecyclerView.adapter = checkBoxPoiAdapter
         binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
     }
@@ -137,7 +136,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private fun getBundleArguments()
     {
         arguments?.let {
-            isEditMode = AddRealtyFragmentArgs.fromBundle(it).origin == 1L
+            isEditMode = AddRealtyFragmentArgs.fromBundle(it).editMode
         }
     }
 
@@ -155,10 +154,12 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
             }
         })
 
+        viewModel.poiRealty.observe(this, Observer { it?.let { checkedList -> checkBoxPoiAdapter.setCheckboxesChecked(checkedList) } })
+
         val status = if (viewModel.realtyDetailed.get()!!.status) 1 else 0
         addRealtyFragStatusSpinner.setSelection(status)
 
-        val type = viewModel.realtyDetailed.get()!!.realtyTypeId
+        val type = viewModel.realtyDetailed.get()!!.realtyTypeId - 1
         addRealtyFragTypeInputSpinner.setSelection(type)
 
         val dateAdded = viewModel.realtyDetailed.get()!!.dateAdded
@@ -202,7 +203,6 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
             override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long)
             {
                 realtyType = position + 1
-                Log.e("Debug", "Value : $realtyType")
             }
         }
     }
@@ -315,13 +315,9 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         if (isEditMode)
         {
             realtyToBeAdded.id = viewModel.realtyDetailed.get()!!.id
-            viewModel.updateRealty(realtyToBeAdded, pictures)
+            viewModel.updateRealty(realtyToBeAdded, pictures, checkBoxPoiAdapter.getSelectedId())
         } else
-        {
-            val insertedId = viewModel.insertRealty(realtyToBeAdded, pictures)
-            Log.e("MainAct", "Item clicked : $insertedId")
-            viewModel.insertPoiRealty(checkBoxPoiAdapter.getSelectedId(), insertedId)
-        }
+            viewModel.insertRealtyAndDependencies(realtyToBeAdded, pictures, checkBoxPoiAdapter.getSelectedId())
     }
 
     // =================================
