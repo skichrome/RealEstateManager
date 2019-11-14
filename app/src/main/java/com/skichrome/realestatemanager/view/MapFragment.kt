@@ -4,14 +4,17 @@ import android.content.IntentSender
 import android.location.Location
 import android.os.Looper
 import android.util.Log
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentMapsBinding
+import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
 import com.skichrome.realestatemanager.utils.CHECK_SETTINGS_RC
 import com.skichrome.realestatemanager.utils.LOCATION_RC
 import com.skichrome.realestatemanager.utils.MANIFEST_LOCATION_PERM
@@ -143,5 +146,35 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     {
         val latLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+        configureMapMarkers()
+    }
+
+    private fun configureMapMarkers()
+    {
+        viewModel.realEstates.observe(this, Observer {
+            it?.let { list ->
+                list.forEach { realty ->
+                    realty.latitude?.let { latNotNull ->
+                        addMarkerToMap(
+                            RealtyMinimalForMap(
+                                id = realty.id,
+                                longitude = realty.longitude!!,
+                                latitude = latNotNull
+                            )
+                        )
+                    }
+                }
+            }
+        })
+    }
+
+    private fun addMarkerToMap(minimalRealty: RealtyMinimalForMap)
+    {
+        val markerOpt = MarkerOptions().apply {
+            position(LatLng(minimalRealty.latitude, minimalRealty.longitude))
+        }
+        map.addMarker(markerOpt).apply {
+            tag = minimalRealty.id
+        }
     }
 }
