@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.view
 
-import android.util.Log
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -12,7 +11,9 @@ import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import kotlinx.android.synthetic.main.fragment_realty_details.*
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 
 class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, RealtyViewModel>(),
     RealtyPhotoAdapter.OnClickPictureListener
@@ -55,8 +56,6 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
             if (realtyId == -1L)
                 realtyId = it.getLong("realtyId")
 
-            Log.e("RealtyViewModel", "realtyId : ${it.getLong("realtyId")}")
-
             if (realtyId == -1L)
                 throw Exception("Something went wrong during DetailsRealtyFragment initialisation")
             configureViewModel(realtyId)
@@ -68,7 +67,29 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     private fun configureViewModel(realtyToDetail: Long)
     {
         viewModel.getRealty(realtyToDetail)
+        viewModel.realtyDetailedLoading.observe(this, Observer {
+            it?.let { isLoading ->
+                if (!isLoading)
+                    configureDateTextView()
+            }
+        })
         binding.realtyViewModel = viewModel
+    }
+
+    private fun configureDateTextView()
+    {
+        val date = SimpleDateFormat.getDateInstance()
+        val realtyDetailed = viewModel.realtyDetailed.get()
+        realtyDetailed?.let {
+            val dateLong = if (it.status) it.dateSell else it.dateAdded
+            realtyDetailsFragmentDate.text = date.format(dateLong)
+
+            realtyDetailsFragmentDateTitle.text = if (it.status) getString(R.string.realty_details_fragment_date_sold)
+            else getString(R.string.realty_details_fragment_date_created)
+
+            realtyDetailsFragmentStatus.text = if (it.status) getString(R.string.realty_details_fragment_status_sold)
+            else getString(R.string.realty_details_fragment_status_available)
+        }
     }
 
     private fun configureRecyclerView()

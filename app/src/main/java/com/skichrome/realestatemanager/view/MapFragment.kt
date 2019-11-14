@@ -71,7 +71,6 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     @AfterPermissionGranted(LOCATION_RC)
     private fun configureLocationPermission()
     {
-        Log.e("LocationSettings", "Triggered !")
         if (EasyPermissions.hasPermissions(context!!, MANIFEST_LOCATION_PERM))
             createLocationRequest()
         else

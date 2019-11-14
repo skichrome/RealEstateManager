@@ -34,6 +34,10 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val insertLoading: LiveData<Boolean?>
         get() = _insertLoading
 
+    private val _realtyDetailedLoading = MutableLiveData<Boolean?>()
+    val realtyDetailedLoading: LiveData<Boolean?>
+        get() = _realtyDetailedLoading
+
     private val _poi = MutableLiveData<List<Poi>>()
     val poi: LiveData<List<Poi>>
         get() = _poi
@@ -96,6 +100,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     fun getRealty(id: Long)
     {
+        _realtyDetailedLoading.value = true
+
         uiScope.uiJob {
             val realty = backgroundTask {
                 repository.getRealty(id)
@@ -122,6 +128,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
             }
 
             _realtyDetailedPhotos.value = mediaRefTask.await()
+            _realtyDetailedLoading.value = false
         }
     }
 
