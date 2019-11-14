@@ -28,7 +28,7 @@ class OnlineSyncRepository(
         if (isConnected())
         {
             val poiRemote = remoteDataSource.getAllPoi()
-            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi")
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi (upload)")
 
             poiRemote.body()?.results?.let {
                 PoiResults.fromRemoteToLocal(it).apply {
@@ -43,7 +43,7 @@ class OnlineSyncRepository(
         if (isConnected())
         {
             val poiRemote = remoteDataSource.getAllRealtyTypes()
-            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi")
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi (download)")
 
             poiRemote.body()?.results?.let {
                 RealtyTypeResults.fromRemoteToLocal(it).apply {
@@ -72,13 +72,13 @@ class OnlineSyncRepository(
         val results = remoteDataSource.uploadAgents(agentLocal)
 
         val status = results.body()?.status ?: false
-        throwExceptionIfStatusIsFalse(status, "agents")
+        throwExceptionIfStatusIsFalse(status, "agents (upload)")
     }
 
     private suspend fun downloadAgents()
     {
         val agentRemote = remoteDataSource.getAllAgents()
-        throwExceptionIfStatusIsFalse(agentRemote.isSuccessful, "agents")
+        throwExceptionIfStatusIsFalse(agentRemote.isSuccessful, "agents (download)")
 
         agentRemote.body()?.results?.let {
             AgentResults.fromRemoteToLocal(it).apply {
@@ -89,30 +89,30 @@ class OnlineSyncRepository(
 
     // ---------- PoiRealty ---------- //
 
-    suspend fun synchronizePoiRealty()
+    suspend fun synchronizePoiRealty(agentId: Long)
     {
         if (isConnected())
         {
-            uploadPoiRealty()
-            downloadPoiRealty()
+            uploadPoiRealty(agentId)
+            downloadPoiRealty(agentId)
         }
     }
 
-    private suspend fun uploadPoiRealty()
+    private suspend fun uploadPoiRealty(agentId: Long)
     {
-        val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(localDataSource.getAllPoiRealty())
+        val poiRealtyRemote = PoiRealtyResults.fromLocalToRemote(localDataSource.getAllPoiRealty(), agentId)
         if (poiRealtyRemote.isEmpty())
             return
         val results = remoteDataSource.uploadPoiRealty(poiRealtyRemote)
 
         val status = results.body()?.status ?: false
-        throwExceptionIfStatusIsFalse(status, "PoiRealty")
+        throwExceptionIfStatusIsFalse(status, "PoiRealty (upload)")
     }
 
-    private suspend fun downloadPoiRealty()
+    private suspend fun downloadPoiRealty(agentId: Long)
     {
-        val poiRealtyRemote = remoteDataSource.getAllPoiRealty()
-        throwExceptionIfStatusIsFalse(poiRealtyRemote.isSuccessful, "PoiRealty")
+        val poiRealtyRemote = remoteDataSource.getAllPoiRealty(agentId)
+        throwExceptionIfStatusIsFalse(poiRealtyRemote.isSuccessful, "PoiRealty (download)")
 
         poiRealtyRemote.body()?.results?.let {
             PoiRealtyResults.fromRemoteToLocal(it).apply {
@@ -123,12 +123,12 @@ class OnlineSyncRepository(
 
     // ---------- Realty ---------- //
 
-    suspend fun synchronizeRealty()
+    suspend fun synchronizeRealty(agentId: Long)
     {
         if (isConnected())
         {
             uploadRealty()
-            downloadRealty()
+            downloadRealty(agentId)
         }
     }
 
@@ -140,13 +140,13 @@ class OnlineSyncRepository(
         val results = remoteDataSource.uploadRealty(realtyRemote)
 
         val status = results.body()?.status ?: false
-        throwExceptionIfStatusIsFalse(status, "realty")
+        throwExceptionIfStatusIsFalse(status, "realty (upload)")
     }
 
-    private suspend fun downloadRealty()
+    private suspend fun downloadRealty(agentId: Long)
     {
-        val realtyRemote = remoteDataSource.getAllRealty()
-        throwExceptionIfStatusIsFalse(realtyRemote.isSuccessful, "realty")
+        val realtyRemote = remoteDataSource.getAllRealty(agentId)
+        throwExceptionIfStatusIsFalse(realtyRemote.isSuccessful, "realty (download)")
 
         realtyRemote.body()?.results?.let {
             RealtyResults.fromRemoteToLocal(it).apply {

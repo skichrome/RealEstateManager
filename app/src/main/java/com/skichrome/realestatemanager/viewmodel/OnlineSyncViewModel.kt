@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skichrome.realestatemanager.model.OnlineSyncRepository
+import com.skichrome.realestatemanager.utils.backgroundTask
 import com.skichrome.realestatemanager.utils.ioTask
 import com.skichrome.realestatemanager.utils.uiJob
 import kotlinx.coroutines.CoroutineScope
@@ -20,21 +21,45 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val _isSyncEnded = MutableLiveData<Boolean>(false)
-    val isSyncEnded: LiveData<Boolean>
-        get() = _isSyncEnded
+    private val _isAgentSyncEnded = MutableLiveData<Boolean>(false)
+    val isAgentSyncEnded: LiveData<Boolean>
+        get() = _isAgentSyncEnded
+
+    private val _isGlobalSyncEnded = MutableLiveData<Boolean>(false)
+    val isGlobalSyncEnded: LiveData<Boolean>
+        get() = _isGlobalSyncEnded
 
     init
     {
-        synchroniseDatabase()
+        synchronizeAgents()
     }
 
     // =======================================
     //                 Methods
     // =======================================
 
-    private fun synchroniseDatabase()
+    private fun synchronizeAgents()
     {
+        _isAgentSyncEnded.value = false
+
+        uiScope.uiJob {
+            try
+            {
+                backgroundTask {
+                    repository.synchronizeAgents()
+                }
+            } catch (e: Exception)
+            {
+                Log.e("Server Synchronization", "Synchronization error with agents", e)
+            }
+            _isAgentSyncEnded.value = true
+        }
+    }
+
+    fun synchroniseDatabase(currentAgentId: Long)
+    {
+        _isGlobalSyncEnded.value = false
+
         uiScope.uiJob {
             try
             {
@@ -45,19 +70,16 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
                     repository.synchronizeRealtyTypes()
                 }
                 ioTask {
-                    repository.synchronizeAgents()
+                    repository.synchronizeRealty(currentAgentId)
                 }
                 ioTask {
-                    repository.synchronizeRealty()
-                }
-                ioTask {
-                    repository.synchronizePoiRealty()
+                    repository.synchronizePoiRealty(currentAgentId)
                 }
             } catch (e: Exception)
             {
                 Log.e("Server Synchronization", "Synchronization error", e)
             }
-            _isSyncEnded.value = true
+            _isGlobalSyncEnded.value = true
         }
     }
 

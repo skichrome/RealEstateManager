@@ -16,6 +16,7 @@ data class RemotePoiRealty(
 @JsonClass(generateAdapter = true)
 data class PoiRealtyResults(
     @Json(name = "realty_id") val realtyId: Long,
+    @Json(name = "agent_id") val agentId: Long,
     @Json(name = "poi_id") val poiId: Int
 )
 {
@@ -30,11 +31,11 @@ data class PoiRealtyResults(
             return localPoiRealtyList
         }
 
-        fun fromLocalToRemote(poiRealty: List<PoiRealty>): List<PoiRealtyResults>
+        fun fromLocalToRemote(poiRealty: List<PoiRealty>, agentId: Long): List<PoiRealtyResults>
         {
             val remotePoiRealtyList: MutableList<PoiRealtyResults> = mutableListOf()
             poiRealty.forEach {
-                remotePoiRealtyList.add(PoiRealtyResults(realtyId = it.realtyId, poiId = it.poiId))
+                remotePoiRealtyList.add(PoiRealtyResults(realtyId = it.realtyId, poiId = it.poiId, agentId = agentId))
             }
             return remotePoiRealtyList
         }

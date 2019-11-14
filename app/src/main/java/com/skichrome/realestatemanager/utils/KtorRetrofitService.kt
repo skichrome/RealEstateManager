@@ -9,6 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface KtorRetrofitService
 {
@@ -39,11 +40,11 @@ interface KtorRetrofitService
     @GET("all-agents")
     suspend fun getAllAgents(): Response<RemoteAgent>
 
-    @GET("all-poi-realty")
-    suspend fun getAllPoiRealty(): Response<RemotePoiRealty>
+    @GET("all-poi-realty/agent-id={agent}")
+    suspend fun getAllPoiRealty(@Path("agent") agent: Long): Response<RemotePoiRealty>
 
-    @GET("all-realty")
-    suspend fun getAllRealty(): Response<RemoteRealty>
+    @GET("all-realty/agent-id={agent}")
+    suspend fun getAllRealty(@Path("agent") agent: Long): Response<RemoteRealty>
 
     // ---------- POST ---------- //
 

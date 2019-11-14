@@ -69,7 +69,7 @@ data class MediaReference(
     foreignKeys = [ForeignKey(
         entity = Realty::class,
         parentColumns = ["id"],
-        childColumns = ["poiId"]
+        childColumns = ["realtyId"]
     )]
 )
 data class PoiRealty(

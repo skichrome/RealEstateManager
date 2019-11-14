@@ -13,7 +13,7 @@ class RemoteRepository
     suspend fun getLatLngFromPhysicalAddress(address: String, postCode: Int, city: String) =
         GoogleRetrofitService.service.getLatLngFromPhysicalAddress(address = "$address+$postCode+$city")
 
-    suspend fun getAllRealty() = KtorRetrofitService.service.getAllRealty()
+    suspend fun getAllRealty(agentId: Long) = KtorRetrofitService.service.getAllRealty(agentId)
 
     suspend fun getAllRealtyTypes() = KtorRetrofitService.service.getAllRealtyTypes()
 
@@ -21,7 +21,7 @@ class RemoteRepository
 
     suspend fun getAllAgents() = KtorRetrofitService.service.getAllAgents()
 
-    suspend fun getAllPoiRealty() = KtorRetrofitService.service.getAllPoiRealty()
+    suspend fun getAllPoiRealty(agentId: Long) = KtorRetrofitService.service.getAllPoiRealty(agentId)
 
     // ---------- POST ---------- //
 

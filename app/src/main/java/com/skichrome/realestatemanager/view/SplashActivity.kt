@@ -48,19 +48,24 @@ class SplashActivity : AppCompatActivity()
     private fun configureSyncViewModel()
     {
         viewModel = ViewModelProviders.of(this, Injection.provideSyncViewModelFactory(this)).get(OnlineSyncViewModel::class.java)
-        viewModel.isSyncEnded.observe(this, Observer {
+
+        viewModel.isAgentSyncEnded.observe(this, Observer {
+            it?.let { isAgentSyncEnded ->
+                val currentUser = getCurrentUser()
+                if (isAgentSyncEnded && currentUser == -1L)
+                    startLoginActivity()
+                else if (isAgentSyncEnded)
+                    viewModel.synchroniseDatabase(currentUser)
+            }
+        })
+
+        viewModel.isGlobalSyncEnded.observe(this, Observer {
             it?.let { isSyncEnded ->
                 if (isSyncEnded)
-                {
-                    if (getCurrentUser() == -1L)
-                        startLoginActivity()
-                    else
-                        launchMainActivity()
-                }
+                    launchMainActivity()
             }
         })
     }
-
 
     private fun getCurrentUser(): Long
     {
