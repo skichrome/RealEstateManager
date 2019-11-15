@@ -39,7 +39,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     //              Fields
     // =================================
 
-    private val photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
+    private lateinit var photoAdapter: RealtyPhotoAdapter
     private val materialEditTextViewList = arrayListOf<TextInputLayout>()
     private val date = SimpleDateFormat.getDateInstance()
     private lateinit var checkBoxPoiAdapter: CheckboxAdapter
@@ -83,6 +83,13 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onDestroy()
+    {
+        binding.addRealtyFragCheckBoxesRecyclerView.adapter = null
+        binding.addRealtyFragRecyclerViewAddPhoto.adapter = null
+        super.onDestroy()
+    }
+
     // =================================
     //              Methods
     // =================================
@@ -102,7 +109,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     private fun configureRecyclerView()
     {
-        checkBoxPoiAdapter = CheckboxAdapter(context!!)
+        checkBoxPoiAdapter = CheckboxAdapter(context)
+        photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
         binding.addRealtyFragCheckBoxesRecyclerView.adapter = checkBoxPoiAdapter
         binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
     }

@@ -23,7 +23,7 @@ class SignInActivity : AppCompatActivity(), LoginUsersAdapter.LoginSelectedListe
 
     private lateinit var binding: ActivitySigninBinding
     private lateinit var viewModel: SignInViewModel
-    private val adapter = LoginUsersAdapter(emptyList(), WeakReference(this))
+    private lateinit var adapter: LoginUsersAdapter
 
     // =======================================
     //           Superclass Methods
@@ -63,6 +63,7 @@ class SignInActivity : AppCompatActivity(), LoginUsersAdapter.LoginSelectedListe
 
     private fun configureRecyclerView()
     {
+        adapter = LoginUsersAdapter(emptyList(), WeakReference(this))
         binding.activitySignInRecyclerView.setHasFixedSize(true)
         binding.activitySignInRecyclerView.adapter = adapter
     }

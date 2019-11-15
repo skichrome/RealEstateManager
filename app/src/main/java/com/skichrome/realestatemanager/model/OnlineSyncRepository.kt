@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.model
 
+import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.retrofit.*
 
@@ -28,7 +29,7 @@ class OnlineSyncRepository(
         if (isConnected())
         {
             val poiRemote = remoteDataSource.getAllPoi()
-            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi (upload)")
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi (download)")
 
             poiRemote.body()?.results?.let {
                 PoiResults.fromRemoteToLocal(it).apply {
@@ -40,10 +41,15 @@ class OnlineSyncRepository(
 
     suspend fun synchronizeRealtyTypes()
     {
+        Log.e("Sync", "${isConnected()}")
+
         if (isConnected())
         {
             val poiRemote = remoteDataSource.getAllRealtyTypes()
-            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "poi (download)")
+
+            Log.e("Sync", "$poiRemote")
+
+            throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "Realty Types (download)")
 
             poiRemote.body()?.results?.let {
                 RealtyTypeResults.fromRemoteToLocal(it).apply {

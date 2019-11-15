@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity()
         if (requestCode == SIGN_IN_RC)
         {
             if (resultCode == RESULT_OK)
-                launchMainActivity()
+                viewModel.synchroniseDatabase(getCurrentUser())
             else
                 finish()
         }

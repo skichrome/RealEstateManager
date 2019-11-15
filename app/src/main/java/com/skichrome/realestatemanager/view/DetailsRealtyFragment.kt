@@ -22,7 +22,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     //              Fields
     // =================================
 
-    private val photoAdapter = RealtyPhotoAdapter(list = mutableListOf(), callback = WeakReference(this))
+    private lateinit var photoAdapter: RealtyPhotoAdapter
 
     // =================================
     //        Superclass Methods
@@ -42,6 +42,12 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     {
         super.onMapReady(gMap)
         configureMapPosition()
+    }
+
+    override fun onDestroy()
+    {
+        binding.realtyDetailsFragmentRecyclerView.adapter = null
+        super.onDestroy()
     }
 
     // =================================
@@ -94,6 +100,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     private fun configureRecyclerView()
     {
+        photoAdapter = RealtyPhotoAdapter(list = mutableListOf(), callback = WeakReference(this))
         binding.realtyDetailsFragmentRecyclerView.adapter = photoAdapter
         viewModel.realtyDetailedPhotos.observe(this, Observer { it?.let { list -> photoAdapter.replacePhotoList(list) } })
     }

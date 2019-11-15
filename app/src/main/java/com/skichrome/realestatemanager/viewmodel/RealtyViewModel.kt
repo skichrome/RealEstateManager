@@ -155,6 +155,9 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     {
         uiScope.uiJob {
             backgroundTask {
+                realty.longitude = realtyDetailed.get()?.longitude
+                realty.latitude = realtyDetailed.get()?.latitude
+
                 repository.updateRealty(realty)
             }
 

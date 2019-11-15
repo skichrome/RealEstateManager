@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.model.database.Poi
 import com.skichrome.realestatemanager.model.database.PoiRealty
 
-class CheckboxAdapter(val context: Context, private var items: MutableList<Checkboxes> = mutableListOf()) :
+class CheckboxAdapter(val context: Context?, private var items: MutableList<Checkboxes> = mutableListOf()) :
     RecyclerView.Adapter<CheckboxAdapter.CheckBoxesViewHolder>()
 {
     // =======================================

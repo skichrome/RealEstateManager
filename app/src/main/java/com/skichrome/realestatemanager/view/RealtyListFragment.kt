@@ -16,7 +16,7 @@ class RealtyListFragment :
     BaseFragment<FragmentRealtyListBinding, RealtyViewModel>(),
     RealtyListAdapter.RealtyItemListener
 {
-    private val adapter = RealtyListAdapter(callback = WeakReference(this))
+    private lateinit var adapter: RealtyListAdapter
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_list
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
@@ -34,6 +34,12 @@ class RealtyListFragment :
         viewModel.getAllRealty()
     }
 
+    override fun onDestroy()
+    {
+        binding.realtyListFragmentRecyclerView.adapter = null
+        super.onDestroy()
+    }
+
     // =================================
     //              Methods
     // =================================
@@ -46,6 +52,7 @@ class RealtyListFragment :
 
     private fun configureRecyclerView()
     {
+        adapter = RealtyListAdapter(callback = WeakReference(this))
         binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
         binding.realtyListFragmentRecyclerView.adapter = adapter
     }

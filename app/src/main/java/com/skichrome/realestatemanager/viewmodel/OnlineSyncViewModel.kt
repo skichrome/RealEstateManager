@@ -65,14 +65,8 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
             {
                 ioTask {
                     repository.synchronizePoi()
-                }
-                ioTask {
                     repository.synchronizeRealtyTypes()
-                }
-                ioTask {
                     repository.synchronizeRealty(currentAgentId)
-                }
-                ioTask {
                     repository.synchronizePoiRealty(currentAgentId)
                 }
             } catch (e: Exception)
