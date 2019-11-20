@@ -17,7 +17,7 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
     // =================================
 
     private lateinit var mapView: MapView
-    protected lateinit var map: GoogleMap
+    protected var map: GoogleMap? = null
 
     abstract fun getMap(): MapView
 
@@ -36,7 +36,7 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
         return view
     }
 
-    override fun onMapReady(gMap: GoogleMap)
+    override fun onMapReady(gMap: GoogleMap?)
     {
         this.map = gMap
     }
@@ -68,6 +68,7 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
     override fun onDestroy()
     {
         mapView.onDestroy()
+        map = null
         super.onDestroy()
     }
 }

@@ -46,8 +46,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val agent: LiveData<List<Agent>>
         get() = _agent
 
-    private val _realtyDetailed = ObservableField<Realty>()
-    val realtyDetailed: ObservableField<Realty>
+    private val _realtyDetailed = ObservableField<Realty?>()
+    val realtyDetailed: ObservableField<Realty?>
         get() = _realtyDetailed
 
     private val _realtyDetailedLatLng = MutableLiveData<RealtyMinimalForMap>()
@@ -101,6 +101,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun getRealty(id: Long)
     {
         _realtyDetailedLoading.value = true
+        _realtyDetailed.set(null)
 
         uiScope.uiJob {
             val realty = backgroundTask {

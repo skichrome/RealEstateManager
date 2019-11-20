@@ -53,4 +53,10 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
             ViewModelProviders.of(this, Injection.provideViewModelFactory(context!!)).get(getViewModelClass())
         } ?: throw Exception("Invalid activity")
     }
+
+    override fun onDestroy()
+    {
+        binding.unbind()
+        super.onDestroy()
+    }
 }

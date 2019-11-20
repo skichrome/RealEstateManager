@@ -38,7 +38,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
         configureRecyclerView()
     }
 
-    override fun onMapReady(gMap: GoogleMap)
+    override fun onMapReady(gMap: GoogleMap?)
     {
         super.onMapReady(gMap)
         configureMapPosition()
@@ -110,9 +110,9 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
         viewModel.realtyDetailedLatLng.observe(this, Observer {
             it?.let { realtyMinimal ->
                 val latLng = LatLng(realtyMinimal.latitude, realtyMinimal.longitude)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
+                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
 
-                map.apply {
+                map?.apply {
                     val markerOpt = MarkerOptions()
                         .position(latLng)
                     addMarker(markerOpt)

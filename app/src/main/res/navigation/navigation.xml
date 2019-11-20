@@ -57,7 +57,11 @@
         android:id="@+id/mapFragment"
         android:name="com.skichrome.realestatemanager.view.MapFragment"
         android:label="Map"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/action_mapFragment_to_detailsRealtyFragment"
+            app:destination="@id/detailsRealtyFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"

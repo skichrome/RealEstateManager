@@ -5,6 +5,7 @@ import android.location.Location
 import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,9 +30,11 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     //              Fields
     // =================================
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
+    private var fusedLocationClient: FusedLocationProviderClient? = null
+    private var locationCallback: LocationCallback? = null
     private var lastLocation: Location? = null
+
+    private var firstMapLoad = true
 
     // =================================
     //        Superclass Methods
@@ -43,6 +46,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
 
     override fun configureFragment()
     {
+        firstMapLoad = true
         binding.mapFragmentFab.setOnClickListener {
             lastLocation?.let {
                 configureMap()
@@ -53,13 +57,15 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     override fun onDestroy()
     {
         lastLocation?.let {
-            fusedLocationClient.removeLocationUpdates(locationCallback)
+            fusedLocationClient?.removeLocationUpdates(locationCallback)
         }
         lastLocation = null
+        fusedLocationClient = null
+        locationCallback = null
         super.onDestroy()
     }
 
-    override fun onMapReady(gMap: GoogleMap)
+    override fun onMapReady(gMap: GoogleMap?)
     {
         super.onMapReady(gMap)
         configureLocationPermission()
@@ -123,7 +129,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     private fun startLocationUpdates(locationRequest: LocationRequest?)
     {
         locationRequest?.let {
-            fusedLocationClient.requestLocationUpdates(it, locationCallback, Looper.getMainLooper())
+            fusedLocationClient?.requestLocationUpdates(it, locationCallback, Looper.getMainLooper())
         }
     }
 
@@ -135,7 +141,11 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
             {
                 locationResult ?: return
                 lastLocation = locationResult.lastLocation
-                configureMap()
+                if (firstMapLoad)
+                {
+                    configureMap()
+                    firstMapLoad = false
+                }
             }
         }
     }
@@ -145,12 +155,18 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     private fun configureMap()
     {
         val latLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
         configureMapMarkers()
     }
 
     private fun configureMapMarkers()
     {
+        map?.setOnMarkerClickListener {
+            val opt = MapFragmentDirections.actionMapFragmentToDetailsRealtyFragment(it.tag.toString().toLong())
+            findNavController().navigate(opt)
+            return@setOnMarkerClickListener true
+        }
+
         viewModel.realEstates.observe(this, Observer {
             it?.let { list ->
                 list.forEach { realty ->
@@ -173,7 +189,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
         val markerOpt = MarkerOptions().apply {
             position(LatLng(minimalRealty.latitude, minimalRealty.longitude))
         }
-        map.addMarker(markerOpt).apply {
+        map?.addMarker(markerOpt)?.apply {
             tag = minimalRealty.id
         }
     }
