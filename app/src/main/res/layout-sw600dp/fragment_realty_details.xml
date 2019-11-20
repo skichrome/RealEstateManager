@@ -153,6 +153,8 @@
                 android:layout_marginStart="16dp"
                 android:text="@{realtyViewModel.realtyDetailed.address}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationTitle"
+                app:layout_constraintEnd_toStartOf="@+id/realtyDetailsFragmentGuideline"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentLocationTitle"
                 tools:text="@string/realty_details_fragment_location_title" />
 
@@ -181,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.6" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentPriceTitle"
