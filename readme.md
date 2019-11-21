@@ -1,4 +1,5 @@
-# RealEstateManager
+# RealEstateManager [![Build Status](https://dev.campeoltoni.fr/jenkins/buildStatus/icon?job=RealEstateManager)](https://dev.campeoltoni.fr/jenkins/job/RealEstateManager/)
+
 This project is an Android App developed for a formation on [OpenClassrooms](https://openclassrooms.com/fr/)
 
 ## Api keys configuration
