@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
+import com.skichrome.realestatemanager.utils.ARG_DETAILS_REALTY_NAME
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
@@ -30,7 +31,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_details
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView = binding.realtyDetailsFragmentMapView
+    override fun getMap(): MapView? = binding?.realtyDetailsFragmentMapView
 
     override fun configureFragment()
     {
@@ -46,7 +47,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     override fun onDestroy()
     {
-        binding.realtyDetailsFragmentRecyclerView.adapter = null
+        binding?.realtyDetailsFragmentRecyclerView?.adapter = null
         super.onDestroy()
     }
 
@@ -60,7 +61,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
             var realtyId = DetailsRealtyFragmentArgs.fromBundle(it).realtyId
 
             if (realtyId == -1L)
-                realtyId = it.getLong("realtyId")
+                realtyId = it.getLong(ARG_DETAILS_REALTY_NAME)
 
             if (realtyId == -1L)
                 throw Exception("Something went wrong during DetailsRealtyFragment initialisation")
@@ -79,7 +80,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
                     configureDateTextView()
             }
         })
-        binding.realtyViewModel = viewModel
+        binding?.realtyViewModel = viewModel
     }
 
     private fun configureDateTextView()
@@ -101,7 +102,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     private fun configureRecyclerView()
     {
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(), callback = WeakReference(this))
-        binding.realtyDetailsFragmentRecyclerView.adapter = photoAdapter
+        binding?.realtyDetailsFragmentRecyclerView?.adapter = photoAdapter
         viewModel.realtyDetailedPhotos.observe(this, Observer { it?.let { list -> photoAdapter.replacePhotoList(list) } })
     }
 

@@ -133,4 +133,12 @@
     <string name="activity_sign_in_btn_sign_in">Register</string>
     <string name="activity_sign_in_no_internet_hint_text">No active internet connexion has been detected, please connect to a network to create a new profile.</string>
     <string name="activity_sign_in_toast_bad_username">Please enter a valid username</string>
+
+    <!-- Search screen -->
+    <string name="search_fragment_validate_btn">Search</string>
+    <string name="search_fragment_min_price">Minimum price</string>
+    <string name="search_fragment_max_price">Maximum price</string>
+    <string name="search_fragment_min_price_value">%1$d $</string>
+    <string name="search_fragment_max_price_value">%1$d $</string>
+    <string name="search_fragment_poi">Points of interest</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.model
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.skichrome.realestatemanager.model.database.*
 
 class LocalRepository(private val db: RealEstateDatabase)
@@ -61,4 +62,8 @@ class LocalRepository(private val db: RealEstateDatabase)
     suspend fun deletePoiRealtyByRealtyId(realtyId: Long) = db.poiRealtyDao().deletePoiRealtyFromRealtyId(realtyId = realtyId)
 
     suspend fun insertPoiRealty(poiRealty: Array<PoiRealty>) = db.poiRealtyDao().insertReplace(*poiRealty)
+
+    // ---------- Raw Query ---------- //
+
+    suspend fun fetchRealtyFromQueryParam(sqlQuery: SupportSQLiteQuery) = db.rawQueryDao().getRealtyFromRaw(sqlQuery = sqlQuery)
 }

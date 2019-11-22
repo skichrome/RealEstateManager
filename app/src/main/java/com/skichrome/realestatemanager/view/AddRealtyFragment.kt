@@ -85,8 +85,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
     override fun onDestroy()
     {
-        binding.addRealtyFragCheckBoxesRecyclerView.adapter = null
-        binding.addRealtyFragRecyclerViewAddPhoto.adapter = null
+        binding?.addRealtyFragCheckBoxesRecyclerView?.adapter = null
+        binding?.addRealtyFragRecyclerViewAddPhoto?.adapter = null
         super.onDestroy()
     }
 
@@ -111,8 +111,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     {
         checkBoxPoiAdapter = CheckboxAdapter(context)
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
-        binding.addRealtyFragCheckBoxesRecyclerView.adapter = checkBoxPoiAdapter
-        binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
+        binding?.addRealtyFragCheckBoxesRecyclerView?.adapter = checkBoxPoiAdapter
+        binding?.addRealtyFragRecyclerViewAddPhoto?.adapter = photoAdapter
     }
 
     private fun configureViewModel()
@@ -153,7 +153,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         if (!isEditMode)
             return
 
-        binding.realtyViewModel = viewModel
+        binding?.realtyViewModel = viewModel
         viewModel.realtyDetailedPhotos.observe(this, Observer {
             it?.let { list ->
                 val mutableList = mutableListOf<MediaReference?>(null)

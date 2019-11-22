@@ -1,5 +1,7 @@
 package com.skichrome.realestatemanager.model
 
+import android.util.Log
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.model.retrofit.Results
@@ -109,5 +111,39 @@ class RealtyRepository(
                 return result.body()?.results
         }
         return null
+    }
+
+    // ---------- Search ---------- //
+
+    suspend fun searchFromParameters(minPrice: Int?, maxPrice: Int?, poiList: List<Int>?): List<Realty>
+    {
+        val baseQueryParam = "SELECT * FROM Realty"
+        val queryStrBuilder = StringBuilder(baseQueryParam)
+
+        minPrice?.let { queryStrBuilder.append(" AND Realty.price >= $it") }
+        maxPrice?.let { queryStrBuilder.append(" AND Realty.price <= $it") }
+
+        Log.e("RealtyRepository", "List of poi (TODO) : $poiList")
+
+//        poiList?.let { poiListNotNull ->
+//            poiListNotNull.forEach {
+        //queryStrBuilder.append(" AND PoiRealty.poiId = $it")
+//            }
+//        }
+
+        if (queryStrBuilder.toString() == baseQueryParam)
+            return localDataSource.fetchRealtyFromQueryParam(SimpleSQLiteQuery(baseQueryParam))
+
+        val queryStr = queryStrBuilder.toString().replaceFirst("AND", "WHERE")
+
+        Log.e("RealtyRepo", "Query Value : $queryStr")
+
+        val query = SimpleSQLiteQuery(queryStr)
+        val queryResult = localDataSource.fetchRealtyFromQueryParam(query)
+        queryResult.forEach {
+            Log.e("RealtyRepo", it.toString())
+        }
+
+        return queryResult
     }
 }

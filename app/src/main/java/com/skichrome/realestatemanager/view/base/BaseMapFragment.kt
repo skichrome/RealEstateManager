@@ -16,10 +16,10 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
     //              Fields
     // =================================
 
-    private lateinit var mapView: MapView
+    private var mapView: MapView? = null
     protected var map: GoogleMap? = null
 
-    abstract fun getMap(): MapView
+    abstract fun getMap(): MapView?
 
     // =================================
     //        Superclass Methods
@@ -30,8 +30,8 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         mapView = getMap()
-        mapView.onCreate(arguments)
-        mapView.getMapAsync(this)
+        mapView?.onCreate(arguments)
+        mapView?.getMapAsync(this)
 
         return view
     }
@@ -44,30 +44,30 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
     override fun onStart()
     {
         super.onStart()
-        mapView.onStart()
+        mapView?.onStart()
     }
 
     override fun onResume()
     {
         super.onResume()
-        mapView.onResume()
+        mapView?.onResume()
     }
 
     override fun onPause()
     {
-        mapView.onPause()
+        mapView?.onPause()
         super.onPause()
     }
 
     override fun onStop()
     {
-        mapView.onStop()
+        mapView?.onStop()
         super.onStop()
     }
 
     override fun onDestroy()
     {
-        mapView.onDestroy()
+        mapView?.onDestroy()
         map = null
         super.onDestroy()
     }

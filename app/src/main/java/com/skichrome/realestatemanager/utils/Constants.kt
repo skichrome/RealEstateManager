@@ -14,3 +14,9 @@ const val MANIFEST_LOCATION_PERM = Manifest.permission.ACCESS_FINE_LOCATION
 const val CHECK_SETTINGS_RC = 124
 
 const val NOTIFICATION_ID = 123456
+
+const val ARG_DETAILS_REALTY_NAME = "realtyId"
+const val ARG_LIST_REALTY_ORIGIN = "origin"
+
+const val SEARCH_MIN_VALUE = 0
+const val SEARCH_MAX_VALUE = 1_000_000

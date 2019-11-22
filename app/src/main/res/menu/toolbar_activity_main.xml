@@ -16,10 +16,9 @@
             android:title="@string/menu_item_edit_name"
             app:showAsAction="ifRoom" />
         <item
-            android:id="@+id/searchMenuItem"
+            android:id="@+id/searchFragment"
             android:icon="@drawable/ic_search_24dp"
             android:title="@string/menu_item_search_name"
-            app:actionViewClass="androidx.appcompat.widget.SearchView"
             app:showAsAction="ifRoom" />
     </group>
 

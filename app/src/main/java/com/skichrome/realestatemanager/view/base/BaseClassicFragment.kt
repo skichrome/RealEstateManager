@@ -4,22 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.skichrome.realestatemanager.viewmodel.Injection
 
-abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
+abstract class BaseClassicFragment<V : ViewModel> : Fragment()
 {
     // =================================
     //              Fields
     // =================================
-
-    private var _binding: T? = null
-    protected val binding: T?
-        get() = _binding
 
     private lateinit var _sharedRealtyViewModel: V
     protected val viewModel: V
@@ -33,12 +27,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
     //        Superclass Methods
     // =================================
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        _binding = DataBindingUtil.inflate(layoutInflater, getFragmentLayout(), container, false)
-        _binding?.executePendingBindings()
-        return _binding?.root
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        inflater.inflate(getFragmentLayout(), container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
@@ -52,11 +42,5 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
         _sharedRealtyViewModel = activity?.run {
             ViewModelProviders.of(this, Injection.provideViewModelFactory(context!!)).get(getViewModelClass())
         } ?: throw Exception("Invalid activity")
-    }
-
-    override fun onDestroy()
-    {
-        binding?.unbind()
-        super.onDestroy()
     }
 }

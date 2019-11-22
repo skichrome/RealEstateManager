@@ -6,9 +6,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
+import com.skichrome.realestatemanager.utils.ARG_DETAILS_REALTY_NAME
+import com.skichrome.realestatemanager.utils.ARG_LIST_REALTY_ORIGIN
 import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.view.ui.RealtyListAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import kotlinx.android.synthetic.main.fragment_realty_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.lang.ref.WeakReference
 
@@ -26,17 +29,18 @@ class RealtyListFragment :
         configureTabletNavController()
         configureViewModel()
         configureRecyclerView()
+        configureSwipeRefreshLayout()
     }
 
     override fun onResume()
     {
         super.onResume()
-        viewModel.getAllRealty()
+        getArgumentsFromBundle()
     }
 
     override fun onDestroy()
     {
-        binding.realtyListFragmentRecyclerView.adapter = null
+        binding?.realtyListFragmentRecyclerView?.adapter = null
         super.onDestroy()
     }
 
@@ -44,17 +48,31 @@ class RealtyListFragment :
     //              Methods
     // =================================
 
+    private fun getArgumentsFromBundle()
+    {
+        arguments?.let {
+            val origin = it.getBoolean(ARG_LIST_REALTY_ORIGIN, false)
+            if (origin)
+                viewModel.getAllRealty()
+        }
+    }
+
     private fun configureViewModel()
     {
-        binding.realtyViewModel = viewModel
+        binding?.realtyViewModel = viewModel
         viewModel.realEstates.observe(this, Observer { it?.let { list -> adapter.replaceRealtyList(list) } })
     }
 
     private fun configureRecyclerView()
     {
         adapter = RealtyListAdapter(callback = WeakReference(this))
-        binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
-        binding.realtyListFragmentRecyclerView.adapter = adapter
+        binding?.realtyListFragmentRecyclerView?.setHasFixedSize(true)
+        binding?.realtyListFragmentRecyclerView?.adapter = adapter
+    }
+
+    private fun configureSwipeRefreshLayout()
+    {
+        realtyListFragmentSwipeRefresh?.setOnRefreshListener { viewModel.getAllRealty() }
     }
 
     private fun configureTabletNavController()
@@ -88,7 +106,7 @@ class RealtyListFragment :
     {
         val navHostFragmentTablet = childFragmentManager.findFragmentById(R.id.fragmentRealtyListNavHostFragmentTablet)
         navHostFragmentTablet?.findNavController()?.apply {
-            val bundle = bundleOf("realtyId" to id)
+            val bundle = bundleOf(ARG_DETAILS_REALTY_NAME to id)
             navigate(R.id.detailsRealtyFragmentTablet, bundle)
         }
             ?: findNavController().apply {

@@ -2,6 +2,7 @@ package com.skichrome.realestatemanager.model.database
 
 import android.database.Cursor
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 
 interface BaseDao<T>
 {
@@ -105,4 +106,11 @@ interface AgentDao : BaseDao<Agent>
 
     @Query("SELECT * FROM Agent")
     suspend fun getAllAgents(): List<Agent>
+}
+
+@Dao
+interface RawQueryDao
+{
+    @RawQuery(observedEntities = [Realty::class])
+    suspend fun getRealtyFromRaw(sqlQuery: SupportSQLiteQuery): List<Realty>
 }

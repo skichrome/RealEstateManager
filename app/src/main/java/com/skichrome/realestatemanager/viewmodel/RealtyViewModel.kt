@@ -92,9 +92,12 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     fun getAllRealty()
     {
         uiScope.uiJob {
+            _isLoading.set(true)
+            _realEstates.value = emptyList()
             _realEstates.value = ioTask {
                 repository.getAllRealty()
             }
+            _isLoading.set(false)
         }
     }
 
@@ -241,6 +244,18 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                 realty.latitude = it.first().geometry.location.lat
                 realty.longitude = it.first().geometry.location.lng
                 repository.updateRealty(realty)
+            }
+        }
+    }
+
+    // ---------- Search Fragment ---------- //
+
+    fun getRealtyMatchingParams(minPrice: Int?, maxPrice: Int?, poiList: List<Int>?)
+    {
+        uiScope.uiJob {
+            _realEstates.value = emptyList()
+            _realEstates.value = ioTask {
+                repository.searchFromParameters(minPrice, maxPrice, poiList)
             }
         }
     }

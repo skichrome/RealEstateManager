@@ -42,12 +42,12 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
 
     override fun getFragmentLayout(): Int = R.layout.fragment_maps
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView = binding.mapFragmentMapView
+    override fun getMap(): MapView? = binding?.mapFragmentMapView
 
     override fun configureFragment()
     {
         firstMapLoad = true
-        binding.mapFragmentFab.setOnClickListener {
+        binding?.mapFragmentFab?.setOnClickListener {
             lastLocation?.let {
                 configureMap()
             } ?: configureLocationPermission()

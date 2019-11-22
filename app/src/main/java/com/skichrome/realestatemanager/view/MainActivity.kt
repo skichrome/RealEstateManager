@@ -9,6 +9,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.skichrome.realestatemanager.R
+import com.skichrome.realestatemanager.utils.ARG_LIST_REALTY_ORIGIN
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -58,6 +59,10 @@ class MainActivity : AppCompatActivity()
 
     private fun configureNavController(navController: NavController)
     {
+        val arg = Bundle()
+        arg.putBoolean(ARG_LIST_REALTY_ORIGIN, true)
+        navController.setGraph(R.navigation.navigation, arg)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             toolbar?.menu?.clear()
             if (destination.id == R.id.detailsRealtyFragment ||
