@@ -69,6 +69,9 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
                     repository.synchronizeRealty(currentAgentId)
                     repository.synchronizePoiRealty(currentAgentId)
                 }
+                ioTask {
+                    repository.synchronizeMediaReferences(currentAgentId)
+                }
             } catch (e: Exception)
             {
                 Log.e("Server Synchronization", "Synchronization error", e)

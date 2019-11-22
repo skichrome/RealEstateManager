@@ -25,6 +25,10 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun getMediaReferencesFromRealtyId(id: Long): List<MediaReference> = db.mediaReferenceDao().getMediaOfRealtyById(realtyId = id)
 
+    suspend fun getMediaReferencesByIdList(ids: List<Long>) = db.mediaReferenceDao().getMediaByIdList(ids)
+
+    suspend fun getAllMediaReferences(): List<MediaReference> = db.mediaReferenceDao().getAllMedias()
+
     suspend fun deleteMediaReference(mediaId: Long) = db.mediaReferenceDao().deleteMediaOfRealtyById(mediaRefId = mediaId)
 
     // ---------- Agent ---------- //

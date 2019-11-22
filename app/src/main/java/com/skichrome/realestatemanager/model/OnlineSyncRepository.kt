@@ -3,6 +3,10 @@ package com.skichrome.realestatemanager.model
 import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.retrofit.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class OnlineSyncRepository(
     private val netManager: NetManager,
@@ -159,5 +163,55 @@ class OnlineSyncRepository(
                 localDataSource.insertRealtyList(this.toTypedArray())
             }
         }
+    }
+
+    // ---------- Media References ---------- //
+
+    suspend fun synchronizeMediaReferences(agentId: Long)
+    {
+        if (isConnected())
+        {
+            val mediaRefToUpload = getMediaReferenceDeltaFromServer(agentId)
+            uploadMediaReferences(mediaRefToUpload, agentId)
+        }
+    }
+
+    private suspend fun getMediaReferenceDeltaFromServer(agentId: Long): RemoteMediaReference
+    {
+        val mediaRefList = MediaReferenceResults.fromLocalToRemote(localDataSource.getAllMediaReferences(), agentId)
+        val result = remoteDataSource.uploadMediaRefList(mediaRefList)
+        throwExceptionIfStatusIsFalse(result.isSuccessful, "MediaRefDelta")
+
+        return result.body() ?: throw Exception("Error with body result of MediaRef delta method.")
+    }
+
+    private suspend fun uploadMediaReferences(mediaRefToUpload: RemoteMediaReference, agentId: Long)
+    {
+        val uploadList = mediaRefToUpload.results
+
+        if (uploadList.isEmpty())
+            return
+
+        val mediaRefIdList = mutableListOf<Long>()
+        uploadList.forEach {
+            mediaRefIdList.add(it.id)
+        }
+
+        localDataSource.getMediaReferencesByIdList(mediaRefIdList).forEach {
+            uploadMediaRefToServer(it.reference, it.shortDesc, agentId, it.realtyId, it.mediaReferenceId)
+        }
+    }
+
+    private suspend fun uploadMediaRefToServer(path: String, title: String, agentId: Long, realtyId: Long, imgId: Long)
+    {
+        val file = File(path)
+        val rb = RequestBody.create(MediaType.parse("media/*"), file)
+        val mpb = MultipartBody.Part.createFormData("upload", file.name, rb)
+
+        val titleRB = RequestBody.create(MultipartBody.FORM, title)
+        val agentIdRB = RequestBody.create(MultipartBody.FORM, agentId.toString())
+        val idRB = RequestBody.create(MultipartBody.FORM, imgId.toString())
+        val realtyIdRB = RequestBody.create(MultipartBody.FORM, realtyId.toString())
+        remoteDataSource.uploadMediaRef(id = idRB, imgFile = mpb, agentId = agentIdRB, title = titleRB, realtyId = realtyIdRB)
     }
 }

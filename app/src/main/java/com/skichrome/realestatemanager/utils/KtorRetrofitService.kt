@@ -3,13 +3,12 @@ package com.skichrome.realestatemanager.utils
 import com.skichrome.realestatemanager.model.retrofit.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface KtorRetrofitService
 {
@@ -59,4 +58,16 @@ interface KtorRetrofitService
 
     @POST("all-realty")
     suspend fun uploadAllRealty(@Body realty: List<RealtyResults>): Response<PostResponse>
+
+    @Multipart
+    @POST("media-references/upload")
+    suspend fun uploadMediaReference(@Part("id") id: RequestBody,
+                                     @Part("title") title: RequestBody,
+                                     @Part("agent_id") agentId: RequestBody,
+                                     @Part("realty_id") realtyId: RequestBody,
+                                     @Part img: MultipartBody.Part
+    ): Response<PostResponseMediaRef>
+
+    @POST("media-references/delete-delta")
+    suspend fun uploadMediaReferences(@Body mediaRefList: List<MediaReferenceResults>): Response<RemoteMediaReference>
 }
