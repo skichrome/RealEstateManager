@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.view
 
+import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -103,7 +104,12 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     {
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(), callback = WeakReference(this))
         binding?.realtyDetailsFragmentRecyclerView?.adapter = photoAdapter
-        viewModel.realtyDetailedPhotos.observe(this, Observer { it?.let { list -> photoAdapter.replacePhotoList(list) } })
+        viewModel.realtyDetailedPhotos.observe(this, Observer {
+            it?.let { list ->
+                photoAdapter.replacePhotoList(list)
+                binding?.realtyDetailsFragmentNoMediaAvailable?.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            }
+        })
     }
 
     private fun configureMapPosition()
