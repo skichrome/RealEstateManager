@@ -27,6 +27,8 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun getMediaReferencesByIdList(ids: List<Long>) = db.mediaReferenceDao().getMediaByIdList(ids)
 
+    suspend fun getMediaReferenceCountFromRealtyId(realtyId: Long) = db.mediaReferenceDao().getMediaReferenceNumberFromRealtyId(realtyId = realtyId)
+
     suspend fun getAllMediaReferences(): List<MediaReference> = db.mediaReferenceDao().getAllMedias()
 
     suspend fun deleteMediaReference(mediaId: Long) = db.mediaReferenceDao().deleteMediaOfRealtyById(mediaRefId = mediaId)
@@ -62,6 +64,8 @@ class LocalRepository(private val db: RealEstateDatabase)
     suspend fun getAllPoiRealty() = db.poiRealtyDao().getAllPoiRealty()
 
     suspend fun getPoiRealtyFromRealtyId(realtyId: Long) = db.poiRealtyDao().getPoIRealtyFromRealtyId(realtyId = realtyId)
+
+    suspend fun getRealtyIdListFromPoiIdList(poiIds: List<Int>) = db.poiRealtyDao().getRealtyIdListFromPoiIdList(poiList = poiIds)
 
     suspend fun deletePoiRealtyByRealtyId(realtyId: Long) = db.poiRealtyDao().deletePoiRealtyFromRealtyId(realtyId = realtyId)
 

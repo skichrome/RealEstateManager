@@ -30,6 +30,7 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
     private var maxPrice = PRICE_MAX_VALUE
     private var minSurface = SURFACE_MIN_VALUE
     private var maxSurface = SURFACE_MAX_VALUE
+    private var minPictures = -1
 
     // =======================================
     //           Superclass Methods
@@ -43,12 +44,13 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
         configureFeedbackFields()
         configurePriceSeekBars()
         configureSurfaceSeekBars()
+        configureMediaRefProgressBar()
         configureDateFields()
 
         configureRecyclerView()
         configureViewModel()
 
-        searchFragmentSearchFab.setOnClickListener { fetchQueryParameters() }
+        searchFragmentSearchBtn.setOnClickListener { fetchQueryParameters() }
     }
 
     override fun onDestroy()
@@ -131,6 +133,22 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
         searchFragmentMaxSurfaceSeekBar.progress = SURFACE_MAX_VALUE
     }
 
+    private fun configureMediaRefProgressBar()
+    {
+        searchFragmentMaxPictureSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
+        {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
+            {
+                minPictures = progress
+                searchFragmentMaxPictureValue.text = "$progress"
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) = Unit
+            override fun onStopTrackingTouch(p0: SeekBar?) = Unit
+        })
+        searchFragmentMaxPictureSeekBar.max = 10
+    }
+
     private fun configureDateFields()
     {
         searchFragmentStatusSwitch.setOnClickListener { isSold = it.isActivated }
@@ -161,8 +179,8 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
             maxSurface = if (maxSurface == SURFACE_MAX_VALUE) null else maxSurface,
             isSold = isSold?.let { if (it) 0 else 1 },
             creationDate = creationDateSearch?.timeInMillis,
-            soldDate = soldDateSearch?.timeInMillis
-
+            soldDate = soldDateSearch?.timeInMillis,
+            mediaRefMinNumber = if (minPictures == -1) null else minPictures
         )
         navigateToFragmentList()
     }

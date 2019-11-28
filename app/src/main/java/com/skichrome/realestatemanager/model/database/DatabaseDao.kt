@@ -84,6 +84,9 @@ interface MediaReferenceDao : BaseDao<MediaReference>
     @Query("SELECT * FROM MediaReference WHERE mediaReferenceId IN (:mediaRefIdList)")
     suspend fun getMediaByIdList(mediaRefIdList: List<Long>): List<MediaReference>
 
+    @Query("SELECT COUNT(mediaReferenceId) FROM MediaReference WHERE realtyId = :realtyId")
+    suspend fun getMediaReferenceNumberFromRealtyId(realtyId: Long): Long
+
     @Query("DELETE FROM MediaReference WHERE mediaReferenceId = :mediaRefId")
     suspend fun deleteMediaOfRealtyById(mediaRefId: Long)
 }
@@ -96,6 +99,9 @@ interface PoiRealtyDao : BaseDao<PoiRealty>
 
     @Query("SELECT * FROM PoiRealty WHERE realtyId = :realtyId")
     suspend fun getPoIRealtyFromRealtyId(realtyId: Long): List<PoiRealty>
+
+    @Query("SELECT realtyId FROM PoiRealty WHERE poiId IN (:poiList)")
+    suspend fun getRealtyIdListFromPoiIdList(poiList: List<Int>): List<Long>
 
     @Query("DELETE FROM PoiRealty WHERE realtyId = :realtyId")
     suspend fun deletePoiRealtyFromRealtyId(realtyId: Long): Int

@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.model
 
-import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.skichrome.realestatemanager.androidmanagers.NetManager
 import com.skichrome.realestatemanager.model.database.*
@@ -123,9 +122,11 @@ class RealtyRepository(
         maxSurface: Int?,
         isSold: Int?,
         creationDate: Long?,
-        soldDate: Long?
+        soldDate: Long?,
+        mediaRefMinNumber: Int?
     ): List<Realty>
     {
+        val realtyResults = mutableListOf<Realty>()
         val baseQueryParam = "SELECT * FROM Realty"
         val queryStrBuilder = StringBuilder(baseQueryParam)
 
@@ -137,27 +138,41 @@ class RealtyRepository(
         creationDate?.let { queryStrBuilder.append(" AND Realty.dateAdded >= $it") }
         soldDate?.let { queryStrBuilder.append(" AND Realty.dateSell >= $it") }
 
-        Log.e("RealtyRepository", "List of poi (TODO) : $poiList")
-
-//        poiList?.let { poiListNotNull ->
-//            poiListNotNull.forEach {
-        //queryStrBuilder.append(" AND PoiRealty.poiId = $it")
-//            }
-//        }
-
-        if (queryStrBuilder.toString() == baseQueryParam)
+        if (queryStrBuilder.toString() == baseQueryParam && poiList.isNullOrEmpty() && mediaRefMinNumber == null)
             return localDataSource.fetchRealtyFromQueryParam(SimpleSQLiteQuery(baseQueryParam))
 
-        val queryStr = queryStrBuilder.toString().replaceFirst("AND", "WHERE")
+        val queryResult = queryStrBuilder.toString()
+            .replaceFirst("AND", "WHERE")
+            .let {
+                localDataSource.fetchRealtyFromQueryParam(SimpleSQLiteQuery(it))
+            }
 
-        Log.e("RealtyRepo", "Query Value : $queryStr")
-
-        val query = SimpleSQLiteQuery(queryStr)
-        val queryResult = localDataSource.fetchRealtyFromQueryParam(query)
-        queryResult.forEach {
-            Log.e("RealtyRepo", it.toString())
+        poiList?.let { poiListNotNull ->
+            queryResult.filter {
+                val poiFromRealty = localDataSource.getRealtyIdListFromPoiIdList(poiListNotNull)
+                poiFromRealty.contains(it.id)
+            }.let {
+                realtyResults.addAll(it)
+            }
         }
 
-        return queryResult
+        mediaRefMinNumber?.let { mediaRefMinNumberNotNull ->
+            if (realtyResults.isEmpty())
+            {
+                queryResult.forEach {
+                    val realtyMediaRefNumber = localDataSource.getMediaReferenceCountFromRealtyId(it.id)
+                    if (realtyMediaRefNumber >= mediaRefMinNumberNotNull)
+                        realtyResults.add(it)
+                }
+            } else
+            {
+                realtyResults.forEach {
+                    val realtyMediaRefNumber = localDataSource.getMediaReferenceCountFromRealtyId(it.id)
+                    if (realtyMediaRefNumber <= mediaRefMinNumberNotNull)
+                        realtyResults.remove(it)
+                }
+            }
+        }
+        return realtyResults
     }
 }

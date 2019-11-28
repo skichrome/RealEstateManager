@@ -258,13 +258,24 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         maxSurface: Int?,
         isSold: Int?,
         creationDate: Long?,
-        soldDate: Long?
+        soldDate: Long?,
+        mediaRefMinNumber: Int?
     )
     {
         uiScope.uiJob {
             _realEstates.value = emptyList()
             _realEstates.value = ioTask {
-                repository.searchFromParameters(minPrice, maxPrice, poiList, minSurface, maxSurface, isSold, creationDate, soldDate)
+                repository.searchFromParameters(
+                    minPrice,
+                    maxPrice,
+                    poiList,
+                    minSurface,
+                    maxSurface,
+                    isSold,
+                    creationDate,
+                    soldDate,
+                    mediaRefMinNumber
+                )
             }
         }
     }

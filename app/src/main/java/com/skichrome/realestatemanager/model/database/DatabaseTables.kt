@@ -70,7 +70,12 @@ data class MediaReference(
         entity = Realty::class,
         parentColumns = ["id"],
         childColumns = ["realtyId"]
-    )]
+    ),
+        ForeignKey(
+            entity = Poi::class,
+            parentColumns = ["poiId"],
+            childColumns = ["poiId"]
+        )]
 )
 data class PoiRealty(
     val realtyId: Long,

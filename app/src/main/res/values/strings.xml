@@ -148,4 +148,5 @@
     <string name="search_fragment_date_created_hint">Created since</string>
     <string name="search_fragment_date_sold_hint">Sold since</string>
     <string name="search_fragment_status_title">Sold ?</string>
+    <string name="search_fragment_min_media_ref_title">Minimal number of pictures</string>
 </resources>
