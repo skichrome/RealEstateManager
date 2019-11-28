@@ -5,9 +5,7 @@ import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.skichrome.realestatemanager.R
-import com.skichrome.realestatemanager.utils.ARG_LIST_REALTY_ORIGIN
-import com.skichrome.realestatemanager.utils.SEARCH_MAX_VALUE
-import com.skichrome.realestatemanager.utils.SEARCH_MIN_VALUE
+import com.skichrome.realestatemanager.utils.*
 import com.skichrome.realestatemanager.view.base.BaseClassicFragment
 import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
@@ -20,8 +18,10 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>()
     // =======================================
 
     private lateinit var adapter: CheckboxAdapter
-    private var minPrice = SEARCH_MIN_VALUE
-    private var maxPrice = SEARCH_MAX_VALUE
+    private var minPrice = PRICE_MIN_VALUE
+    private var maxPrice = PRICE_MAX_VALUE
+    private var minSurface = SURFACE_MIN_VALUE
+    private var maxSurface = SURFACE_MAX_VALUE
 
     // =======================================
     //           Superclass Methods
@@ -33,12 +33,13 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>()
     override fun configureFragment()
     {
         configureFeedbackFields()
-        configureSeekBars()
+        configurePriceSeekBars()
+        configureSurfaceSeekBars()
 
         configureRecyclerView()
         configureViewModel()
 
-        searchFragmentSearchBtn.setOnClickListener { fetchQueryParameters() }
+        searchFragmentSearchFab.setOnClickListener { fetchQueryParameters() }
     }
 
     override fun onDestroy()
@@ -52,19 +53,22 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>()
     // =======================================
 
     // ------------ UI ------------
+
     private fun configureFeedbackFields()
     {
-        searchFragmentMinPriceValue.text = getString(R.string.search_fragment_min_price_value, SEARCH_MIN_VALUE)
-        searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_max_price_value, SEARCH_MAX_VALUE)
+        searchFragmentMinPriceValue.text = getString(R.string.search_fragment_price_value, PRICE_MIN_VALUE)
+        searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_price_value, PRICE_MAX_VALUE)
+        searchFragmentMinSurfaceValue.text = getString(R.string.search_fragment_surface_value, SURFACE_MIN_VALUE)
+        searchFragmentMaxSurfaceValue.text = getString(R.string.search_fragment_surface_value, SURFACE_MAX_VALUE)
     }
 
-    private fun configureSeekBars()
+    private fun configurePriceSeekBars()
     {
         searchFragmentMinPriceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
         {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
             {
-                searchFragmentMinPriceValue.text = getString(R.string.search_fragment_min_price_value, progress)
+                searchFragmentMinPriceValue.text = getString(R.string.search_fragment_price_value, progress)
                 minPrice = progress
             }
 
@@ -77,13 +81,45 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>()
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
             {
                 searchFragmentMinPriceSeekBar.max = progress
-                searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_max_price_value, progress)
+                searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_price_value, progress)
                 maxPrice = progress
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
         })
+        searchFragmentMaxPriceSeekBar.max = PRICE_MAX_VALUE
+        searchFragmentMaxPriceSeekBar.progress = PRICE_MAX_VALUE
+    }
+
+    private fun configureSurfaceSeekBars()
+    {
+        searchFragmentMinSurfaceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
+        {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
+            {
+                searchFragmentMinSurfaceValue.text = getString(R.string.search_fragment_surface_value, progress)
+                minSurface = progress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
+
+        searchFragmentMaxSurfaceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
+        {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
+            {
+                searchFragmentMinSurfaceSeekBar.max = progress
+                searchFragmentMaxSurfaceValue.text = getString(R.string.search_fragment_surface_value, progress)
+                maxSurface = progress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
+        searchFragmentMaxSurfaceSeekBar.max = SURFACE_MAX_VALUE
+        searchFragmentMaxSurfaceSeekBar.progress = SURFACE_MAX_VALUE
     }
 
     private fun configureRecyclerView()
@@ -102,9 +138,12 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>()
     private fun fetchQueryParameters()
     {
         viewModel.getRealtyMatchingParams(
-            if (minPrice == SEARCH_MIN_VALUE) null else minPrice,
-            if (maxPrice == SEARCH_MAX_VALUE) null else maxPrice,
-            if (adapter.getSelectedId().isEmpty()) null else adapter.getSelectedId()
+            if (minPrice == PRICE_MIN_VALUE) null else minPrice,
+            if (maxPrice == PRICE_MAX_VALUE) null else maxPrice,
+            if (adapter.getSelectedId().isEmpty()) null else adapter.getSelectedId(),
+            if (minSurface == SURFACE_MIN_VALUE) null else minSurface,
+            if (maxSurface == SURFACE_MAX_VALUE) null else maxSurface
+
         )
         navigateToFragmentList()
     }

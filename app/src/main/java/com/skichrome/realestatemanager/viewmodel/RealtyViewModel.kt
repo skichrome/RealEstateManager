@@ -250,12 +250,18 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
     // ---------- Search Fragment ---------- //
 
-    fun getRealtyMatchingParams(minPrice: Int?, maxPrice: Int?, poiList: List<Int>?)
+    fun getRealtyMatchingParams(
+        minPrice: Int?,
+        maxPrice: Int?,
+        poiList: List<Int>?,
+        minSurface: Int?,
+        maxSurface: Int?
+    )
     {
         uiScope.uiJob {
             _realEstates.value = emptyList()
             _realEstates.value = ioTask {
-                repository.searchFromParameters(minPrice, maxPrice, poiList)
+                repository.searchFromParameters(minPrice, maxPrice, poiList, minSurface, maxSurface)
             }
         }
     }

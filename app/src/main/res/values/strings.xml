@@ -138,7 +138,9 @@
     <string name="search_fragment_validate_btn">Search</string>
     <string name="search_fragment_min_price">Minimum price</string>
     <string name="search_fragment_max_price">Maximum price</string>
-    <string name="search_fragment_min_price_value">%1$d $</string>
-    <string name="search_fragment_max_price_value">%1$d $</string>
+    <string name="search_fragment_price_value">%1$d $</string>
     <string name="search_fragment_poi">Points of interest</string>
+    <string name="search_fragment_min_surface_title">Minimal Surface</string>
+    <string name="search_fragment_max_surface_title">Maximal Surface</string>
+    <string name="search_fragment_surface_value">%1$d m2</string>
 </resources>

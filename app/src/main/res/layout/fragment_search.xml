@@ -9,8 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/searchFragmentPriceCardView"
@@ -84,9 +83,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
-                    android:max="1000000"
                     android:padding="8dp"
-                    android:progress="1000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -147,16 +144,111 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/searchFragmentSearchBtn"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchFragmentSurfaceCardView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="@string/search_fragment_validate_btn"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchFragmentPoiCardView" />
+            app:layout_constraintTop_toBottomOf="@+id/searchFragmentPoiCardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/searchFragmentMinSurfaceTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/search_fragment_min_surface_title"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/searchFragmentMinSurfaceValue"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/searchFragmentMinSurfaceTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="12 m2" />
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/searchFragmentMinSurfaceSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:max="1000000"
+                    android:padding="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchFragmentMinSurfaceTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/searchFragmentMaxSurfaceTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/search_fragment_max_surface_title"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/searchFragmentMinSurfaceSeekBar" />
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/searchFragmentMaxSurfaceSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchFragmentMaxSurfaceTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/searchFragmentMaxSurfaceValue"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/searchFragmentMaxSurfaceTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="123456 m2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/searchFragmentSearchFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_search_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchFragmentSurfaceCardView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

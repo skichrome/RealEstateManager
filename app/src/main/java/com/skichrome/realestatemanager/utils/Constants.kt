@@ -18,5 +18,8 @@ const val NOTIFICATION_ID = 123456
 const val ARG_DETAILS_REALTY_NAME = "realtyId"
 const val ARG_LIST_REALTY_ORIGIN = "origin"
 
-const val SEARCH_MIN_VALUE = 0
-const val SEARCH_MAX_VALUE = 1_000_000
+const val PRICE_MIN_VALUE = 0
+const val PRICE_MAX_VALUE = 10_000_000
+
+const val SURFACE_MIN_VALUE = 0
+const val SURFACE_MAX_VALUE = 1_000

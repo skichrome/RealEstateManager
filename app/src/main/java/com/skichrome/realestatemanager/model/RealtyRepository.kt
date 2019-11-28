@@ -115,13 +115,21 @@ class RealtyRepository(
 
     // ---------- Search ---------- //
 
-    suspend fun searchFromParameters(minPrice: Int?, maxPrice: Int?, poiList: List<Int>?): List<Realty>
+    suspend fun searchFromParameters(
+        minPrice: Int?,
+        maxPrice: Int?,
+        poiList: List<Int>?,
+        minSurface: Int?,
+        maxSurface: Int?
+    ): List<Realty>
     {
         val baseQueryParam = "SELECT * FROM Realty"
         val queryStrBuilder = StringBuilder(baseQueryParam)
 
         minPrice?.let { queryStrBuilder.append(" AND Realty.price >= $it") }
         maxPrice?.let { queryStrBuilder.append(" AND Realty.price <= $it") }
+        minSurface?.let { queryStrBuilder.append(" AND Realty.surface >= $it") }
+        maxSurface?.let { queryStrBuilder.append(" AND Realty.surface <= $it") }
 
         Log.e("RealtyRepository", "List of poi (TODO) : $poiList")
 
