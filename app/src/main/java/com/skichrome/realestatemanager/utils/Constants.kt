@@ -23,3 +23,9 @@ const val PRICE_MAX_VALUE = 10_000_000
 
 const val SURFACE_MIN_VALUE = 0
 const val SURFACE_MAX_VALUE = 1_000
+
+const val DATE_DIALOG_TAG = "Dialog Fragment"
+const val CREATION_DATE_ADD_TAG = 0
+const val SOLD_DATE_ADD_TAG = 1
+const val CREATION_DATE_SEARCH_TAG = 2
+const val SOLD_DATE_SEARCH_TAG = 3

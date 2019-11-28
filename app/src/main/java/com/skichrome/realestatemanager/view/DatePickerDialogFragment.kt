@@ -5,6 +5,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import com.skichrome.realestatemanager.utils.CREATION_DATE_SEARCH_TAG
+import com.skichrome.realestatemanager.utils.SOLD_DATE_ADD_TAG
+import com.skichrome.realestatemanager.utils.SOLD_DATE_SEARCH_TAG
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -24,8 +27,11 @@ class DatePickerDialogFragment(
 
         val dpd = DatePickerDialog(context!!, this, year, month, day)
 
-        if (tag == 1)
-            dpd.datePicker.minDate = cal.time.time
+        when (tag)
+        {
+            SOLD_DATE_ADD_TAG -> dpd.datePicker.minDate = cal.time.time
+            CREATION_DATE_SEARCH_TAG, SOLD_DATE_SEARCH_TAG -> dpd.datePicker.maxDate = cal.time.time
+        }
 
         return dpd
     }

@@ -162,7 +162,6 @@
                 android:orientation="horizontal"
                 android:paddingBottom="16dp">
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/searchFragmentMinSurfaceTitle"
                     style="@style/TextAppearance.AppCompat.Title"
@@ -238,6 +237,103 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchFragmentDateCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchFragmentSurfaceCardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/searchFragmentStatusTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/search_fragment_status_title"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Switch
+                    android:id="@+id/searchFragmentStatusSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="8dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/searchFragmentStatusTitle"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/searchFragmentDateCreatedTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/search_fragment_date_created_title"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchFragmentStatusTitle" />
+
+                <EditText
+                    android:id="@+id/searchFragmentDateCreatedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/search_fragment_date_created_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchFragmentDateCreatedTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/searchFragmentDateCreatedTitle"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+
+                <TextView
+                    android:id="@+id/searchFragmentDateSoldTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/search_fragment_date_sold_title"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchFragmentDateCreatedTitle" />
+
+                <EditText
+                    android:id="@+id/searchFragmentDateSoldEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/search_fragment_date_sold_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchFragmentDateSoldTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/searchFragmentDateCreatedEditText"
+                    app:layout_constraintTop_toTopOf="@+id/searchFragmentDateSoldTitle"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/searchFragmentSearchFab"
             android:layout_width="wrap_content"
@@ -248,7 +344,7 @@
             android:src="@drawable/ic_search_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchFragmentSurfaceCardView" />
+            app:layout_constraintTop_toBottomOf="@id/searchFragmentDateCardView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

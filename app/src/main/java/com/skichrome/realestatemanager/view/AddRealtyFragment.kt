@@ -18,9 +18,7 @@ import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentAddRealtyBinding
 import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.database.Realty
-import com.skichrome.realestatemanager.utils.NOTIFICATION_ID
-import com.skichrome.realestatemanager.utils.REQUEST_IMAGE_CAPTURE
-import com.skichrome.realestatemanager.utils.StorageUtils
+import com.skichrome.realestatemanager.utils.*
 import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
@@ -188,8 +186,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
         if (!isEditMode)
             addRealtyFragDateCreatedEditText.setText(displayDate)
-        addRealtyFragDateAddedBtn.setOnClickListener { showDatePicker(0) }
-        addRealtyFragDateSoldBtn.setOnClickListener { showDatePicker(1) }
+        addRealtyFragDateAddedBtn.setOnClickListener { showDatePicker(CREATION_DATE_ADD_TAG) }
+        addRealtyFragDateSoldBtn.setOnClickListener { showDatePicker(SOLD_DATE_ADD_TAG) }
         addRealtyFragStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long)
@@ -220,7 +218,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private fun showDatePicker(tag: Int)
     {
         val dialogFragment = DatePickerDialogFragment(WeakReference(this), tag, realtyCreationDate)
-        dialogFragment.show(fragmentManager!!, "DateDialog")
+        dialogFragment.show(fragmentManager!!, DATE_DIALOG_TAG)
     }
 
     private fun launchCamera()
@@ -232,7 +230,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
                     if (StorageUtils.isExternalStorageWritable())
                     {
                         context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            ?.let { StorageUtils.createOrGetImageFile(it, "test") }
+                            ?.let { StorageUtils.createOrGetImageFile(it, "REM") }
                     } else null
 
                 } catch (e: IOException)
@@ -337,12 +335,12 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         val time = date.format(calendar.time)
         when (tag)
         {
-            0 ->
+            CREATION_DATE_ADD_TAG ->
             {
                 addRealtyFragDateCreatedEditText.setText(time)
                 realtyCreationDate = calendar
             }
-            1 ->
+            SOLD_DATE_ADD_TAG ->
             {
                 addRealtyFragSoldDateEditText.setText(time)
                 addRealtyFragSoldDateTextViewLayout.error = null

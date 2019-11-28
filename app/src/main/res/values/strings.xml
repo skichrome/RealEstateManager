@@ -143,4 +143,9 @@
     <string name="search_fragment_min_surface_title">Minimal Surface</string>
     <string name="search_fragment_max_surface_title">Maximal Surface</string>
     <string name="search_fragment_surface_value">%1$d m2</string>
+    <string name="search_fragment_date_created_title">Created since</string>
+    <string name="search_fragment_date_sold_title">Sold since</string>
+    <string name="search_fragment_date_created_hint">Created since</string>
+    <string name="search_fragment_date_sold_hint">Sold since</string>
+    <string name="search_fragment_status_title">Sold ?</string>
 </resources>

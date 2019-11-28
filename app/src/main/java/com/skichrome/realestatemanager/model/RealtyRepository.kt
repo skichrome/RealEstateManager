@@ -120,7 +120,10 @@ class RealtyRepository(
         maxPrice: Int?,
         poiList: List<Int>?,
         minSurface: Int?,
-        maxSurface: Int?
+        maxSurface: Int?,
+        isSold: Int?,
+        creationDate: Long?,
+        soldDate: Long?
     ): List<Realty>
     {
         val baseQueryParam = "SELECT * FROM Realty"
@@ -130,6 +133,9 @@ class RealtyRepository(
         maxPrice?.let { queryStrBuilder.append(" AND Realty.price <= $it") }
         minSurface?.let { queryStrBuilder.append(" AND Realty.surface >= $it") }
         maxSurface?.let { queryStrBuilder.append(" AND Realty.surface <= $it") }
+        isSold?.let { queryStrBuilder.append(" AND Realty.status == $it") }
+        creationDate?.let { queryStrBuilder.append(" AND Realty.dateAdded >= $it") }
+        soldDate?.let { queryStrBuilder.append(" AND Realty.dateSell >= $it") }
 
         Log.e("RealtyRepository", "List of poi (TODO) : $poiList")
 
