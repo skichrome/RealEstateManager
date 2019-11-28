@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.utils.*
 import com.skichrome.realestatemanager.view.base.BaseClassicFragment
@@ -27,10 +28,18 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
     private var soldDateSearch: Calendar? = null
 
     private var minPrice = PRICE_MIN_VALUE
-    private var maxPrice = PRICE_MAX_VALUE
+    private var maxPrice = -1
     private var minSurface = SURFACE_MIN_VALUE
-    private var maxSurface = SURFACE_MAX_VALUE
-    private var minPictures = -1
+    private var maxSurface = -1
+    private var minPictures = 0
+    private var maxPictures = -1
+
+    companion object
+    {
+        private const val DEFAULT_MAX_PRICE = "10000000"
+        private const val DEFAULT_MAX_SURFACE = "1000"
+        private const val DEFAULT_MAX_PICTURES = "10"
+    }
 
     // =======================================
     //           Superclass Methods
@@ -41,7 +50,9 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
 
     override fun configureFragment()
     {
+        getDefaultValuesFromSharedPreferences()
         configureFeedbackFields()
+
         configurePriceSeekBars()
         configureSurfaceSeekBars()
         configureMediaRefProgressBar()
@@ -65,16 +76,32 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
 
     // ------------ UI ------------
 
+    private fun getDefaultValuesFromSharedPreferences()
+    {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        maxPrice = sharedPrefs.getString(getString(R.string.settings_fragment_search_param_price_key), DEFAULT_MAX_PRICE)?.toInt()
+            ?: DEFAULT_MAX_PRICE.toInt()
+        maxSurface = sharedPrefs.getString(getString(R.string.settings_fragment_search_param_surface_key), DEFAULT_MAX_SURFACE)?.toInt()
+            ?: DEFAULT_MAX_SURFACE.toInt()
+        maxPictures = sharedPrefs.getString(getString(R.string.settings_fragment_search_param_pictures_key), DEFAULT_MAX_PICTURES)?.toInt()
+            ?: DEFAULT_MAX_PICTURES.toInt()
+    }
+
     private fun configureFeedbackFields()
     {
         searchFragmentMinPriceValue.text = getString(R.string.search_fragment_price_value, PRICE_MIN_VALUE)
-        searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_price_value, PRICE_MAX_VALUE)
+        searchFragmentMaxPriceValue.text = getString(R.string.search_fragment_price_value, maxPrice)
         searchFragmentMinSurfaceValue.text = getString(R.string.search_fragment_surface_value, SURFACE_MIN_VALUE)
-        searchFragmentMaxSurfaceValue.text = getString(R.string.search_fragment_surface_value, SURFACE_MAX_VALUE)
+        searchFragmentMaxSurfaceValue.text = getString(R.string.search_fragment_surface_value, maxSurface)
+        searchFragmentMaxPictureValue.text = "$minPictures"
     }
 
     private fun configurePriceSeekBars()
     {
+        searchFragmentMinPriceSeekBar.max = maxPrice
+        searchFragmentMaxPriceSeekBar.max = maxPrice
+        searchFragmentMaxPriceSeekBar.progress = maxPrice
+
         searchFragmentMinPriceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
         {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
@@ -99,12 +126,14 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
         })
-        searchFragmentMaxPriceSeekBar.max = PRICE_MAX_VALUE
-        searchFragmentMaxPriceSeekBar.progress = PRICE_MAX_VALUE
     }
 
     private fun configureSurfaceSeekBars()
     {
+        searchFragmentMinSurfaceSeekBar.max = maxSurface
+        searchFragmentMaxSurfaceSeekBar.max = maxSurface
+        searchFragmentMaxSurfaceSeekBar.progress = maxSurface
+
         searchFragmentMinSurfaceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
         {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
@@ -129,12 +158,12 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
         })
-        searchFragmentMaxSurfaceSeekBar.max = SURFACE_MAX_VALUE
-        searchFragmentMaxSurfaceSeekBar.progress = SURFACE_MAX_VALUE
     }
 
     private fun configureMediaRefProgressBar()
     {
+        searchFragmentMaxPictureSeekBar.max = maxPictures
+
         searchFragmentMaxPictureSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener
         {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean)
@@ -146,7 +175,6 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
             override fun onStopTrackingTouch(p0: SeekBar?) = Unit
         })
-        searchFragmentMaxPictureSeekBar.max = 10
     }
 
     private fun configureDateFields()
@@ -173,14 +201,14 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
     {
         viewModel.getRealtyMatchingParams(
             minPrice = if (minPrice == PRICE_MIN_VALUE) null else minPrice,
-            maxPrice = if (maxPrice == PRICE_MAX_VALUE) null else maxPrice,
+            maxPrice = if (maxPrice == DEFAULT_MAX_PRICE.toInt()) null else maxPrice,
             poiList = if (adapter.getSelectedId().isEmpty()) null else adapter.getSelectedId(),
             minSurface = if (minSurface == SURFACE_MIN_VALUE) null else minSurface,
-            maxSurface = if (maxSurface == SURFACE_MAX_VALUE) null else maxSurface,
+            maxSurface = if (maxSurface == DEFAULT_MAX_SURFACE.toInt()) null else maxSurface,
             isSold = isSold?.let { if (it) 0 else 1 },
             creationDate = creationDateSearch?.timeInMillis,
             soldDate = soldDateSearch?.timeInMillis,
-            mediaRefMinNumber = if (minPictures == -1) null else minPictures
+            mediaRefMinNumber = if (minPictures == 0) null else minPictures
         )
         navigateToFragmentList()
     }

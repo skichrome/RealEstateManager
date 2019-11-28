@@ -2,9 +2,6 @@
     <string name="app_name">Real Estate Manager</string>
     <string name="content_provider_authority">com.skichrome.realestatemanager.fileprovider</string>
 
-    <!-- DEBUG -->
-    <string name="realty_fragment_name">Realty</string>
-
     <!-- Toolbar and Navigation drawer Menu -->
     <string name="menu_item_add_name">Add</string>
     <string name="menu_item_edit_name">Edit</string>
@@ -26,17 +23,12 @@
     <string name="add_realty_frag_hint_postcode">Postcode</string>
     <string name="add_realty_frag_hint_price">Price</string>
     <string name="add_realty_frag_hint_surface">Surface</string>
-    <string name="add_realty_frag_hint_type">Type</string>
     <string name="add_realty_frag_hint_rooms">Rooms</string>
     <string name="add_realty_frag_hint_creation_date">Creation date</string>
     <string name="add_realty_frag_hint_sold_date">Sold date</string>
-    <string name="add_realty_frag_hint_status">Status</string>
-    <string name="add_realty_frag_hint_agent">Agent</string>
     <string name="add_realty_frag_recycler_view_title">Realty pictures</string>
     <string name="add_realty_frag_btn_submit">Submit</string>
     <string name="add_realty_fragment_edit_text_input_tag">required_input</string>
-    <string name="add_realty_fragment_edit_text_created_date_input_tag">created_date_input</string>
-    <string name="add_realty_fragment_edit_text_sold_date_input_tag">sold_date_input</string>
     <string name="add_realty_frag_error_input_field">Required field</string>
     <string name="add_realty_fragment_btn_set_date">set</string>
 
@@ -68,14 +60,6 @@
         <item name="type_duplex">Duplex</item>
     </string-array>
 
-    <string-array name="near_realty_poi">
-        <item name="poi_school">School</item>
-        <item name="poi_gas">Gas Station</item>
-        <item name="poi_trade">Trade</item>
-        <item name="poi_park">Park</item>
-        <item name="poi_cash">Cash Machine</item>
-    </string-array>
-
     <!-- Delete Picture Alert Dialog -->
     <string name="delete_picture_alert_title">Warning</string>
     <string name="delete_picture_alert_message">Do you really want to delete this picture ?</string>
@@ -103,16 +87,21 @@
     <string name="realty_details_fragment_no_media_available">No medias have been saved for this realty</string>
 
     <!-- Settings Fragment -->
-    <string name="settings_fragment_category_credentials">Credentials</string>
     <string name="settings_fragment_category_notification">Notifications</string>
+    <string name="settings_fragment_category_search">Search Screen</string>
 
-    <string name="settings_fragment_username_title">Username</string>
-    <string name="settings_fragment_username_summary">Select your username to identify you on this system</string>
     <string name="settings_fragment_username_key">agentUsername</string>
 
     <string name="settings_fragment_notification_title">New realty inserted notification</string>
     <string name="settings_fragment_notification_summary">Modify notification settings in system settings</string>
     <string name="settings_fragment_notification_key">notification</string>
+
+    <string name="settings_fragment_search_param_price_title">Select the maximum price filter in the search screen</string>
+    <string name="settings_fragment_search_param_surface_title">Select the maximum surface filter in the search screen</string>
+    <string name="settings_fragment_search_param_pictures_title">Select the maximum pictures filter in the search screen</string>
+    <string name="settings_fragment_search_param_price_key" translatable="false">paramSearchPriceKey</string>
+    <string name="settings_fragment_search_param_surface_key" translatable="false">paramSearchSurfaceKey</string>
+    <string name="settings_fragment_search_param_pictures_key" translatable="false">paramSearchPicturesKey</string>
 
     <!-- System Notification -->
     <string name="notification_description">Be notified when the app has successfully saved your real estate.</string>
@@ -122,12 +111,8 @@
 
     <!-- Agent alertDialog related strings -->
     <string name="current_user_actions_change">Logout and quit</string>
-    <string name="current_user_actions_alert_dialog_title">Select your profile</string>
-    <string name="current_user_actions_alert_dialog_positive_btn">Apply</string>
-    <string name="current_user_actions_alert_dialog_new_agent">Enter new agent name</string>
 
     <!-- Login screen -->
-    <string name="title_activity_login">Sign in</string>
     <string name="activity_sign_in_hint">Select an existing profile or enter new profile name</string>
     <string name="activity_sign_in_prompt_username">New profile name…</string>
     <string name="activity_sign_in_btn_sign_in">Register</string>

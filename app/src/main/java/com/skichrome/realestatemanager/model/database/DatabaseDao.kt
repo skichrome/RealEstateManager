@@ -20,9 +20,6 @@ interface BaseDao<T>
 
     @Update
     suspend fun update(obj: T): Int
-
-    @Update
-    suspend fun update(vararg obj: T): Int
 }
 
 @Dao
@@ -33,9 +30,6 @@ interface RealtyDao : BaseDao<Realty>
 
     @Query("SELECT * FROM Realty WHERE id = :realtyId")
     suspend fun getRealtyById(realtyId: Long): Realty
-
-    @Query("DELETE FROM Realty WHERE id = :realtyId")
-    suspend fun deleteRealtyById(realtyId: Long)
 
     @Query("SELECT * FROM Realty WHERE latitude IS NULL OR longitude IS NULL")
     suspend fun getRealtyListLatLngNull(): List<Realty>
@@ -48,29 +42,12 @@ interface RealtyDao : BaseDao<Realty>
 @Dao
 interface PoiDao : BaseDao<Poi>
 {
-
     @Query("SELECT * FROM Poi")
     suspend fun getAllPoi(): List<Poi>
-
-    @Query("SELECT * FROM Poi WHERE poiId = :realtyId")
-    suspend fun getPoiOfRealtyById(realtyId: Int): Poi
-
-    @Query("DELETE FROM Poi WHERE poiId = :poiId")
-    suspend fun deletePoiOfRealtyById(poiId: Int)
 }
 
 @Dao
 interface RealtyTypeDao : BaseDao<RealtyType>
-{
-    @Query("SELECT * FROM RealtyType")
-    suspend fun getAllRealtyType(): List<RealtyType>
-
-    @Query("SELECT * FROM RealtyType WHERE realtyTypeId = :realtyTypeId")
-    suspend fun getTypeOfRealtyById(realtyTypeId: Int): RealtyType
-
-    @Query("DELETE FROM RealtyType WHERE realtyTypeId = :realtyTypeId")
-    suspend fun deleteTypeOfRealtyById(realtyTypeId: Int)
-}
 
 @Dao
 interface MediaReferenceDao : BaseDao<MediaReference>
@@ -110,9 +87,6 @@ interface PoiRealtyDao : BaseDao<PoiRealty>
 @Dao
 interface AgentDao : BaseDao<Agent>
 {
-    @Query("SELECT name FROM Agent LIMIT 1")
-    suspend fun getAgentName(): String
-
     @Query("SELECT * FROM Agent")
     suspend fun getAllAgents(): List<Agent>
 }

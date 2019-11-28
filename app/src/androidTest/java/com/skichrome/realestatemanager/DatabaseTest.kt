@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager
 
-import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -145,20 +144,6 @@ class DatabaseTest
         assertEquals(listOf(storedRealty, REALTY2), updatedRealtyList)
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun insertAndDeleteRealty() = runBlocking {
-        agentDao.insertIgnore(AGENT)
-        realtyTypeDao.insertIgnore(REALTY_TYPE)
-        realtyDao.insertIgnore(REALTY)
-
-        val storedRealty = realtyDao.getAllRealty().first()
-        realtyDao.deleteRealtyById(storedRealty.id)
-
-        val expectedEmptyList = realtyDao.getAllRealty()
-        assertEquals(true, expectedEmptyList.isEmpty())
-    }
-
     // =================================
     //  Poi DAO Test
     // =================================
@@ -186,57 +171,9 @@ class DatabaseTest
         assertEquals(listOf(storedPoi), updatedPoi)
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun insertAndDeletePoi() = runBlocking {
-        poiDao.insertIgnore(POI)
-
-        val storedPoi = poiDao.getAllPoi().first()
-        poiDao.deletePoiOfRealtyById(storedPoi.poiId)
-
-        val expectedEmptyList = poiDao.getAllPoi()
-        assertEquals(true, expectedEmptyList.isEmpty())
-    }
-
     // =================================
     //  RealtyType DAO Test
     // =================================
-
-    @Test
-    @Throws(Exception::class)
-    fun insertAndGetRealtyType() = runBlocking {
-        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
-
-        val storedType = realtyTypeDao.getAllRealtyType()
-        assertEquals(listOf(REALTY_TYPE, REALTY_TYPE2), storedType)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun updateAndGetRealtyType() = runBlocking {
-        realtyTypeDao.insertIgnore(REALTY_TYPE, REALTY_TYPE2)
-
-        val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
-        storedRealtyType.name = "House"
-        realtyTypeDao.update(storedRealtyType)
-
-        val updatedType = realtyTypeDao.getAllRealtyType()
-        assertEquals(listOf(storedRealtyType, REALTY_TYPE2), updatedType)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun insertAndDeleteRealtyType() = runBlocking {
-        realtyTypeDao.insertIgnore(REALTY_TYPE)
-
-        val storedRealtyType = realtyTypeDao.getAllRealtyType().first()
-        realtyTypeDao.deleteTypeOfRealtyById(storedRealtyType.realtyTypeId)
-
-        val expectedEmptyList = realtyTypeDao.getAllRealtyType()
-
-        Log.wtf("TESTS", "Realty : $expectedEmptyList")
-        assertEquals(true, expectedEmptyList.isEmpty())
-    }
 
     // =================================
     //  MediaReference DAO Test
@@ -288,24 +225,4 @@ class DatabaseTest
     // =================================
     //  Agent DAO Test
     // =================================
-
-    @Test
-    @Throws(Exception::class)
-    fun insertAndGetAgent() = runBlocking {
-        agentDao.insertIgnore(AGENT)
-        val storedAgentName = agentDao.getAgentName()
-        assertEquals(AGENT.name, storedAgentName)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun updateAgent() = runBlocking {
-        agentDao.insertIgnore(AGENT)
-
-        val newAgent = Agent(AGENT.agentId, "New Name", System.currentTimeMillis())
-        agentDao.update(newAgent)
-
-        val storedAgent = agentDao.getAgentName()
-        assertEquals(newAgent.name, storedAgent)
-    }
 }

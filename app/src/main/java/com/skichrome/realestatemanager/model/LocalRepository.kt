@@ -39,17 +39,11 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun insertAgentList(agent: Array<Agent>) = db.agentDao().insertIgnore(*agent)
 
-    suspend fun updateAgent(agent: Agent) = db.agentDao().update(agent)
-
     suspend fun getAllAgents() = db.agentDao().getAllAgents()
 
     // ---------- RealtyType ---------- //
 
-    suspend fun insertRealtyType(realtyType: RealtyType) = db.realtyTypeDao().insertReplace(realtyType)
-
     suspend fun insertRealtyTypeList(realtyType: Array<RealtyType>) = db.realtyTypeDao().insertReplace(*realtyType)
-
-    suspend fun getAllRealtyTypes() = db.realtyTypeDao().getAllRealtyType()
 
     // ---------- Poi ---------- //
 

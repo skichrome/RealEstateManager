@@ -19,10 +19,7 @@ const val ARG_DETAILS_REALTY_NAME = "realtyId"
 const val ARG_LIST_REALTY_ORIGIN = "origin"
 
 const val PRICE_MIN_VALUE = 0
-const val PRICE_MAX_VALUE = 10_000_000
-
 const val SURFACE_MIN_VALUE = 0
-const val SURFACE_MAX_VALUE = 1_000
 
 const val DATE_DIALOG_TAG = "Dialog Fragment"
 const val CREATION_DATE_ADD_TAG = 0

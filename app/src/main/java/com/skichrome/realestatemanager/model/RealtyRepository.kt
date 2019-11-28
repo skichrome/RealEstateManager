@@ -49,27 +49,6 @@ class RealtyRepository(
 
     suspend fun getAllAgents(): List<Agent> = localDataSource.getAllAgents()
 
-    // ---------- RealtyType ---------- //
-
-    suspend fun getAllRealtyTypes(): List<RealtyType>
-    {
-        if (isConnected())
-        {
-            val remoteResult = remoteDataSource.getAllRealtyTypes()
-            if (remoteResult.isSuccessful)
-            {
-                val resultList: MutableList<RealtyType> = mutableListOf()
-                remoteResult.body()?.results?.forEach {
-                    val realtyType = RealtyType(realtyTypeId = it.id, name = it.name)
-                    localDataSource.insertRealtyType(realtyType)
-                    resultList.add(realtyType)
-                }
-                return resultList
-            }
-        }
-        return localDataSource.getAllRealtyTypes()
-    }
-
     // ---------- Poi ---------- //
 
     suspend fun getAllPoi(): List<Poi>
@@ -146,6 +125,9 @@ class RealtyRepository(
             .let {
                 localDataSource.fetchRealtyFromQueryParam(SimpleSQLiteQuery(it))
             }
+
+        if (poiList.isNullOrEmpty() && mediaRefMinNumber == null)
+            return queryResult
 
         poiList?.let { poiListNotNull ->
             queryResult.filter {

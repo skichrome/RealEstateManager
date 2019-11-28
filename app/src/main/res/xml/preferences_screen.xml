@@ -2,10 +2,35 @@
 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <PreferenceCategory android:title="@string/settings_fragment_category_notification">
         <Preference
+            android:icon="@drawable/ic_notifications_active_24dp"
             android:key="@string/settings_fragment_notification_key"
             android:summary="@string/settings_fragment_notification_summary"
             android:title="@string/settings_fragment_notification_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_fragment_category_search">
+        <EditTextPreference
+            android:defaultValue="10000000"
+            android:dialogLayout="@layout/edit_text_input_preference"
+            android:icon="@drawable/ic_attach_money_24dp"
+            android:key="@string/settings_fragment_search_param_price_key"
+            android:title="@string/settings_fragment_search_param_price_title" />
+        <EditTextPreference
+            android:defaultValue="1000"
+            android:dialogLayout="@layout/edit_text_input_preference"
+            android:icon="@drawable/ic_filter_center_focus_24dp"
+            android:inputType="number"
+            android:key="@string/settings_fragment_search_param_surface_key"
+            android:title="@string/settings_fragment_search_param_surface_title" />
+        <EditTextPreference
+            android:defaultValue="10"
+            android:dialogLayout="@layout/edit_text_input_preference"
+            android:icon="@drawable/ic_image_24dp"
+            android:inputType="number"
+            android:key="@string/settings_fragment_search_param_pictures_key"
+            android:title="@string/settings_fragment_search_param_pictures_title" />
     </PreferenceCategory>
 </PreferenceScreen>
