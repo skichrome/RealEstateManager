@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.view
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.utils.SIGN_IN_RC
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.OnlineSyncViewModel
+import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity()
 {
@@ -26,6 +28,8 @@ class SplashActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
+        setContentView(R.layout.activity_splash)
         configureSyncViewModel()
     }
 
@@ -63,6 +67,15 @@ class SplashActivity : AppCompatActivity()
             it?.let { isSyncEnded ->
                 if (isSyncEnded)
                     launchMainActivity()
+            }
+        })
+
+        viewModel.synchronisationProgress.observe(this, Observer {
+            it?.let { progress ->
+                val progressAnimator = ObjectAnimator.ofInt(activitySplashProgressBar, "progress", progress)
+                progressAnimator.duration = 50
+                progressAnimator.start()
+
             }
         })
     }

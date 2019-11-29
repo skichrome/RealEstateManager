@@ -16,18 +16,12 @@ object StorageUtils
     }
 
     // ==================================
-    // External Storage
+    // External Storage access
     // ==================================
 
     fun isExternalStorageWritable(): Boolean
     {
         val state = Environment.getExternalStorageState()
         return Environment.MEDIA_MOUNTED == state
-    }
-
-    fun isExternalStorageReadable(): Boolean
-    {
-        val state = Environment.getExternalStorageState()
-        return Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state
     }
 }

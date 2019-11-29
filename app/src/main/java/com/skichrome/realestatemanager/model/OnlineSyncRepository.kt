@@ -1,7 +1,7 @@
 package com.skichrome.realestatemanager.model
 
-import android.util.Log
 import com.skichrome.realestatemanager.androidmanagers.NetManager
+import com.skichrome.realestatemanager.model.database.MediaReference
 import com.skichrome.realestatemanager.model.retrofit.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -45,14 +45,9 @@ class OnlineSyncRepository(
 
     suspend fun synchronizeRealtyTypes()
     {
-        Log.e("Sync", "${isConnected()}")
-
         if (isConnected())
         {
             val poiRemote = remoteDataSource.getAllRealtyTypes()
-
-            Log.e("Sync", "$poiRemote")
-
             throwExceptionIfStatusIsFalse(poiRemote.isSuccessful, "Realty Types (download)")
 
             poiRemote.body()?.results?.let {
@@ -213,5 +208,26 @@ class OnlineSyncRepository(
         val idRB = RequestBody.create(MultipartBody.FORM, imgId.toString())
         val realtyIdRB = RequestBody.create(MultipartBody.FORM, realtyId.toString())
         remoteDataSource.uploadMediaRef(id = idRB, imgFile = mpb, agentId = agentIdRB, title = titleRB, realtyId = realtyIdRB)
+    }
+
+    suspend fun getRemoteMediaReferences(currentAgentId: Long)
+    {
+        if (isConnected())
+        {
+            val remoteMediaRef = remoteDataSource.getAllMediaReferences(currentAgentId)
+            throwExceptionIfStatusIsFalse(remoteMediaRef.isSuccessful, "MediaReferences (download)")
+
+            remoteMediaRef.body()?.results?.let { MediaReferenceResults.fromRemoteToLocal(it) }
+                ?.forEach { updateLocalMediaRefDatabaseAndFiles(it) }
+        }
+    }
+
+    private suspend fun updateLocalMediaRefDatabaseAndFiles(mediaReference: MediaReference)
+    {
+        val file = File(mediaReference.reference)
+        if (file.exists())
+            file.delete()
+        localDataSource.insertMediaReference(mediaReference)
+        localDataSource.updateMediaReference(mediaReference)
     }
 }

@@ -26,9 +26,9 @@ class RemoteRepository
 
     suspend fun getAllPoiRealty(agentId: Long) = KtorRetrofitService.service.getAllPoiRealty(agentId)
 
-    // ---------- POST ---------- //
+    suspend fun getAllMediaReferences(agentId: Long) = KtorRetrofitService.service.getAllMediaReferences(agent = agentId)
 
-    suspend fun updateAgent(agent: AgentResults) = KtorRetrofitService.service.uploadAgent(agent)
+    // ---------- POST ---------- //
 
     suspend fun uploadAgents(agents: List<AgentResults>) = KtorRetrofitService.service.uploadAllAgents(agents)
 

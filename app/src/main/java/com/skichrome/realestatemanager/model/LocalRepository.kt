@@ -23,6 +23,8 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun insertMediaReference(medias: MediaReference) = db.mediaReferenceDao().insertIgnore(medias)
 
+    suspend fun updateMediaReference(media: MediaReference) = db.mediaReferenceDao().update(media)
+
     suspend fun getMediaReferencesFromRealtyId(id: Long): List<MediaReference> = db.mediaReferenceDao().getMediaOfRealtyById(realtyId = id)
 
     suspend fun getMediaReferencesByIdList(ids: List<Long>) = db.mediaReferenceDao().getMediaByIdList(ids)

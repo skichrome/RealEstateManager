@@ -29,6 +29,10 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     val isGlobalSyncEnded: LiveData<Boolean>
         get() = _isGlobalSyncEnded
 
+    private val _synchronisationProgress = MutableLiveData(0)
+    val synchronisationProgress: LiveData<Int>
+        get() = _synchronisationProgress
+
     init
     {
         synchronizeAgents()
@@ -41,6 +45,7 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     private fun synchronizeAgents()
     {
         _isAgentSyncEnded.value = false
+        _synchronisationProgress.value = 0
 
         uiScope.uiJob {
             try
@@ -59,23 +64,38 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     fun synchroniseDatabase(currentAgentId: Long)
     {
         _isGlobalSyncEnded.value = false
+        _synchronisationProgress.value = 10
 
         uiScope.uiJob {
             try
             {
                 ioTask {
                     repository.synchronizePoi()
+                }
+                _synchronisationProgress.value = 20
+                ioTask {
                     repository.synchronizeRealtyTypes()
+                }
+                _synchronisationProgress.value = 30
+                ioTask {
                     repository.synchronizeRealty(currentAgentId)
+                }
+                _synchronisationProgress.value = 50
+                ioTask {
                     repository.synchronizePoiRealty(currentAgentId)
                 }
+                _synchronisationProgress.value = 70
                 ioTask {
                     repository.synchronizeMediaReferences(currentAgentId)
+                }
+                ioTask {
+                    repository.getRemoteMediaReferences(currentAgentId)
                 }
             } catch (e: Exception)
             {
                 Log.e("Server Synchronization", "Synchronization error", e)
             }
+            _synchronisationProgress.value = 100
             _isGlobalSyncEnded.value = true
         }
     }

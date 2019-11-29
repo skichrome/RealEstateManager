@@ -45,10 +45,10 @@ interface KtorRetrofitService
     @GET("all-realty/agent-id={agent}")
     suspend fun getAllRealty(@Path("agent") agent: Long): Response<RemoteRealty>
 
-    // ---------- POST ---------- //
+    @GET("media-references/agent-id={agent}")
+    suspend fun getAllMediaReferences(@Path("agent") agent: Long): Response<RemoteMediaReference>
 
-    @POST("agent/update")
-    suspend fun uploadAgent(@Body agent: AgentResults): Response<PostResponse>
+    // ---------- POST ---------- //
 
     @POST("all-agents")
     suspend fun uploadAllAgents(@Body agents: List<AgentResults>): Response<PostResponse>
