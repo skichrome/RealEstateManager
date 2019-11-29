@@ -41,6 +41,8 @@ class RealtyRepository(
         }
     }
 
+    suspend fun getFirstMediaReferenceFromRealty(realtyId: Long) = localDataSource.getFirstMediaReferenceFromRealty(realtyId)
+
     suspend fun getMediaReferencesFromRealty(id: Long): List<MediaReference> = localDataSource.getMediaReferencesFromRealtyId(id)
 
     suspend fun deleteMediaReference(mediaId: Long) = localDataSource.deleteMediaReference(mediaId)
@@ -51,24 +53,7 @@ class RealtyRepository(
 
     // ---------- Poi ---------- //
 
-    suspend fun getAllPoi(): List<Poi>
-    {
-        if (isConnected())
-        {
-            val remoteResult = remoteDataSource.getAllPoi()
-            if (remoteResult.isSuccessful)
-            {
-                val resultList: MutableList<Poi> = mutableListOf()
-                remoteResult.body()?.results?.forEach {
-                    val poi = Poi(poiId = it.id, name = it.name)
-                    localDataSource.insertPoi(poi)
-                    resultList.add(poi)
-                }
-                return resultList
-            }
-        }
-        return localDataSource.getAllPoi()
-    }
+    suspend fun getAllPoi(): List<Poi> = localDataSource.getAllPoi()
 
     // ---------- PoiRealty ---------- //
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skichrome.realestatemanager.model.RealtyRepository
 import com.skichrome.realestatemanager.model.database.*
+import com.skichrome.realestatemanager.model.database.minimalobj.MediaReferencePreview
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyMinimalForMap
 import com.skichrome.realestatemanager.utils.*
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +63,10 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     val poiRealty: LiveData<List<PoiRealty>>
         get() = _poiRealty
 
+    private val _mediaReferencePreview = MutableLiveData<List<MediaReferencePreview>>()
+    val mediaReferencePreview: LiveData<List<MediaReferencePreview>>
+        get() = _mediaReferencePreview
+
     init
     {
         getAllAgents()
@@ -78,7 +83,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         _insertLoading.value = null
     }
 
-    // ---------- Realty / MediaReference ---------- //
+    // ---------- Poi ---------- //
 
     private fun getAllPoi()
     {
@@ -89,6 +94,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         }
     }
 
+    // ---------- Realty / MediaReference ---------- //
+
     fun getAllRealty()
     {
         uiScope.uiJob {
@@ -97,6 +104,9 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
             _realEstates.value = ioTask {
                 repository.getAllRealty()
             }
+
+            getFirstMediaReferenceOfRealty()
+
             _isLoading.set(false)
         }
     }
@@ -179,6 +189,20 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
 
             mediaRefTask.await()
             _insertLoading.value = false
+        }
+    }
+
+    private fun getFirstMediaReferenceOfRealty()
+    {
+        uiScope.uiJob {
+            val minimalMediaRefList = mutableListOf<MediaReferencePreview>()
+            _realEstates.value?.forEach {
+                val minMediaRef: String? = uiTask {
+                    repository.getFirstMediaReferenceFromRealty(it.id)
+                }
+                minimalMediaRefList.add(MediaReferencePreview(it.id, minMediaRef))
+            }
+            _mediaReferencePreview.value = minimalMediaRefList
         }
     }
 

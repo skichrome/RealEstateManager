@@ -58,6 +58,9 @@ interface MediaReferenceDao : BaseDao<MediaReference>
     @Query("SELECT * FROM MediaReference WHERE realtyId = :realtyId")
     suspend fun getMediaOfRealtyById(realtyId: Long): List<MediaReference>
 
+    @Query("SELECT reference FROM MediaReference WHERE realtyId = :realtyId LIMIT 1")
+    suspend fun getFirstMediaOfRealtyById(realtyId: Long): String?
+
     @Query("SELECT * FROM MediaReference WHERE mediaReferenceId IN (:mediaRefIdList)")
     suspend fun getMediaByIdList(mediaRefIdList: List<Long>): List<MediaReference>
 

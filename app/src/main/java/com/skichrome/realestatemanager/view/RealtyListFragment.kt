@@ -61,6 +61,7 @@ class RealtyListFragment :
     {
         binding?.realtyViewModel = viewModel
         viewModel.realEstates.observe(this, Observer { it?.let { list -> adapter.replaceRealtyList(list) } })
+        viewModel.mediaReferencePreview.observe(this, Observer { it?.let { list -> adapter.replaceMediaRefList(list) } })
     }
 
     private fun configureRecyclerView()
