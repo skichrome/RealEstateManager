@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.skichrome.realestatemanager.utils.AutoClearedValue
 import com.skichrome.realestatemanager.viewmodel.Injection
 
 abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
@@ -17,9 +18,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
     //              Fields
     // =================================
 
-    private var _binding: T? = null
-    protected val binding: T?
-        get() = _binding
+    protected var binding by AutoClearedValue<T>()
 
     private lateinit var _sharedRealtyViewModel: V
     protected val viewModel: V
@@ -33,16 +32,17 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
     //        Superclass Methods
     // =================================
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        _binding = DataBindingUtil.inflate(layoutInflater, getFragmentLayout(), container, false)
-        _binding?.executePendingBindings()
-        return _binding?.root
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        DataBindingUtil.inflate<T>(layoutInflater, getFragmentLayout(), container, false).also {
+            binding = it
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.executePendingBindings()
+
         configureViewModel()
         configureFragment()
     }
@@ -52,11 +52,5 @@ abstract class BaseFragment<T : ViewDataBinding, V : ViewModel> : Fragment()
         _sharedRealtyViewModel = activity?.run {
             ViewModelProviders.of(this, Injection.provideViewModelFactory(context!!)).get(getViewModelClass())
         } ?: throw Exception("Invalid activity")
-    }
-
-    override fun onDestroy()
-    {
-        binding?.unbind()
-        super.onDestroy()
     }
 }

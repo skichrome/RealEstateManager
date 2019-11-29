@@ -49,9 +49,9 @@ class LocalRepository(private val db: RealEstateDatabase)
 
     suspend fun insertRealtyTypeList(realtyType: Array<RealtyType>) = db.realtyTypeDao().insertReplace(*realtyType)
 
-    // ---------- Poi ---------- //
+    suspend fun getAllRealtyTypes() = db.realtyTypeDao().getAllRealtyTypes()
 
-    suspend fun insertPoi(poi: Poi) = db.poiDao().insertReplace(poi)
+    // ---------- Poi ---------- //
 
     suspend fun insertPoiList(poi: Array<Poi>) = db.poiDao().insertReplace(*poi)
 

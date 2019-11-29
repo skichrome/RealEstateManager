@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import com.skichrome.realestatemanager.model.database.Poi
-import com.skichrome.realestatemanager.model.database.PoiRealty
 
 class CheckboxAdapter(val context: Context?, private var items: MutableList<Checkboxes> = mutableListOf()) :
     RecyclerView.Adapter<CheckboxAdapter.CheckBoxesViewHolder>()
@@ -28,7 +27,7 @@ class CheckboxAdapter(val context: Context?, private var items: MutableList<Chec
     }
 
     override fun onBindViewHolder(holder: CheckBoxesViewHolder, position: Int) =
-        holder.setText(items[position].checkboxName, items[position].isChecked)
+        holder.setText(items[position].checkboxName, items[position].isChecked, items[position].isClickable)
 
     override fun getItemCount(): Int = items.size
 
@@ -57,22 +56,33 @@ class CheckboxAdapter(val context: Context?, private var items: MutableList<Chec
         notifyDataSetChanged()
     }
 
-    fun setCheckboxesChecked(checkedList: List<PoiRealty>)
+    fun setCheckboxesChecked(checkedList: List<Int>)
     {
-        checkedList.forEach {
-            items[it.poiId - 1].isChecked = true
+        checkedList.forEach { items[it - 1].isChecked = true }
+        items.forEach { it.isClickable = true }
+        notifyDataSetChanged()
+    }
+
+    fun setCheckboxesCheckedAndDeleteUnchecked(checkedList: List<Int>)
+    {
+        items.forEach {
+            it.isClickable = false
+            it.isChecked = false
         }
+        checkedList.forEach { items[it - 1].isChecked = true }
+
         notifyDataSetChanged()
     }
 
     class CheckBoxesViewHolder(private val checkBox: CheckBox) : RecyclerView.ViewHolder(checkBox)
     {
-        fun setText(displayText: String, isChecked: Boolean = false)
+        fun setText(displayText: String, isChecked: Boolean = false, isClickable: Boolean)
         {
             checkBox.text = displayText
             checkBox.isChecked = isChecked
+            checkBox.isClickable = isClickable
         }
     }
 
-    data class Checkboxes(val checkboxName: String, var isChecked: Boolean)
+    data class Checkboxes(val checkboxName: String, var isChecked: Boolean, var isClickable: Boolean = true)
 }

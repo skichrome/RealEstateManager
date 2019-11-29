@@ -2,7 +2,8 @@
 
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,6 +12,10 @@
         <variable
             name="isImgLocationNull"
             type="Boolean" />
+
+        <variable
+            name="imgDescription"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +35,7 @@
             app:cardCornerRadius="4dp"
             app:cardElevation="2dp"
             app:cardPreventCornerOverlap="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -51,6 +57,20 @@
                 android:src="@drawable/ic_add_circle_24dp"
                 android:tint="@color/colorPrimary"
                 android:visibility="@{isImgLocationNull ? View.VISIBLE : View.GONE}" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:background="@color/black_transparent"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@{imgDescription}"
+                android:textColor="@color/white"
+                android:visibility="@{isImgLocationNull ? View.INVISIBLE : View.VISIBLE}"
+                tools:text="Imotep" />
 
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

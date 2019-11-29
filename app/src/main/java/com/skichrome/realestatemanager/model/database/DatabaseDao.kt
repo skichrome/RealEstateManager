@@ -48,6 +48,10 @@ interface PoiDao : BaseDao<Poi>
 
 @Dao
 interface RealtyTypeDao : BaseDao<RealtyType>
+{
+    @Query("SELECT * FROM RealtyType")
+    suspend fun getAllRealtyTypes(): List<RealtyType>
+}
 
 @Dao
 interface MediaReferenceDao : BaseDao<MediaReference>
@@ -77,8 +81,8 @@ interface PoiRealtyDao : BaseDao<PoiRealty>
     @Query("SELECT * FROM PoiRealty")
     suspend fun getAllPoiRealty(): List<PoiRealty>
 
-    @Query("SELECT * FROM PoiRealty WHERE realtyId = :realtyId")
-    suspend fun getPoIRealtyFromRealtyId(realtyId: Long): List<PoiRealty>
+    @Query("SELECT poiId FROM PoiRealty WHERE realtyId = :realtyId")
+    suspend fun getPoIRealtyFromRealtyId(realtyId: Long): List<Int>
 
     @Query("SELECT realtyId FROM PoiRealty WHERE poiId IN (:poiList)")
     suspend fun getRealtyIdListFromPoiIdList(poiList: List<Int>): List<Long>

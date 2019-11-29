@@ -21,7 +21,7 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
     //                  Fields
     // =======================================
 
-    private lateinit var adapter: CheckboxAdapter
+    private var adapter by AutoClearedValue<CheckboxAdapter>()
 
     private var isSold: Boolean? = null
     private var creationDateSearch: Calendar? = null

@@ -33,7 +33,6 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var locationCallback: LocationCallback? = null
     private var lastLocation: Location? = null
-
     private var firstMapLoad = true
 
     // =================================
@@ -42,12 +41,13 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
 
     override fun getFragmentLayout(): Int = R.layout.fragment_maps
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView? = binding?.mapFragmentMapView
+    override fun getMap(): MapView = binding.mapFragmentMapView
 
     override fun configureFragment()
     {
+        super.configureFragment()
         firstMapLoad = true
-        binding?.mapFragmentFab?.setOnClickListener {
+        binding.mapFragmentFab?.setOnClickListener {
             lastLocation?.let {
                 configureMap()
             } ?: configureLocationPermission()
@@ -65,7 +65,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
         super.onDestroy()
     }
 
-    override fun onMapReady(gMap: GoogleMap?)
+    override fun onMapReady(gMap: GoogleMap)
     {
         super.onMapReady(gMap)
         configureLocationPermission()

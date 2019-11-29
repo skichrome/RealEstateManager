@@ -10,7 +10,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
 import com.skichrome.realestatemanager.utils.ARG_DETAILS_REALTY_NAME
+import com.skichrome.realestatemanager.utils.AutoClearedValue
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
+import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import kotlinx.android.synthetic.main.fragment_realty_details.*
@@ -24,7 +26,8 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     //              Fields
     // =================================
 
-    private lateinit var photoAdapter: RealtyPhotoAdapter
+    private var photoAdapter by AutoClearedValue<RealtyPhotoAdapter>()
+    private var poiAdapter by AutoClearedValue<CheckboxAdapter>()
 
     // =================================
     //        Superclass Methods
@@ -32,24 +35,19 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_details
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView? = binding?.realtyDetailsFragmentMapView
+    override fun getMap(): MapView = binding.realtyDetailsFragmentMapView
 
     override fun configureFragment()
     {
+        super.configureFragment()
         getBundleArgs()
         configureRecyclerView()
     }
 
-    override fun onMapReady(gMap: GoogleMap?)
+    override fun onMapReady(gMap: GoogleMap)
     {
         super.onMapReady(gMap)
         configureMapPosition()
-    }
-
-    override fun onDestroy()
-    {
-        binding?.realtyDetailsFragmentRecyclerView?.adapter = null
-        super.onDestroy()
     }
 
     // =================================
@@ -75,13 +73,14 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     private fun configureViewModel(realtyToDetail: Long)
     {
         viewModel.getRealty(realtyToDetail)
+        binding.realtyViewModel = viewModel
         viewModel.realtyDetailedLoading.observe(this, Observer {
             it?.let { isLoading ->
                 if (!isLoading)
                     configureDateTextView()
             }
         })
-        binding?.realtyViewModel = viewModel
+        viewModel.poi.observe(this, Observer { it?.let { list -> poiAdapter.replaceCheckboxData(list) } })
     }
 
     private fun configureDateTextView()
@@ -103,13 +102,16 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
     private fun configureRecyclerView()
     {
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(), callback = WeakReference(this))
-        binding?.realtyDetailsFragmentRecyclerView?.adapter = photoAdapter
+        binding.realtyDetailsFragmentRecyclerViewPhoto.adapter = photoAdapter
         viewModel.realtyDetailedPhotos.observe(this, Observer {
             it?.let { list ->
                 photoAdapter.replacePhotoList(list)
-                binding?.realtyDetailsFragmentNoMediaAvailable?.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                binding.realtyDetailsFragmentNoMediaAvailable.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
             }
         })
+        poiAdapter = CheckboxAdapter(context)
+        binding.realtyDetailsFragmentRecyclerViewPoi.adapter = poiAdapter
+        viewModel.poiRealty.observe(this, Observer { it?.let { list -> poiAdapter.setCheckboxesCheckedAndDeleteUnchecked(list) } })
     }
 
     private fun configureMapPosition()

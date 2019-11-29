@@ -8,11 +8,10 @@ import com.bumptech.glide.Glide
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.RealtyListRvItemBinding
 import com.skichrome.realestatemanager.model.database.Realty
-import com.skichrome.realestatemanager.model.database.minimalobj.MediaReferencePreview
+import com.skichrome.realestatemanager.model.database.minimalobj.RealtyPreviewExtras
 import java.lang.ref.WeakReference
 
-class RealtyListAdapter(private var realtyList: List<Realty> = listOf(),
-                        private var mediaRefList: List<MediaReferencePreview> = listOf(),
+class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewExtras?>> = listOf(),
                         private val callback: WeakReference<RealtyItemListener>
 ) :
     RecyclerView.Adapter<RealtyListAdapter.RealtyListViewHolder>()
@@ -26,32 +25,28 @@ class RealtyListAdapter(private var realtyList: List<Realty> = listOf(),
         return RealtyListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) = holder.bind(realtyList[position], mediaRefList[position], callback)
+    override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) =
+        holder.bind(realtyList[position].first, realtyList[position].second, callback)
 
     override fun getItemCount(): Int = realtyList.size
 
-    fun replaceRealtyList(list: List<Realty>) = list.let {
-        realtyList = list
-    }
-
-    fun replaceMediaRefList(list: List<MediaReferencePreview>)
-    {
-        mediaRefList = list
+    fun replaceRealtyList(realtyAndMediaRefList: List<Pair<Realty, RealtyPreviewExtras?>>) = realtyAndMediaRefList.let {
+        realtyList = realtyAndMediaRefList
         notifyDataSetChanged()
     }
 
     class RealtyListViewHolder(private val binding: RealtyListRvItemBinding) :
         RecyclerView.ViewHolder(binding.root)
     {
-        fun bind(item: Realty, mediaRef: MediaReferencePreview, callback: WeakReference<RealtyItemListener>)
+        fun bind(realty: Realty, realtyPreviewExtras: RealtyPreviewExtras?, callback: WeakReference<RealtyItemListener>)
         {
-            mediaRef.reference?.let {
+            realtyPreviewExtras?.mediaUrl?.let {
                 Glide.with(binding.root).load(it).circleCrop().into(binding.realtyPreviewImg)
             } ?: Glide.with(binding.root).load(R.drawable.ic_app_logo_default_realty).into(binding.realtyPreviewImg)
 
-            item.realtyTypeId = item.realtyTypeId - 1
-            binding.realty = item
-            binding.root.setOnClickListener { callback.get()?.onClickRealty(item.id) }
+            binding.realtyType = realtyPreviewExtras?.realtyTypeName
+            binding.realty = realty
+            binding.root.setOnClickListener { callback.get()?.onClickRealty(realty.id) }
             binding.executePendingBindings()
         }
     }

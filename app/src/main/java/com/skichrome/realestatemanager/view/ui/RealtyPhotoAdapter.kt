@@ -52,6 +52,7 @@ class RealtyPhotoAdapter(private var list: MutableList<MediaReference?>, private
         fun bind(image: MediaReference?, callback: WeakReference<OnClickPictureListener>)
         {
             binding.isImgLocationNull = image == null
+            binding.imgDescription = image?.shortDesc
 
             if (image == null)
             {

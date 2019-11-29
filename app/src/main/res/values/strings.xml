@@ -77,6 +77,7 @@
     <string name="realty_details_fragment_rooms_title">Rooms</string>
     <string name="realty_details_fragment_location_title">Location</string>
     <string name="realty_details_fragment_description_title">Description</string>
+    <string name="realty_details_fragment_specifications_title">Specifications</string>
     <string name="realty_details_fragment_medias_title">Medias</string>
     <string name="realty_details_fragment_price">Price</string>
     <string name="realty_details_fragment_status">Status</string>
@@ -85,6 +86,7 @@
     <string name="realty_details_fragment_date_created">Creation date</string>
     <string name="realty_details_fragment_date_sold">Sold date</string>
     <string name="realty_details_fragment_no_media_available">No medias have been saved for this realty</string>
+    <string name="realty_details_fragment_poi_title">Point of Interests</string>
 
     <!-- Settings Fragment -->
     <string name="settings_fragment_category_notification">Notifications</string>

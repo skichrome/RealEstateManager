@@ -1,9 +1,6 @@
 package com.skichrome.realestatemanager.view.base
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.GoogleMap
@@ -19,24 +16,21 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
     private var mapView: MapView? = null
     protected var map: GoogleMap? = null
 
-    abstract fun getMap(): MapView?
+    abstract fun getMap(): MapView
 
     // =================================
     //        Superclass Methods
     // =================================
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    @CallSuper
+    override fun configureFragment()
     {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-
         mapView = getMap()
         mapView?.onCreate(arguments)
         mapView?.getMapAsync(this)
-
-        return view
     }
 
-    override fun onMapReady(gMap: GoogleMap?)
+    override fun onMapReady(gMap: GoogleMap)
     {
         this.map = gMap
     }

@@ -37,10 +37,11 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     //              Fields
     // =================================
 
-    private lateinit var photoAdapter: RealtyPhotoAdapter
+    private var photoAdapter by AutoClearedValue<RealtyPhotoAdapter>()
+    private var checkBoxPoiAdapter by AutoClearedValue<CheckboxAdapter>()
+
     private val materialEditTextViewList = arrayListOf<TextInputLayout>()
     private val date = SimpleDateFormat.getDateInstance()
-    private lateinit var checkBoxPoiAdapter: CheckboxAdapter
     private lateinit var spinnerArray: Array<String>
     private lateinit var realtyCreationDate: Calendar
     private lateinit var imageAddedSrc: String
@@ -81,13 +82,6 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onDestroy()
-    {
-        binding?.addRealtyFragCheckBoxesRecyclerView?.adapter = null
-        binding?.addRealtyFragRecyclerViewAddPhoto?.adapter = null
-        super.onDestroy()
-    }
-
     // =================================
     //              Methods
     // =================================
@@ -109,8 +103,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     {
         checkBoxPoiAdapter = CheckboxAdapter(context)
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
-        binding?.addRealtyFragCheckBoxesRecyclerView?.adapter = checkBoxPoiAdapter
-        binding?.addRealtyFragRecyclerViewAddPhoto?.adapter = photoAdapter
+        binding.addRealtyFragCheckBoxesRecyclerView?.adapter = checkBoxPoiAdapter
+        binding.addRealtyFragRecyclerViewAddPhoto?.adapter = photoAdapter
     }
 
     private fun configureViewModel()
@@ -151,7 +145,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         if (!isEditMode)
             return
 
-        binding?.realtyViewModel = viewModel
+        binding.realtyViewModel = viewModel
         viewModel.realtyDetailedPhotos.observe(this, Observer {
             it?.let { list ->
                 val mutableList = mutableListOf<MediaReference?>(null)

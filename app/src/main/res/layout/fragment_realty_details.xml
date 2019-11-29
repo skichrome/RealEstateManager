@@ -16,6 +16,7 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/realtyDetailsFragmentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,11 +32,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/realty_details_fragment_medias_title"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/realtyDetailsFragmentRecyclerView"
+                android:id="@+id/realtyDetailsFragmentRecyclerViewPhoto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -55,10 +57,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/realty_details_fragment_no_media_available"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/realtyDetailsFragmentRecyclerView"
+                app:layout_constraintBottom_toBottomOf="@+id/realtyDetailsFragmentRecyclerViewPhoto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/realtyDetailsFragmentRecyclerView"
+                app:layout_constraintTop_toTopOf="@+id/realtyDetailsFragmentRecyclerViewPhoto"
                 tools:visibility="visible" />
 
             <TextView
@@ -69,8 +71,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/realty_details_fragment_description_title"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRecyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRecyclerViewPhoto" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentDescription"
@@ -86,6 +89,18 @@
                 tools:text="lorem ipsum dolor sit amet" />
 
             <TextView
+                android:id="@+id/realtyDetailsFragmentTitleSpecifications"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/realty_details_fragment_specifications_title"
+                android:textColor="@color/colorPrimary"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDescription" />
+
+            <TextView
                 android:id="@+id/realtyDetailsFragmentSurfaceTitle"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
@@ -97,16 +112,16 @@
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_surface_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentTitleSpecifications" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentSurface"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="32dp"
                 android:text='@{realtyViewModel.realtyDetailed.surface + " m2"}'
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentSurfaceTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentSurfaceTitle"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentSurfaceTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurfaceTitle"
                 tools:text="@string/realty_details_fragment_surface_title" />
 
             <TextView
@@ -121,16 +136,16 @@
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_rooms_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurfaceTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurface" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentRoomNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:text="@{String.valueOf(realtyViewModel.realtyDetailed.roomNumber)}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentRoomNumberTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentRoomNumberTitle"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentRoomNumberTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumberTitle"
                 tools:text="@string/realty_details_fragment_rooms_title" />
 
             <TextView
@@ -145,16 +160,16 @@
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_location_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumberTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumber" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentLocationAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:text="@{realtyViewModel.realtyDetailed.address}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentLocationTitle"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentLocationTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationTitle"
                 tools:text="@string/realty_details_fragment_location_title" />
 
             <TextView
@@ -201,7 +216,7 @@
                 android:drawablePadding="4dp"
                 android:text="@string/realty_details_fragment_status"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPriceTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPrice" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentDateTitle"
@@ -213,49 +228,82 @@
                 android:drawableStart="@drawable/ic_schedule_24dp"
                 android:drawablePadding="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentStatusTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentStatus"
                 tools:text="@string/realty_details_fragment_date_created" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:text="@{String.valueOf(realtyViewModel.realtyDetailed.price)}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentPriceTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentPriceTitle"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentPriceTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPriceTitle"
                 tools:text="123456789" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentStatusTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentStatusTitle"
+                android:layout_marginStart="32dp"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentStatusTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentStatusTitle"
                 tools:text="Sold / available" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentDateTitle"
-                app:layout_constraintStart_toEndOf="@+id/realtyDetailsFragmentDateTitle"
+                android:layout_marginStart="32dp"
+                app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentDateTitle"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDateTitle"
                 tools:text="10/11/2019" />
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/realtyDetailsFragmentMapView"
+            <TextView
+                android:id="@+id/realtyDetailsFragmentPoiTitle"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/realty_details_fragment_poi_title"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDate" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/realtyDetailsFragmentRecyclerViewPoi"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_margin="16dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPoiTitle"
+                app:spanCount="3"
+                tools:itemCount="5" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:visibility="@{realtyViewModel.realtyDetailed.latitude == null ? View.GONE : View.VISIBLE}"
-                app:elevation="2dp"
+                app:cardElevation="4dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDateTitle"
-                map:liteMode="true" />
+                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRecyclerViewPoi">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/realtyDetailsFragmentMapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    map:liteMode="true" />
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

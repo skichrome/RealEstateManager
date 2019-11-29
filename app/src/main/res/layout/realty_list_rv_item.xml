@@ -8,6 +8,9 @@
     <data>
 
         <variable
+            name="realtyType"
+            type="String" />
+        <variable
             name="realty"
             type="com.skichrome.realestatemanager.model.database.Realty" />
     </data>
@@ -53,10 +56,9 @@
                 <TextView
                     android:id="@+id/realtyListItemType"
                     android:layout_width="match_parent"
-                    android:textColor="@color/colorPrimary"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
-                    android:text="@{@stringArray/realty_categories[realty.realtyTypeId]}"
+                    android:text="@{realtyType}"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     tools:text="Realty Type" />
 
