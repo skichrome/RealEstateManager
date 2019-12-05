@@ -14,7 +14,7 @@ class RealtyContentProvider : ContentProvider()
     {
         const val AUTHORITY = "com.skichrome.realestatemanager.provider"
         val TABLE_NAME: String? = Realty::class.java.simpleName
-        val URI: Uri = Uri.parse("content://$AUTHORITY/")
+        val REALTY_URI: Uri = Uri.parse("content://$AUTHORITY/")
 
         const val READ_ONLY_MODE = "This database is in read only mode !"
     }
@@ -31,7 +31,7 @@ class RealtyContentProvider : ContentProvider()
             return cursor
         } ?: throw IllegalArgumentException("Failed to query row from uri [$uri]")
 
-    override fun insert(uri: Uri, cv: ContentValues?): Uri? = throw IllegalArgumentException(READ_ONLY_MODE)
-    override fun update(uri: Uri, cv: ContentValues?, sel: String?, selArgs: Array<out String>?): Int = throw IllegalArgumentException(READ_ONLY_MODE)
-    override fun delete(uri: Uri, sel: String?, selArgs: Array<out String>?): Int = throw IllegalArgumentException(READ_ONLY_MODE)
+    override fun insert(uri: Uri, cv: ContentValues?): Uri? = throw IllegalAccessException(READ_ONLY_MODE)
+    override fun update(uri: Uri, cv: ContentValues?, sel: String?, selArgs: Array<out String>?): Int = throw IllegalAccessException(READ_ONLY_MODE)
+    override fun delete(uri: Uri, sel: String?, selArgs: Array<out String>?): Int = throw IllegalAccessException(READ_ONLY_MODE)
 }
