@@ -154,4 +154,7 @@
     <string name="search_fragment_min_media_ref_title">Minimal number of pictures</string>
     <string name="search_fragment_post_code_title">Area</string>
     <string name="search_fragment_post_code_hint">Post code</string>
+
+    <!-- Empty fragment screen for tablet -->
+    <string name="empty_fragment_text_hint">Select a Realty on the left</string>
 </resources>
