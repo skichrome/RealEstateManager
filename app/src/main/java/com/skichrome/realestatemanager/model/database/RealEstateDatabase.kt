@@ -5,8 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import com.skichrome.realestatemanager.model.database.migrations.MigrationOneTwo
 import com.skichrome.realestatemanager.utils.DATABASE_NAME
 
 @Database(
@@ -43,15 +42,7 @@ abstract class RealEstateDatabase : RoomDatabase()
                 RealEstateDatabase::class.java,
                 DATABASE_NAME
             )
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MigrationOneTwo)
                 .build()
-
-        private val MIGRATION_1_2 = object : Migration(1, 2)
-        {
-            override fun migrate(database: SupportSQLiteDatabase)
-            {
-                database.execSQL("ALTER TABLE Realty ADD COLUMN currency INTEGER NOT NULL DEFAULT 0")
-            }
-        }
     }
 }
