@@ -4,13 +4,12 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyListBinding
 import com.skichrome.realestatemanager.model.database.Realty
 import com.skichrome.realestatemanager.model.database.minimalobj.RealtyPreviewExtras
-import com.skichrome.realestatemanager.utils.ARG_DETAILS_REALTY_NAME
-import com.skichrome.realestatemanager.utils.ARG_LIST_REALTY_ORIGIN
-import com.skichrome.realestatemanager.utils.AutoClearedValue
+import com.skichrome.realestatemanager.utils.*
 import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.view.ui.RealtyListAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
@@ -30,7 +29,6 @@ class RealtyListFragment :
     override fun configureFragment()
     {
         configureTabletNavController()
-        configureRecyclerView()
         configureViewModel()
         configureSwipeRefreshLayout()
         configureFabAddRealty()
@@ -62,9 +60,9 @@ class RealtyListFragment :
             nullableRealtyList?.let { realtyList ->
                 viewModel.realtyPreviewExtras.observe(this, Observer { nullableMediaRefList ->
                     nullableMediaRefList?.let { mediaRefList ->
+                        configureRecyclerView()
 
                         val pairList = mutableListOf<Pair<Realty, RealtyPreviewExtras?>>()
-
                         realtyList.forEachIndexed { index, realty ->
                             val linkedMediaRef = mediaRefList[index]
                             pairList.add(Pair(realty, linkedMediaRef))
@@ -77,9 +75,21 @@ class RealtyListFragment :
         })
     }
 
+    private fun getUserSelectedCurrencyForAdapter(): Pair<Int, Float>
+    {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val userRatePref = prefs.getString(getString(R.string.settings_fragment_display_currency_key), "0")?.toIntOrNull() ?: 0
+        val conversionRate = when (userRatePref)
+        {
+            1 -> prefs.getFloat(SHARED_PREFS_EURO_CONV_RATE_KEY, 1f)
+            else -> prefs.getFloat(SHARED_PREFS_DOLLARS_CONV_RATE_KEY, 1f)
+        }
+        return Pair(userRatePref, conversionRate)
+    }
+
     private fun configureRecyclerView()
     {
-        adapter = RealtyListAdapter(callback = WeakReference(this))
+        adapter = RealtyListAdapter(callback = WeakReference(this), userCurrency = getUserSelectedCurrencyForAdapter())
         binding.realtyListFragmentRecyclerView.setHasFixedSize(true)
         binding.realtyListFragmentRecyclerView.adapter = adapter
     }

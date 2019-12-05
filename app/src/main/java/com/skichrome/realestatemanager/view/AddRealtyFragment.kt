@@ -48,6 +48,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private lateinit var imageAddedTypeFromSpinner: String
     private var realtyType: Int = -1
     private var realtyStatus: Boolean = false
+    private var priceCurrency: Int = 0
     private var realtySoldDate: Calendar? = null
     private var canRegisterARealty = false
 
@@ -68,6 +69,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         getBundleArguments()
         configureEditableMode()
         configureDateInput()
+        configureCurrencySpinner()
         addRealtyFragSubmitBtn.setOnClickListener {
             canRegisterARealty = true
             getDateInputData()
@@ -103,8 +105,8 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     {
         checkBoxPoiAdapter = CheckboxAdapter(context)
         photoAdapter = RealtyPhotoAdapter(list = mutableListOf(null), callback = WeakReference(this))
-        binding.addRealtyFragCheckBoxesRecyclerView?.adapter = checkBoxPoiAdapter
-        binding.addRealtyFragRecyclerViewAddPhoto?.adapter = photoAdapter
+        binding.addRealtyFragCheckBoxesRecyclerView.adapter = checkBoxPoiAdapter
+        binding.addRealtyFragRecyclerViewAddPhoto.adapter = photoAdapter
     }
 
     private fun configureViewModel()
@@ -199,11 +201,16 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
         addRealtyFragTypeInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
         {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) = position.let { realtyType = it + 1 }
+        }
+    }
 
-            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long)
-            {
-                realtyType = position + 1
-            }
+    private fun configureCurrencySpinner()
+    {
+        addRealtyFragPriceCurrencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) = position.let { priceCurrency = it }
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
     }
 
@@ -306,6 +313,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
             postCode = addRealtyFragPostCodeInput.text.toString().toInt(),
             address = addRealtyFragAddressInput.text.toString(),
             price = addRealtyFragPriceInput.text.toString().toFloat(),
+            currency = priceCurrency,
             realtyTypeId = realtyType,
             agentId = agentId
         )

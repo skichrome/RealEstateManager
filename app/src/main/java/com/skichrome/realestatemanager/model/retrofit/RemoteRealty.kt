@@ -17,6 +17,7 @@ data class RemoteRealty(
 data class RealtyResults(
     @Json(name = "id") val id: Long,
     @Json(name = "price") val price: Float,
+    @Json(name = "price_currency") val currency: Int,
     @Json(name = "surface") val surface: Float,
     @Json(name = "room_number") val roomNumber: Int,
     @Json(name = "full_description") val fullDescription: String,
@@ -53,6 +54,7 @@ data class RealtyResults(
                         longitude = it.longitude,
                         postCode = it.postCode,
                         price = it.price,
+                        currency = it.currency,
                         roomNumber = it.roomNumber,
                         surface = it.surface
                     )
@@ -80,6 +82,7 @@ data class RealtyResults(
                         longitude = it.longitude,
                         postCode = it.postCode,
                         price = it.price,
+                        currency = it.currency,
                         roomNumber = it.roomNumber,
                         surface = it.surface
                     )

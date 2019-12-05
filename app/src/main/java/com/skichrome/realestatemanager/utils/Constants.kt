@@ -26,3 +26,6 @@ const val CREATION_DATE_ADD_TAG = 0
 const val SOLD_DATE_ADD_TAG = 1
 const val CREATION_DATE_SEARCH_TAG = 2
 const val SOLD_DATE_SEARCH_TAG = 3
+
+const val SHARED_PREFS_DOLLARS_CONV_RATE_KEY = "dollars_currency_conversion_rate"
+const val SHARED_PREFS_EURO_CONV_RATE_KEY = "euros_currency_conversion_rate"

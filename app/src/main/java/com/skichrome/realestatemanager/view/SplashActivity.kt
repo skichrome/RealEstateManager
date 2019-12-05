@@ -8,6 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.skichrome.realestatemanager.R
+import com.skichrome.realestatemanager.utils.SHARED_PREFS_DOLLARS_CONV_RATE_KEY
+import com.skichrome.realestatemanager.utils.SHARED_PREFS_EURO_CONV_RATE_KEY
 import com.skichrome.realestatemanager.utils.SIGN_IN_RC
 import com.skichrome.realestatemanager.viewmodel.Injection
 import com.skichrome.realestatemanager.viewmodel.OnlineSyncViewModel
@@ -53,7 +55,19 @@ class SplashActivity : AppCompatActivity()
     {
         viewModel = ViewModelProviders.of(this, Injection.provideSyncViewModelFactory(this)).get(OnlineSyncViewModel::class.java)
 
-        viewModel.isAgentSyncEnded.observe(this, Observer {
+        viewModel.conversionRateValue.observe(this, Observer {
+            it?.let { convRatePair ->
+                val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+
+                prefs.putFloat(SHARED_PREFS_DOLLARS_CONV_RATE_KEY, convRatePair.first)
+                prefs.putFloat(SHARED_PREFS_EURO_CONV_RATE_KEY, convRatePair.second)
+
+                prefs.commit()
+            }
+        })
+
+        viewModel.isConversionAndAgentSyncEnded.observe(this, Observer {
             it?.let { isAgentSyncEnded ->
                 val currentUser = getCurrentUser()
                 if (isAgentSyncEnded && currentUser == -1L)

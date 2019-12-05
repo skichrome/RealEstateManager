@@ -33,4 +33,14 @@
             android:key="@string/settings_fragment_search_param_pictures_key"
             android:title="@string/settings_fragment_search_param_pictures_title" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Currency">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/currency"
+            android:entryValues="@array/currency_entries"
+            android:key="@string/settings_fragment_display_currency_key"
+            android:summary="@string/settings_fragment_display_currency_summary"
+            android:title="@string/settings_fragment_display_currency" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -35,6 +35,7 @@ class DatabaseTest
         private val REALTY = Realty(
             id = AUTO_GENERATED_ID,
             price = 120_000f,
+            currency = 0,
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",
@@ -50,6 +51,7 @@ class DatabaseTest
         private val REALTY2 = Realty(
             id = AUTO_GENERATED_ID + 1L,
             price = 120_000f,
+            currency = 1,
             address = "12 avenue du pont",
             postCode = 95000,
             city = "J'ai pas d'inspiration",

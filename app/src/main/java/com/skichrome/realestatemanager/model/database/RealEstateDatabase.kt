@@ -5,11 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.skichrome.realestatemanager.utils.DATABASE_NAME
 
 @Database(
     entities = [Realty::class, Poi::class, RealtyType::class, MediaReference::class, PoiRealty::class, Agent::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -40,6 +42,16 @@ abstract class RealEstateDatabase : RoomDatabase()
                 context.applicationContext,
                 RealEstateDatabase::class.java,
                 DATABASE_NAME
-            ).build()
+            )
+                .addMigrations(MIGRATION_1_2)
+                .build()
+
+        private val MIGRATION_1_2 = object : Migration(1, 2)
+        {
+            override fun migrate(database: SupportSQLiteDatabase)
+            {
+                database.execSQL("ALTER TABLE Realty ADD COLUMN currency INTEGER NOT NULL DEFAULT 0")
+            }
+        }
     }
 }

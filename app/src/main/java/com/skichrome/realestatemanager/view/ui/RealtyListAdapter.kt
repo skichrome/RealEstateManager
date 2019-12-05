@@ -1,5 +1,6 @@
 package com.skichrome.realestatemanager.view.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,7 +13,8 @@ import com.skichrome.realestatemanager.model.database.minimalobj.RealtyPreviewEx
 import java.lang.ref.WeakReference
 
 class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewExtras?>> = listOf(),
-                        private val callback: WeakReference<RealtyItemListener>
+                        private val callback: WeakReference<RealtyItemListener>,
+                        private val userCurrency: Pair<Int, Float>
 ) :
     RecyclerView.Adapter<RealtyListAdapter.RealtyListViewHolder>()
 {
@@ -22,7 +24,7 @@ class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewE
     {
         val inflater = LayoutInflater.from(parent.context)
         binding = DataBindingUtil.inflate(inflater, R.layout.realty_list_rv_item, parent, false)
-        return RealtyListViewHolder(binding)
+        return RealtyListViewHolder(binding, userCurrency)
     }
 
     override fun onBindViewHolder(holder: RealtyListViewHolder, position: Int) =
@@ -35,7 +37,7 @@ class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewE
         notifyDataSetChanged()
     }
 
-    class RealtyListViewHolder(private val binding: RealtyListRvItemBinding) :
+    class RealtyListViewHolder(private val binding: RealtyListRvItemBinding, private val userCurrency: Pair<Int, Float>) :
         RecyclerView.ViewHolder(binding.root)
     {
         fun bind(realty: Realty, realtyPreviewExtras: RealtyPreviewExtras?, callback: WeakReference<RealtyItemListener>)
@@ -43,6 +45,30 @@ class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewE
             realtyPreviewExtras?.mediaUrl?.let {
                 Glide.with(binding.root).load(it).circleCrop().into(binding.realtyPreviewImg)
             } ?: Glide.with(binding.root).load(R.drawable.ic_app_logo_default_realty).into(binding.realtyPreviewImg)
+
+            val priceText = when (userCurrency.first)
+            {
+                1 ->
+                {
+                    if (realty.currency == 0)
+                        "${userCurrency.second * realty.price} $"
+                    else
+                        "${realty.price} $"
+                }
+                else ->
+                {
+                    if (realty.currency == 1)
+                        "${userCurrency.second * realty.price} €"
+                    else
+                        "${realty.price} €"
+                }
+            }
+
+            binding.realtyListItemPrice.text = priceText
+            Log.e(
+                "List Adapter",
+                "Results : \n User pref : ${userCurrency.first} \n Conv rate : ${userCurrency.second} \n price : ${realty.price} \n realty curr : ${realty.currency} \n result : $priceText"
+            )
 
             binding.realtyType = realtyPreviewExtras?.realtyTypeName
             binding.realty = realty

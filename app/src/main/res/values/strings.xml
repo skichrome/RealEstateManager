@@ -60,6 +60,16 @@
         <item name="type_duplex">Duplex</item>
     </string-array>
 
+    <string-array name="currency">
+        <item name="euro"> € </item>
+        <item name="dollar"> $ </item>
+    </string-array>
+
+    <string-array name="currency_entries">
+        <item name="euro">0</item>
+        <item name="dollar">1</item>
+    </string-array>
+
     <!-- Delete Picture Alert Dialog -->
     <string name="delete_picture_alert_title">Warning</string>
     <string name="delete_picture_alert_message">Do you really want to delete this picture ?</string>
@@ -104,6 +114,10 @@
     <string name="settings_fragment_search_param_price_key" translatable="false">paramSearchPriceKey</string>
     <string name="settings_fragment_search_param_surface_key" translatable="false">paramSearchSurfaceKey</string>
     <string name="settings_fragment_search_param_pictures_key" translatable="false">paramSearchPicturesKey</string>
+
+    <string name="settings_fragment_display_currency">Select your preferred currency</string>
+    <string name="settings_fragment_display_currency_summary">This will change all prices displayed to match selected currency</string>
+    <string name="settings_fragment_display_currency_key">currencyKey</string>
 
     <!-- System Notification -->
     <string name="notification_description">Be notified when the app has successfully saved your real estate.</string>

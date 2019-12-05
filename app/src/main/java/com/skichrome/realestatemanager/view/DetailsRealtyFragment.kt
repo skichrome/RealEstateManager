@@ -2,6 +2,7 @@ package com.skichrome.realestatemanager.view
 
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -11,6 +12,8 @@ import com.skichrome.realestatemanager.R
 import com.skichrome.realestatemanager.databinding.FragmentRealtyDetailsBinding
 import com.skichrome.realestatemanager.utils.ARG_DETAILS_REALTY_NAME
 import com.skichrome.realestatemanager.utils.AutoClearedValue
+import com.skichrome.realestatemanager.utils.SHARED_PREFS_DOLLARS_CONV_RATE_KEY
+import com.skichrome.realestatemanager.utils.SHARED_PREFS_EURO_CONV_RATE_KEY
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
 import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
@@ -77,7 +80,10 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
         viewModel.realtyDetailedLoading.observe(this, Observer {
             it?.let { isLoading ->
                 if (!isLoading)
+                {
                     configureDateTextView()
+                    configurePriceTextView()
+                }
             }
         })
         viewModel.poi.observe(this, Observer { it?.let { list -> poiAdapter.replaceCheckboxData(list) } })
@@ -96,6 +102,22 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
             realtyDetailsFragmentStatus.text = if (it.status) getString(R.string.realty_details_fragment_status_sold)
             else getString(R.string.realty_details_fragment_status_available)
+        }
+    }
+
+    private fun configurePriceTextView()
+    {
+        viewModel.realtyDetailed.get()?.let {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+            realtyDetailsFragmentPrice.text =
+                when (prefs.getString(getString(R.string.settings_fragment_display_currency_key), "0")?.toIntOrNull() ?: 0)
+                {
+                    1 ->
+                        if (it.currency == 0) "${prefs.getFloat(SHARED_PREFS_EURO_CONV_RATE_KEY, 1f) * it.price} $" else "${it.price} $"
+                    else ->
+                        if (it.currency == 1) "${prefs.getFloat(SHARED_PREFS_DOLLARS_CONV_RATE_KEY, 1f) * it.price} €" else "${it.price} €"
+                }
         }
     }
 

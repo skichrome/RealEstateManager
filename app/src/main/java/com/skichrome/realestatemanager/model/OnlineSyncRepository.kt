@@ -26,6 +26,22 @@ class OnlineSyncRepository(
             throw Exception("An error occurred when trying to synchronize $origin")
     }
 
+    // ---------- Currency Conversion Rate ---------- //
+
+    suspend fun getCurrencyConversionRate(): Pair<Float, Float>?
+    {
+        if (isConnected())
+        {
+            val convRateResponse = remoteDataSource.getCurrencyConversionRate()
+            throwExceptionIfStatusIsFalse(convRateResponse.isSuccessful, "Currency conversion rate (download)")
+
+            convRateResponse.body()?.results?.let {
+                return Pair(it.usdValue, it.eurValue)
+            }
+        }
+        return null
+    }
+
     // ---------- Poi & RealtyTypes ---------- //
 
     suspend fun synchronizePoi()

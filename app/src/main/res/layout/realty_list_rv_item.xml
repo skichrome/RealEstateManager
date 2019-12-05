@@ -78,7 +78,6 @@
                     android:textColor="@color/colorSecondary"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
-                    android:text='@{"$ " + realty.price}'
                     tools:text="Realty price" />
             </LinearLayout>
         </LinearLayout>

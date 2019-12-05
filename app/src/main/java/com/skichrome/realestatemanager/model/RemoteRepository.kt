@@ -13,6 +13,8 @@ class RemoteRepository
 {
     // ---------- GET ---------- //
 
+    suspend fun getCurrencyConversionRate() = KtorRetrofitService.service.getCurrentConversionRate()
+
     suspend fun getLatLngFromPhysicalAddress(address: String, postCode: Int, city: String) =
         GoogleRetrofitService.service.getLatLngFromPhysicalAddress(address = "$address+$postCode+$city")
 

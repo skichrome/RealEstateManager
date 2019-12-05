@@ -21,9 +21,9 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val _isAgentSyncEnded = MutableLiveData<Boolean>(false)
-    val isAgentSyncEnded: LiveData<Boolean>
-        get() = _isAgentSyncEnded
+    private val _isConversionAndAgentSyncEnded = MutableLiveData<Boolean>(false)
+    val isConversionAndAgentSyncEnded: LiveData<Boolean>
+        get() = _isConversionAndAgentSyncEnded
 
     private val _isGlobalSyncEnded = MutableLiveData<Boolean>(false)
     val isGlobalSyncEnded: LiveData<Boolean>
@@ -33,8 +33,13 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     val synchronisationProgress: LiveData<Int>
         get() = _synchronisationProgress
 
+    private val _conversionRateValue = MutableLiveData<Pair<Float, Float>>()
+    val conversionRateValue: LiveData<Pair<Float, Float>>
+        get() = _conversionRateValue
+
     init
     {
+        synchronizeConversionRate()
         synchronizeAgents()
     }
 
@@ -42,9 +47,19 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
     //                 Methods
     // =======================================
 
+    private fun synchronizeConversionRate()
+    {
+        _isConversionAndAgentSyncEnded.value = false
+
+        uiScope.uiJob {
+            _conversionRateValue.value = backgroundTask {
+                repository.getCurrencyConversionRate()
+            }
+        }
+    }
+
     private fun synchronizeAgents()
     {
-        _isAgentSyncEnded.value = false
         _synchronisationProgress.value = 0
 
         uiScope.uiJob {
@@ -57,7 +72,7 @@ class OnlineSyncViewModel(private val repository: OnlineSyncRepository) : ViewMo
             {
                 Log.e("Server Synchronization", "Synchronization error with agents", e)
             }
-            _isAgentSyncEnded.value = true
+            _isConversionAndAgentSyncEnded.value = true
         }
     }
 

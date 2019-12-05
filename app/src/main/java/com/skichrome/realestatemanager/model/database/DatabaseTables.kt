@@ -20,6 +20,7 @@ import androidx.room.PrimaryKey
 data class Realty(
     @PrimaryKey(autoGenerate = true) var id: Long = 0L,
     val price: Float,
+    val currency: Int,
     val surface: Float,
     val roomNumber: Int,
     val fullDescription: String,

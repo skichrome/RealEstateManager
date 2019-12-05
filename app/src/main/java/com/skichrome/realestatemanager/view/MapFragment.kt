@@ -47,7 +47,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
     {
         super.configureFragment()
         firstMapLoad = true
-        binding.mapFragmentFab?.setOnClickListener {
+        binding.mapFragmentFab.setOnClickListener {
             lastLocation?.let {
                 configureMap()
             } ?: configureLocationPermission()
