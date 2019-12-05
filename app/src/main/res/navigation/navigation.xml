@@ -15,16 +15,24 @@
 
         <action
             android:id="@+id/action_realtyListFragment_to_detailsRealtyFragment"
-            app:destination="@id/detailsRealtyFragment" />
+            app:destination="@id/detailsRealtyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_realtyListFragment_to_addRealtyFragment"
-            app:destination="@id/addRealtyFragment" />
+            app:destination="@id/addRealtyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
         android:id="@+id/addRealtyFragment"
         android:name="com.skichrome.realestatemanager.view.AddRealtyFragment"
-        android:label="New Realty"
+        android:label="@string/add_realty_fragment_add_title"
         tools:layout="@layout/fragment_add_realty">
         <argument
             android:name="editMode"
@@ -39,10 +47,18 @@
         tools:layout="@layout/fragment_realty_details">
         <action
             android:id="@+id/action_detailsRealtyFragment_to_mapFragment"
-            app:destination="@+id/mapFragment" />
+            app:destination="@+id/mapFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_detailsRealtyFragment_to_addRealtyFragment"
-            app:destination="@id/addRealtyFragment">
+            app:destination="@id/addRealtyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="editMode"
                 android:defaultValue="true" />
@@ -60,7 +76,11 @@
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapFragment_to_detailsRealtyFragment"
-            app:destination="@id/detailsRealtyFragment" />
+            app:destination="@id/detailsRealtyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -70,10 +90,18 @@
 
     <action
         android:id="@+id/actionGlobalSettingsFragment"
-        app:destination="@id/settingsFragment" />
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     <action
         android:id="@+id/actionGlobalMapFragment"
-        app:destination="@id/mapFragment" />
+        app:destination="@id/mapFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.skichrome.realestatemanager.view.SearchFragment"
@@ -81,5 +109,9 @@
         tools:layout="@layout/fragment_search" />
     <action
         android:id="@+id/action_global_searchFragment"
-        app:destination="@id/searchFragment" />
+        app:destination="@id/searchFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 </navigation>

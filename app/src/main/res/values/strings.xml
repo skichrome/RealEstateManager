@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+    <string name="add_realty_fragment_add_title">New Realty</string>
+    <string name="add_realty_fragment_modify_title">Realty Edition</string>
     <string name="content_provider_authority">com.skichrome.realestatemanager.fileprovider</string>
 
     <!-- Toolbar and Navigation drawer Menu -->
@@ -150,4 +152,6 @@
     <string name="search_fragment_date_sold_hint">Sold since</string>
     <string name="search_fragment_status_title">Sold ?</string>
     <string name="search_fragment_min_media_ref_title">Minimal number of pictures</string>
+    <string name="search_fragment_post_code_title">Area</string>
+    <string name="search_fragment_post_code_hint">Post code</string>
 </resources>

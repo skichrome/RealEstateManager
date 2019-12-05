@@ -299,7 +299,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
         isSold: Int?,
         creationDate: Long?,
         soldDate: Long?,
-        mediaRefMinNumber: Int?
+        mediaRefMinNumber: Int?,
+        postCode: Int?
     )
     {
         uiScope.uiJob {
@@ -314,7 +315,8 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                     isSold,
                     creationDate,
                     soldDate,
-                    mediaRefMinNumber
+                    mediaRefMinNumber,
+                    postCode
                 )
             }
         }

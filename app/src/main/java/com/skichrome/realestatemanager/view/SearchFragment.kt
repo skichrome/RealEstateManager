@@ -208,7 +208,8 @@ class SearchFragment : BaseClassicFragment<RealtyViewModel>(), DatePickerDialogF
             isSold = isSold?.let { if (it) 0 else 1 },
             creationDate = creationDateSearch?.timeInMillis,
             soldDate = soldDateSearch?.timeInMillis,
-            mediaRefMinNumber = if (minPictures == 0) null else minPictures
+            mediaRefMinNumber = if (minPictures == 0) null else minPictures,
+            postCode = if (searchFragmentPostCodeEditText.text.toString().isEmpty()) null else searchFragmentPostCodeEditText.text.toString().toIntOrNull()
         )
         navigateToFragmentList()
     }

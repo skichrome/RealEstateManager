@@ -89,7 +89,8 @@ class RealtyRepository(
         isSold: Int?,
         creationDate: Long?,
         soldDate: Long?,
-        mediaRefMinNumber: Int?
+        mediaRefMinNumber: Int?,
+        postCode: Int?
     ): List<Realty>
     {
         val realtyResults = mutableListOf<Realty>()
@@ -103,6 +104,7 @@ class RealtyRepository(
         isSold?.let { queryStrBuilder.append(" AND Realty.status == $it") }
         creationDate?.let { queryStrBuilder.append(" AND Realty.dateAdded >= $it") }
         soldDate?.let { queryStrBuilder.append(" AND Realty.dateSell >= $it") }
+        postCode?.let { queryStrBuilder.append(" AND Realty.postCode == $it") }
 
         if (queryStrBuilder.toString() == baseQueryParam && poiList.isNullOrEmpty() && mediaRefMinNumber == null)
             return localDataSource.fetchRealtyFromQueryParam(SimpleSQLiteQuery(baseQueryParam))
