@@ -166,11 +166,9 @@
                 android:id="@+id/realtyDetailsFragmentLocationAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragments_default_margin"
                 android:text="@{realtyViewModel.realtyDetailed.address}"
-                app:layout_constraintEnd_toStartOf="@+id/realtyDetailsFragmentLeftGuideline"
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentLocationTitle"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentLeftGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationTitle"
                 tools:text="@string/realty_details_fragment_location_title" />
 
             <TextView
@@ -205,14 +203,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.25" />
+                app:layout_constraintGuide_percent="0.2" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/realtyDetailsFragmentRightGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.7" />
 
             <TextView
                 android:id="@+id/realtyDetailsFragmentPriceTitle"
@@ -271,10 +269,8 @@
                 android:id="@+id/realtyDetailsFragmentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fragments_default_margin"
-                app:layout_constraintEnd_toStartOf="@+id/realtyDetailsFragmentRightGuideline"
+                app:layout_constraintBaseline_toBaselineOf="@+id/realtyDetailsFragmentDateTitle"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentRightGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDateTitle"
                 tools:text="10/11/2019" />
 
             <TextView

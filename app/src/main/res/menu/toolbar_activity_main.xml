@@ -16,11 +16,4 @@
             android:title="@string/menu_item_search_name"
             app:showAsAction="ifRoom" />
     </group>
-
-    <group android:checkableBehavior="none">
-        <item
-            android:id="@+id/changeCurrentAgent"
-            android:title="@string/current_user_actions_change"
-            app:showAsAction="never" />
-    </group>
 </menu>

@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.view.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -63,12 +62,7 @@ class RealtyListAdapter(private var realtyList: List<Pair<Realty, RealtyPreviewE
                         "${realty.price} €"
                 }
             }
-
             binding.realtyListItemPrice.text = priceText
-            Log.e(
-                "List Adapter",
-                "Results : \n User pref : ${userCurrency.first} \n Conv rate : ${userCurrency.second} \n price : ${realty.price} \n realty curr : ${realty.currency} \n result : $priceText"
-            )
 
             binding.realtyType = realtyPreviewExtras?.realtyTypeName
             binding.realty = realty

@@ -8,13 +8,6 @@
         <item name="colorAccent">@color/colorSecondary</item>
     </style>
 
-    <!-- Toolbar style -->
-    <style name="toolbarStyle" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="colorControlNormal">@color/textColorPrimaryDark</item>
-        <item name="android:tint">@color/textColorPrimaryDark</item>
-    </style>
-
     <!-- Splash screen style -->
     <style name="SplashScreenStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>

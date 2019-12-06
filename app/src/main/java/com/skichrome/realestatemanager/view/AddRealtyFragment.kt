@@ -24,7 +24,6 @@ import com.skichrome.realestatemanager.view.ui.CheckboxAdapter
 import com.skichrome.realestatemanager.view.ui.RealtyPhotoAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
 import kotlinx.android.synthetic.main.fragment_add_realty.*
-import kotlinx.android.synthetic.main.toolbar.*
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -146,7 +145,7 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
     private fun configureEditableMode()
     {
         activity?.run {
-            toolbar?.title = if (isEditMode) getString(R.string.add_realty_fragment_modify_title)
+            addRealtyFragmentTitle?.text = if (isEditMode) getString(R.string.add_realty_fragment_modify_title)
             else getString(R.string.add_realty_fragment_add_title)
         }
 

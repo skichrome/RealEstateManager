@@ -13,8 +13,8 @@ import com.skichrome.realestatemanager.utils.*
 import com.skichrome.realestatemanager.view.base.BaseFragment
 import com.skichrome.realestatemanager.view.ui.RealtyListAdapter
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_realty_list.*
-import kotlinx.android.synthetic.main.toolbar.*
 import java.lang.ref.WeakReference
 
 class RealtyListFragment :
@@ -31,7 +31,6 @@ class RealtyListFragment :
         configureTabletNavController()
         configureViewModel()
         configureSwipeRefreshLayout()
-        configureFabAddRealty()
     }
 
     override fun onResume()
@@ -99,26 +98,18 @@ class RealtyListFragment :
         realtyListFragmentSwipeRefresh?.setOnRefreshListener { viewModel.getAllRealty() }
     }
 
-    private fun configureFabAddRealty()
-    {
-        realtyListFragmentFab.setOnClickListener {
-            findNavController().navigate(R.id.action_realtyListFragment_to_addRealtyFragment)
-        }
-    }
-
     private fun configureTabletNavController()
     {
         childFragmentManager.findFragmentById(R.id.fragmentRealtyListNavHostFragmentTablet)
             ?.findNavController()
             ?.apply {
                 addOnDestinationChangedListener { _, destination, _ ->
-
-                    activity?.toolbar?.menu
+                    activity?.activityMainBottomAppBar?.menu
                         ?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
                         ?.isVisible = destination.id != R.id.emptyFragment
                 }
 
-                activity?.toolbar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
+                activity?.activityMainBottomAppBar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
                     ?.setOnMenuItemClickListener {
                         val options = RealtyListFragmentDirections.actionRealtyListFragmentToAddRealtyFragment(true)
                         activity?.findNavController(R.id.activityMainMainNavHostFragment)

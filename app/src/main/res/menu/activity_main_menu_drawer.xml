@@ -8,13 +8,21 @@
     </group>
 
     <group
-        android:id="@+id/groupOne"
         android:checkableBehavior="none">
         <item
             android:id="@+id/actionGlobalMapFragment"
+            android:icon="@drawable/ic_map_24dp"
             android:title="@string/menu_drawer_item_map_title" />
         <item
             android:id="@+id/actionGlobalSettingsFragment"
+            android:icon="@drawable/ic_settings_24dp"
             android:title="@string/menu_drawer_item_settings_title" />
+    </group>
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/changeCurrentAgent"
+            android:icon="@drawable/ic_lock_outline_24dp"
+            android:title="@string/current_user_actions_change" />
     </group>
 </menu>

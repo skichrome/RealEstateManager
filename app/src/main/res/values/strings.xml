@@ -2,10 +2,11 @@
     <string name="app_name">Real Estate Manager</string>
     <string name="add_realty_fragment_add_title">New Realty</string>
     <string name="add_realty_fragment_modify_title">Realty Edition</string>
+    <string name="fragment_list_title">Real Estate List</string>
+    <string name="fragment_search_title">Search engine</string>
     <string name="content_provider_authority">com.skichrome.realestatemanager.fileprovider</string>
 
     <!-- Toolbar and Navigation drawer Menu -->
-    <string name="menu_item_add_name">Add</string>
     <string name="menu_item_edit_name">Edit</string>
     <string name="menu_item_search_name">Search</string>
     <string name="menu_drawer_item_map_title">map</string>
