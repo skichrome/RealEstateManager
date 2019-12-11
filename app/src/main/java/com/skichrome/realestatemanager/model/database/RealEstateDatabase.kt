@@ -43,6 +43,7 @@ abstract class RealEstateDatabase : RoomDatabase()
                 DATABASE_NAME
             )
                 .addMigrations(MigrationOneTwo)
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

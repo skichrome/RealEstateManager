@@ -21,6 +21,7 @@ import com.skichrome.realestatemanager.utils.LOCATION_RC
 import com.skichrome.realestatemanager.utils.MANIFEST_LOCATION_PERM
 import com.skichrome.realestatemanager.view.base.BaseMapFragment
 import com.skichrome.realestatemanager.viewmodel.RealtyViewModel
+import kotlinx.android.synthetic.main.fragment_maps.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -41,7 +42,7 @@ class MapFragment : BaseMapFragment<FragmentMapsBinding, RealtyViewModel>()
 
     override fun getFragmentLayout(): Int = R.layout.fragment_maps
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView = binding.mapFragmentMapView
+    override fun getMap(): MapView = mapFragmentMapView
 
     override fun configureFragment()
     {

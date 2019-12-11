@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity()
 
     private fun configureFab(navController: NavController)
     {
-        activityMainFab?.setOnClickListener { navController.navigate(R.id.action_realtyListFragment_to_addRealtyFragment) }
+        activityMainFab?.setOnClickListener { navController.navigate(R.id.action_global_addRealtyFragment) }
     }
 
     private fun configureNavController(navController: NavController)

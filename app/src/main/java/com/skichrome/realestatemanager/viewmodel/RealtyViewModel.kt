@@ -127,6 +127,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
     {
         uiScope.uiJob {
             val minimalMediaRefList = mutableListOf<RealtyPreviewExtras?>()
+            _realtyPreviewExtras.value = minimalMediaRefList
 
             _realEstates.value?.forEachIndexed { index, realty ->
                 val minMediaRef: String? = uiTask {
@@ -319,6 +320,7 @@ class RealtyViewModel(private val repository: RealtyRepository) : ViewModel()
                     postCode
                 )
             }
+            getRealtyExtras()
         }
     }
 

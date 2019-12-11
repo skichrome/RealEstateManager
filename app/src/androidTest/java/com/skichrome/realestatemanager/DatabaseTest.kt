@@ -7,7 +7,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.skichrome.realestatemanager.model.database.*
 import com.skichrome.realestatemanager.utils.AppCoroutinesConfiguration
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -105,7 +104,6 @@ class DatabaseTest
             shortDesc = "RxJava tests crashes was very difficult to fix but now it's OK, Imotep"
         )
 
-        @ExperimentalCoroutinesApi
         @BeforeClass
         @JvmStatic
         fun initCoroutines()
@@ -477,15 +475,5 @@ class DatabaseTest
             assertEquals(true, it.isNotEmpty())
             assertEquals(listOf(poiInserted), it)
         }
-    }
-
-    // =================================
-    //  Migration Test
-    // =================================
-
-    @Test
-    @Throws(Exception::class)
-    fun testMigrationFromOneToTwo() = runBlocking {
-
     }
 }

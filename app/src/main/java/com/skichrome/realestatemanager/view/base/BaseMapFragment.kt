@@ -59,10 +59,11 @@ abstract class BaseMapFragment<T : ViewDataBinding, V : ViewModel> : BaseFragmen
         super.onStop()
     }
 
-    override fun onDestroy()
+    override fun onDestroyView()
     {
         mapView?.onDestroy()
+        map?.clear()
         map = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 }

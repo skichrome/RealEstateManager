@@ -111,6 +111,8 @@
                 android:drawablePadding="4dp"
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_surface_title"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentTitleSpecifications" />
 
@@ -118,7 +120,7 @@
                 android:id="@+id/realtyDetailsFragmentSurface"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 android:text='@{realtyViewModel.realtyDetailed.surface + " m2"}'
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentSurfaceTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurfaceTitle"
@@ -135,6 +137,8 @@
                 android:drawablePadding="4dp"
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_rooms_title"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentSurface" />
 
@@ -142,7 +146,7 @@
                 android:id="@+id/realtyDetailsFragmentRoomNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 android:text="@{String.valueOf(realtyViewModel.realtyDetailed.roomNumber)}"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentRoomNumberTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumberTitle"
@@ -159,6 +163,8 @@
                 android:drawablePadding="4dp"
                 android:gravity="center"
                 android:text="@string/realty_details_fragment_location_title"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentRoomNumber" />
 
@@ -166,7 +172,7 @@
                 android:id="@+id/realtyDetailsFragmentLocationAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 android:text="@{realtyViewModel.realtyDetailed.address}"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentLocationTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentLocationTitle"
@@ -202,6 +208,8 @@
                 android:drawableStart="@drawable/ic_attach_money_24dp"
                 android:drawablePadding="4dp"
                 android:text="@string/realty_details_fragment_price"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/realtyDetailsFragmentLocationPostCode" />
 
@@ -215,6 +223,8 @@
                 android:drawableStart="@drawable/ic_check_24dp"
                 android:drawablePadding="4dp"
                 android:text="@string/realty_details_fragment_status"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPrice" />
 
@@ -227,6 +237,8 @@
                 android:layout_marginTop="@dimen/fragments_default_large_margin"
                 android:drawableStart="@drawable/ic_schedule_24dp"
                 android:drawablePadding="4dp"
+                android:textStyle="bold"
+                app:drawableTint="@color/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentStatus"
                 tools:text="@string/realty_details_fragment_date_created" />
@@ -235,7 +247,7 @@
                 android:id="@+id/realtyDetailsFragmentPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 android:text="@{String.valueOf(realtyViewModel.realtyDetailed.price)}"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentPriceTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentPriceTitle"
@@ -245,7 +257,7 @@
                 android:id="@+id/realtyDetailsFragmentStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentStatusTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentStatusTitle"
                 tools:text="Sold / available" />
@@ -254,7 +266,7 @@
                 android:id="@+id/realtyDetailsFragmentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 app:layout_constraintStart_toStartOf="@+id/realtyDetailsFragmentDateTitle"
                 app:layout_constraintTop_toBottomOf="@+id/realtyDetailsFragmentDateTitle"
                 tools:text="10/11/2019" />

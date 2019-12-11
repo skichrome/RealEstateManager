@@ -38,7 +38,7 @@ class DetailsRealtyFragment : BaseMapFragment<FragmentRealtyDetailsBinding, Real
 
     override fun getFragmentLayout(): Int = R.layout.fragment_realty_details
     override fun getViewModelClass(): Class<RealtyViewModel> = RealtyViewModel::class.java
-    override fun getMap(): MapView = binding.realtyDetailsFragmentMapView
+    override fun getMap(): MapView = realtyDetailsFragmentMapView
 
     override fun configureFragment()
     {

@@ -1,6 +1,5 @@
 package com.skichrome.realestatemanager.viewmodel
 
-import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -47,7 +46,6 @@ class SignInViewModel(private val repository: SignInRepository) : ViewModel()
     private fun isConnectedToInternet()
     {
         val connStatus = repository.getInternetConnStatus()
-        Log.e("SignInVM", "Network val : $connStatus")
         _isConnected.set(connStatus)
     }
 

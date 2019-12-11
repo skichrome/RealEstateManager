@@ -59,14 +59,17 @@ class RealtyListFragment :
             nullableRealtyList?.let { realtyList ->
                 viewModel.realtyPreviewExtras.observe(this, Observer { nullableMediaRefList ->
                     nullableMediaRefList?.let { mediaRefList ->
-                        configureRecyclerView()
+                        if (realtyList.size == mediaRefList.size)
+                        {
+                            configureRecyclerView()
 
-                        val pairList = mutableListOf<Pair<Realty, RealtyPreviewExtras?>>()
-                        realtyList.forEachIndexed { index, realty ->
-                            val linkedMediaRef = mediaRefList[index]
-                            pairList.add(Pair(realty, linkedMediaRef))
+                            val pairList = mutableListOf<Pair<Realty, RealtyPreviewExtras?>>()
+                            realtyList.forEachIndexed { index, realty ->
+                                val linkedMediaRef = mediaRefList[index]
+                                pairList.add(Pair(realty, linkedMediaRef))
+                            }
+                            adapter.replaceRealtyList(pairList)
                         }
-                        adapter.replaceRealtyList(pairList)
                     }
                 })
 
@@ -111,7 +114,7 @@ class RealtyListFragment :
 
                 activity?.activityMainBottomAppBar?.menu?.findItem(R.id.action_detailsRealtyFragment_to_addRealtyFragment)
                     ?.setOnMenuItemClickListener {
-                        val options = RealtyListFragmentDirections.actionRealtyListFragmentToAddRealtyFragment(true)
+                        val options = RealtyListFragmentDirections.actionGlobalAddRealtyFragment(true)
                         activity?.findNavController(R.id.activityMainMainNavHostFragment)
                             ?.navigate(options)
                         return@setOnMenuItemClickListener true

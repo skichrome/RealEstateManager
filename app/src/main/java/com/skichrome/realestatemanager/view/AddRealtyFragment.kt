@@ -171,7 +171,16 @@ class AddRealtyFragment : BaseFragment<FragmentAddRealtyBinding, RealtyViewModel
 
         val dateAdded = viewModel.realtyDetailed.get()!!.dateAdded
         addRealtyFragDateCreatedEditText.setText(date.format(dateAdded))
+        realtyCreationDate = Calendar.getInstance().apply {
+            timeInMillis = dateAdded
+        }
+
         val dateSell = viewModel.realtyDetailed.get()?.dateSell
+        dateSell?.apply {
+            realtySoldDate = Calendar.getInstance().apply {
+                timeInMillis = dateSell
+            }
+        }
 
         dateSell?.let {
             addRealtyFragSoldDateEditText.setText(date.format(it))
